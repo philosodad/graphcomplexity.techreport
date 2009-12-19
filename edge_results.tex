@@ -1,0 +1,88 @@
+\documentclass[conference, 11pt]{IEEEtran} 
+\usepackage{verbatim}
+\usepackage{multirow} \usepackage{enumerate}
+\usepackage{amsmath,enumerate} \usepackage{amsthm}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
+\usepackage{graphicx}
+\DeclareGraphicsRule{*}{mps}{*}{}
+
+\usepackage{pgf}
+\usepackage{tikz}
+\usetikzlibrary{decorations.pathmorphing} % LATEX and plain TEX when using Tik Z
+\usetikzlibrary{positioning}
+\usetikzlibrary{er}
+\tikzstyle{vx}=[draw,circle,fill=black!50,minimum size=2pt, inner sep=1pt, node distance=15mm]
+\tikzstyle{bup}=[semithick, decoration={bent, aspect=.3, amplitude=4}, decorate, ->, >=stealth]
+\tikzstyle{bdn}=[semithick, decoration={bent, aspect=.3, amplitude=-4}, decorate, ->, >=stealth]
+\tikzstyle{BUP}=[thick, decoration={bent, aspect=.3, amplitude=8}, decorate, ->, >=stealth]
+\tikzstyle{BDN}=[thick, decoration={bent, aspect=.3, amplitude=-8}, decorate, ->, >=stealth]
+\tikzstyle{MUP}=[thick, decoration={bent, aspect=.3, amplitude=16}, decorate, ->, >=stealth]
+\tikzstyle{MDN}=[thick, decoration={bent, aspect=.3, amplitude=-16}, decorate, ->, >=stealth]
+\tikzstyle{str}=[semithick, decorate, ->, >=stealth]
+\tikzstyle{cr}=[draw, circle, fill=black!25,minimum size=150pt]
+
+% \paperheight=11in \paperwidth=8.5in \textheight=9.0in
+% \textwidth=6.5in \voffset=-.875in \hoffset=-.875in
+\newenvironment{code} {\begin {quote}\begin{footnotesize}}
+    {\end{footnotesize}\end{quote}}
+
+% \oddsidemargin 0.0 in \evensidemargin 0.0 in
+\newenvironment{enumeratealpha}
+{\begin{enumerate}[(a{\textup{)}}]}{\end{enumerate}}
+
+\theoremstyle{definition}
+\newtheorem{lem-rule}{Rule}
+
+% text macros
+\def\cI{{\mathcal I}} \def\cR{{\mathcal R}} \def\cE{{\mathcal E}}
+\def\cC{{\mathcal C}} \def\cF{{\mathcal F}} \def\cU{{\mathcal U}}
+\def\cH{{\mathcal H}} \def\cD{{\mathcal D}} \def\cB{{\mathcal B}}
+\def\cQ{{\mathcal Q}} \def\cV{{\mathcal V}} \def\cS{{\mathcal S}}
+\def\cG{{\mathcal G}} \def\cA{{\mathcal A}}
+
+\def\cId{{$\mathcal I$}} \def\cRd{{$\mathcal R$}} \def\cEd{{$\mathcal
+    E$}} \def\cCd{{$\mathcal C$}} \def\cFd{{$\mathcal F$}}
+\def\cUd{{$\mathcal U$}} \def\cHd{{$\mathcal H$}} \def\cDd{{$\mathcal
+    D$}} \def\cBd{{$\mathcal B$}} \def\cQd{{$\mathcal Q$}}
+\def\cVd{{$\mathcal V$}} \def\cSd{{$\mathcal S$}} \def\cGd{{$\mathcal
+    G$}} \def\cAd{{$\mathcal A$}}
+
+\bibliographystyle {IEEEtranS}
+\begin {document}
+
+\title{IEEE Paper} 
+
+\author{\IEEEauthorblockN{J. Paul Daigle}
+\IEEEauthorblockA{Department of Computer Science\\
+Georgia State University\\
+Atlanta, Georgia 30303\\
+Email: jdaigle1@student.gsu.edu}
+}
+
+\maketitle
+
+\begin{abstract}
+
+\end{abstract}
+
+\section{Results} 
+In this section, we evaluate the performance of our algorithm against the distributed combinatorial 2-approximation algorithm for weighted vertex cover presented by Koufogiannakis and Young.\cite{1582746} Weight, in this case, is representative of battery life. The simulations were programmed using Python.\footnote{The code for this project is available on google code as open source software, this paper references changeset 6fa22bd4b8d9.} To adapt the framework based target coverage algorithm presented by Dhawan and Prasad\cite{IPDPS.2008.45361}, edges between nodes are represented as targets. 
+
+Sensors were deployed in a square area and assumed to start with some small variation in battery life. Communication rounds were not modeled. The 2-approximation algorithm is known to have a communications cost of $O(log p)$ and the framework algorithm is bounded by $O(\Delta^\Delta)$, which can be viewed as a constant for sparse graphs.
+
+The process of simulation is as follows. First, two identical sensor networks are build. Then, each network goes through a communication phase until a cover is achieved. After the first node in that cover dies, anothe communication phase occurs. This process repeats until no cover can be achieved with the remaining active sensors.
+
+The simulation results are shown in figure~\ref{fig:results}. We record two results for each graph, the number of nodes in the initial cover and the total lifetime of the network. The framework algorithm performs as well in the first dimension and generally outperforms the combinatorial algorithm in the second.
+
+\begin{figure}[htp]
+  \begin{center}
+    \includegraphics[width=0.45\textwidth]{initresults}
+    \caption{Simulation Results}
+    \label{fig:results}
+  \end{center}
+\end{figure}
+  
+\bibliography{/Users/paul/Documents/Biblio/cs3}
+\end {document}
