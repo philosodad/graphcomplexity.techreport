@@ -68,21 +68,17 @@ Email: jdaigle1@student.gsu.edu}
 \end{abstract}
 
 \section{Results} 
-In this section, we evaluate the performance of our algorithm against the distributed combinatorial 2-approximation algorithm for weighted vertex cover presented by Koufogiannakis and Young.\cite{1582746} Weight, in this case, is representative of battery life. The simulations were programmed using Python.\footnote{The code for this project is available on google code as open source software, this paper references changeset 6fa22bd4b8d9.} To adapt the framework based target coverage algorithm presented by Dhawan and Prasad\cite{IPDPS.2008.45361}, edges between nodes are represented as targets. 
+In this section, we evaluate the performance of our algorithm in two cases. First, we compare our results to a baseline 2-approximation algorithm for unweighted vertex cover.\cite{500824} Next, we evaluate the performance of our algorithm against the distributed combinatorial 2-approximation algorithm for weighted vertex cover presented by Koufogiannakis and Young.\cite{1582746} The simulations were programmed using Python.\footnote{The code for this project is available on google code as open source software, this paper references changeset 6fa22bd4b8d9.} To adapt the framework based target coverage algorithm presented by Dhawan and Prasad\cite{IPDPS.2008.45361}, edges between nodes are represented as targets. 
+\subsection{Unweighted Cover}
+To calculate the unweighted cover, a graph containing 100 unweighted nodes was assigned a random number of edges in logarithmic steps between 100 and 4500 (forming a clique). 20 graphs were generated in each size. Vertex covers were calculated separately using the framework algorithm versus the standard reduction algorithm. The framework produced covers that were consitent with a constant 2-$\epsilon$ approximation. Figure~\ref{fig:unweight_covers} shows the average performance of both algorithms with the total degree of the tested graphs compared to the size of the vertex cover. Sensors were deployed in a square area and assumed to start with some small variation in battery life. Communication rounds were not modeled. The 2-approximation algorithm is known to have a communications cost of $O(log p)$ and the framework algorithm is bounded by $O(\Delta^\Delta)$, which can be viewed as a constant for sparse graphs.
 
-Sensors were deployed in a square area and assumed to start with some small variation in battery life. Communication rounds were not modeled. The 2-approximation algorithm is known to have a communications cost of $O(log p)$ and the framework algorithm is bounded by $O(\Delta^\Delta)$, which can be viewed as a constant for sparse graphs.
-
-The process of simulation is as follows. First, two identical sensor networks are build. Then, each network goes through a communication phase until a cover is achieved. After the first node in that cover dies, anothe communication phase occurs. This process repeats until no cover can be achieved with the remaining active sensors.
-
-The simulation results are shown in figure~\ref{fig:results}. We record two results for each graph, the number of nodes in the initial cover and the total lifetime of the network. The framework algorithm performs as well in the first dimension and generally outperforms the combinatorial algorithm in the second.
-
-\begin{figure}[htp]
-  \begin{center}
-    \includegraphics[width=0.45\textwidth]{initresults}
-    \caption{Simulation Results}
-    \label{fig:results}
-  \end{center}
+\begin{figure}
+  \begin{tikzpicture}[x=.05cm, y=.1 cm, only marks]
+    \draw plot[mark=*, xshift=2pt, only marks] file {unweighted_fra.dat};
+    \draw plot[mark=+, xshift=2pt, only marks] file {unweighted_seq.dat};
+  \end{tikzpicture}
 \end{figure}
+
   
-\bibliography{/Users/paul/Documents/Biblio/cs3}
+\bibliography{vertex_bib}
 \end {document}
