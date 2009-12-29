@@ -4,7 +4,8 @@
 \usepackage{amsmath,enumerate} \usepackage{amsthm}
 \usepackage{algorithm}
 \usepackage{algorithmic}
-
+\usepackage{pstricks}
+\usepackage{amssymb, latexsym}
 \usepackage{graphicx}
 \DeclareGraphicsRule{*}{mps}{*}{}
 
@@ -72,14 +73,11 @@ In this section, we evaluate the performance of our algorithm in two cases. Firs
 \subsection{Unweighted Cover}
 To calculate the unweighted cover, a graph containing 100 unweighted nodes was assigned a random number of edges in logarithmic steps between 100 and 4500 (forming a clique). 20 graphs were generated in each size. Vertex covers were calculated separately using the framework algorithm versus the standard reduction algorithm. The framework produced covers that were consitent with a constant 2-$\epsilon$ approximation. Figure~\ref{fig:unweight_covers} shows the average performance of both algorithms with the total degree of the tested graphs compared to the size of the vertex cover. Sensors were deployed in a square area and assumed to start with some small variation in battery life. Communication rounds were not modeled. The 2-approximation algorithm is known to have a communications cost of $O(log p)$ and the framework algorithm is bounded by $O(\Delta^\Delta)$, which can be viewed as a constant for sparse graphs.
 
-\begin{figure}
-  \begin{tikzpicture}[x=.2cm, y=.2 cm ]
-    \draw plot[mark=*, xshift=12cm, only marks] file {unweighted-fra.dat};
-    \draw plot[mark=+, xshift=12cm, only marks] file {unweighted-seq.dat};
-    \draw plot[xshift=12cm, id=x-ax] function { "unweighted-deg.dat" using 3:2:xticlabels(1)}; 
-  \end{tikzpicture}
-\end{figure}
+\begin{figure}[width=2in]
+  \label{fig:unweight_covers}
+  \caption{Unweighted Case Versus 2-approximation}
+  \input{unweight.tex}
+\end{figure}	
 
-  
 \bibliography{vertex_bib}
 \end {document}
