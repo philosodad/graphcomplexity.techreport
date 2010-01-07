@@ -67,17 +67,63 @@ Email: jdaigle1@student.gsu.edu}
 \begin{abstract}
 
 \end{abstract}
+\section{Generalized Maximal Matching}
+The generalized maximal matching algorithm presented by Gonzalex is a linear time 2-approximation of the vertex cover problem that does not rely on linear programming or combinatorics.\cite{Gonzalez1995129} The algorithm proceeds by considering each edge of the graph in turn. For each edge, a weight is evaluated and one vertex of the edge will be denoted as {\em saturated} as described below. When each edge has been evaluated, the algorithm terminates and the saturated edges form a vertex cover.
+
+\subsection{Definitions}
+\begin{description}
+\item [Graph] A vertex and edge weighted graph $G(V,E,W_v, W_e)$
+\item [Neighborhood] $n_e$ for $v\in V$, such that $u \in n_v$ if $\exists e(u,v) \in E$
+\item [Incident Weight] $i_v | i = w_v - \sum w_e \forall e(u,v) \forall u \in n_v$, that is, the sum of the weights of the edges incident to a vertex.
+\item [Incident Difference] $d_v = w_v - i_v$
+\end{description}
+
+\subsection{Edge Weight Assignment}
+\label{sec:sequential}
+Using the above definitions, $w_e$ is set to zero for all $w_e\in W_e$. For each edge $e(u,v)$, leave the weight at 0 if either $u$ or $v$ are saturated. Otherwise, increase $w_e$ by the minimum incident difference between $u,v$ and mark the appropriate vertex as saturated. As one of these conditions must be met (either at least one node is saturated or not) for each edge, the edges only need be traversed once to complete the algorithm. As each edge is assigned a saturated vertex if it is without one when being considered, no edge is incident to two unsaturated nodes after being considered. Therefore, the saturated nodes will form a vertex cover on the Graph after each node has been considered once.
+
+\subsection{Proof of 2-approximation}
+Gonzalex presents a simple proof of 2-approximation based on the insight that the collection of saturated nodes can be divided into two sets (of which one might be empty), the set of all nodes that are part of the optimal cover and the set which are not. Both sets can be proven to be less or equal to the weight of the optimal cover.
+\section{Distributed Generalized Maximal Matching}
+\subsection{Assumptions}
+The time complexity of our algorithm relies on several assumptions and limitations. We first assume that the network is initialized and that every node is aware of its neighbors. Second, we assume that some communication scheme has been established to allow nodes to communicate to their neighbors reliably, and that this communication scheme is bounded by the size of the local neighborhood rather than the total size of the network. We follow the literature in ignoring the questions of network initialization, collision, and collection and instead analyze only the specific communication and computation costs of the algorithm itself.
+
+We rely on the established fact that a maximal matching is a vertex cover with an approximation of 2.\cite{1435381}  
+\subsection{Algorithm}
+Algorithm~\ref{alg:main} proceeds in steps. Each node in the network considers itself to have an edge with each of its neighbors. In each communication phase, one edge will be considered, that is, each node in the graph will communicate reciprocally and exclusively with one of its neighbors to determine whether one of them should become part of the cover, based on the sequential algorithm described in section~\ref{sec:sequential}.. Based on this procedure, each node will update the weight of the considered edge and move on to communicate to another neighbor. When each node has communicated with each of its neighbors, the algorithm halts.
+ 
+\begin{algorithm}
+\caption{Distributed General Maximal Matching}
+\begin{algorithmic}
+\FORALL {$v_u \in V$ in parrallel}
+\FORALL {$v_v \in n_u$}
+\STATE Form a Partnership with $v_v$
+\STATE Update edge weight $e(u,v)$, saturation state and incident weight ${n_u, n_v}$
+\ENDFOR
+\ENDFOR
+\end{algorithmic}
+\label{alg:main}
+\end{algorithm}
+
+\subsection{Analysis}
+It is trivial to show that the communication time of the algorithm is bounded by the degree of the graph, as each vertex communicates only with its neighbors and communicates with each neighbor only once. This communication is a constant, that is, each vertex simply communicates its incident weight to its partner for the round. The vertices can then independently determine the correct weight to assign to the edge, determine their saturation states, and update their incident weights without any further information being exchanged.
+
+Each vertex must visit each of its edges exactly once. The total number of edges that any vertex has to visit is therefore bounded by its degree. In each communication round, there are two possibilities. Either every vertex finds a partner or some vertexes cannot find a partner. In the first case, each vertex will reduce the number of remaining vertexes to be visited by exactly one. In the second case, all of the neighbors of an unpartnered vertex $v_l$ must have a partner (or one would form a partnership with $v_l$. Assume that this vertex does not form a partnership until all of its neighbors have updated all of their other edges. The algorithm will have run for $\Delta_p$ rounds, where $\Delta_p$ is the largest degree of a vertex in the neighborhood of $v_l$. $v_l$ must now form partnerships with each of its neighbors, and the algorithm will continue for $\Delta_l$ rounds, where $\Delta_l$ is the degree of $v_l$. Assuming that both $\Delta_l$ and $\Delta_p$ are the highest degrees in the Graph, we see that the algorithm is still bounded by $O(\Delta)$ in the worst case.
+
+Our algorithm can be viewed as a special ordering of the sequential algorithm. Each pair of vertexes examines only one edge in a communication round. These edges are disjoint, that is, no two edges being examined share a common vertex, so the weighting of any edge in a given round is independent of the weighting of any other edge evaluated in that round. Establishing a weight for each of these edges and determining whether any endpoint fits into the cover in parallel is therefore equivalent to making the same determination for each edge in sequence. From this it follows that if the sequential algorithm is correct and produces a 2-approximate minimum weighted vertex cover, the distributed algorithm is also correct and also produces a 2-approximate minimum weighted vertex cover.   
+
+Algorithm~\ref{alg:main} is the first example in the literature of a fully distributed 2-approximation for the minimum vertex cover problem that is bounded by $\Delta$ rather than the size of the graph.\cite{1435381}
 
 \section{Results} 
-In this section, we evaluate the performance of our algorithm in two cases. First, we compare our results to a baseline 2-approximation algorithm for unweighted vertex cover.\cite{500824} Next, we evaluate the performance of our algorithm against the distributed combinatorial 2-approximation algorithm for weighted vertex cover presented by Koufogiannakis and Young.\cite{1582746} The simulations were programmed using Python.\footnote{The code for this project is available on google code as open source software, this paper references changeset 6fa22bd4b8d9.} To adapt the framework based target coverage algorithm presented by Dhawan and Prasad\cite{IPDPS.2008.45361}, edges between nodes are represented as targets. 
+In this section, we evaluate the performance of our algorithm in two cases. First, we compare our results to a baseline 2-approximation algorithm for unweighted vertex cover.\cite{500824} 
 \subsection{Unweighted Cover}
 To calculate the unweighted cover, a graph containing 100 unweighted nodes was assigned a random number of edges in logarithmic steps between 100 and 4500 (forming a clique). 20 graphs were generated in each size. Vertex covers were calculated separately using the framework algorithm versus the standard reduction algorithm. The framework produced covers that were consitent with a constant 2-$\epsilon$ approximation. Figure~\ref{fig:unweight_covers} shows the average performance of both algorithms with the total degree of the tested graphs compared to the size of the vertex cover. Sensors were deployed in a square area and assumed to start with some small variation in battery life. Communication rounds were not modeled. The 2-approximation algorithm is known to have a communications cost of $O(log p)$ and the framework algorithm is bounded by $O(\Delta^\Delta)$, which can be viewed as a constant for sparse graphs.
-
+\begin{center}
 \begin{figure}[width=2in]
   \label{fig:unweight_covers}
   \caption{Unweighted Case Versus 2-approximation}
   \input{unweight.tex}
 \end{figure}	
-
+\end{center}
 \bibliography{vertex_bib}
 \end {document}
