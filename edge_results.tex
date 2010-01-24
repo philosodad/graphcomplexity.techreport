@@ -35,13 +35,19 @@
 
 \theoremstyle{definition}
 \newtheorem{lem-rule}{Rule}
-
+\newtheorem{thm}{Theorem}
+\newtheorem{lem}{Lemma}[thm]
+\newtheorem{prop}{Proposition}[thm]
+\newtheorem{dfn}{Definitions}[thm]
 % text macros
 \def\cI{{\mathcal I}} \def\cR{{\mathcal R}} \def\cE{{\mathcal E}}
 \def\cC{{\mathcal C}} \def\cF{{\mathcal F}} \def\cU{{\mathcal U}}
 \def\cH{{\mathcal H}} \def\cD{{\mathcal D}} \def\cB{{\mathcal B}}
 \def\cQ{{\mathcal Q}} \def\cV{{\mathcal V}} \def\cS{{\mathcal S}}
 \def\cG{{\mathcal G}} \def\cA{{\mathcal A}}
+
+\def\bI{{\mathbb I}} \def\bO{{\mathbb O}}
+\def\bId{{$\mathcal I$}} \def\bOd{{$\mathbb O$}}
 
 \def\cId{{$\mathcal I$}} \def\cRd{{$\mathcal R$}} \def\cEd{{$\mathcal
     E$}} \def\cCd{{$\mathcal C$}} \def\cFd{{$\mathcal F$}}
@@ -105,19 +111,41 @@ Algorithm~\ref{alg:main} proceeds in steps. Each node in the network considers i
 \label{alg:main}
 \end{algorithm}
 
-\subsection{Analysis}
+The distributed algorithm can be viewed as a special ordering of the sequential algorithm. Each pair of vertexes examines only one edge in a communication round. These edges are disjoint, that is, no two edges being examined share a common vertex, so the weighting of any edge in a given round is independent of the weighting of any other edge evaluated in that round. Establishing a weight for each of these edges and determining whether any endpoint fits into the cover in parallel is therefore equivalent to making the same determination for each edge in sequence. From this it follows that if the sequential algorithm is correct and produces a 2-approximate minimum weighted vertex cover, the distributed algorithm is also correct and also produces a 2-approximate minimum weighted vertex cover.   
+
+\section{Extension to Hypergraphs}
+\subsection{Equivalence to Target Coverage}
+\input{target-edge-proof.tex}
+\subsection{The Algorithm for Edge Equivalence in Hypergraphs}
+To design the hypergraph algorithm, we assume that each vertex is aware of the membership of each of its edges. Each vertex will therefore attempt to establish an exclusive communication clique for each of its hyperedge. One possible method of doing so would be to hash the edges according to unique sensor ids, assuring that each edge in the graph has a unique, sortable identifier without requiring network wide communication.
+
+We define the weight of each vertex $v \in V$ as $\omega_v$ and the {\em incident weight} of $v$ as $\varpi_v$. If two vertexes have equal incident weight, then ties are broken by choosing the vertex with the lowest index.
+
+\input{alg-dhgmm.tex}
+
+When the algorithm has finished, the edges that are saturated form a cover.
+\subsection{Correctness of Algorithm~\ref{alg:dhgmm}}
+Algorithm~\ref{alg:dhgmm} is correct if at least one vertex for each hyperedge is saturated. It is trivial to see that the algorithm is correct, each edge in the graph is selected, and the incident weight of each vertex in the edge is decreased by the amount necessary to saturate at least one edge.
+\subsection{2-Approximation of the Algorithm}
+A slight modification of the proof in \cite{Gonzalez1995129} produces a proof that Algorithm~\ref{alg:dhgmm} is a 2-approximation for edge cover in hypergraphs.
+\input{two-equiv-proof.tex}
+
+\section{Analysis of Algorithm~\ref{alg:main} and Algorithm~\ref{alg:dhgmm}}
+There are two factors to be considered in the analysis of the algorithms. The first is the difficulty of finding partners in an ad hoc network. This problem is related to channel allocation, that is, each network node wants to communicate to each of it's neighbors, and each such communication must be scheduled in some conflict free manner. This problem has been well studied, and the communication delay for the network can be calculated to be no more than $O(\Delta^{\Delta})$ for the pair matching and communication phase to complete for all nodes in the graph.\cite{4053985}
+
+For the purpose of analysis, Algorithm~\ref{alg:main} can be treated as a special case of Algorithm~\ref{alg:dhgmm} in which each hyperedge contains only two vertexes.
+ 
 It is trivial to show that the communication time of the algorithm is bounded by the degree of the graph, as each vertex communicates only with its neighbors and communicates with each neighbor only once. This communication is a constant, that is, each vertex simply communicates its incident weight to its partner for the round. The vertices can then independently determine the correct weight to assign to the edge, determine their saturation states, and update their incident weights without any further information being exchanged.
 
-Each vertex must visit each of its edges exactly once. The total number of edges that any vertex has to visit is therefore bounded by its degree. In each communication round, there are two possibilities. Either every vertex finds a partner or some vertexes cannot find a partner. In the first case, each vertex will reduce the number of remaining vertexes to be visited by exactly one. In the second case, all of the neighbors of an unpartnered vertex $v_l$ must have a partner (or one would form a partnership with $v_l$. Assume that this vertex does not form a partnership until all of its neighbors have updated all of their other edges. The algorithm will have run for $\Delta_p$ rounds, where $\Delta_p$ is the largest degree of a vertex in the neighborhood of $v_l$. $v_l$ must now form partnerships with each of its neighbors, and the algorithm will continue for $\Delta_l$ rounds, where $\Delta_l$ is the degree of $v_l$. Assuming that both $\Delta_l$ and $\Delta_p$ are the highest degrees in the Graph, we see that the algorithm is still bounded by $O(\Delta)$ in the worst case.
+Each vertex $v$ must visit each of its edges exactly once. The total number of edges that any vertex has to visit is therefore bounded by its degree. In each communication round, there are two possibilities. Either $v$ finds all of its partners for some edge or it does not. In the first case, $v$ will reduce the number of remaining edges to be visited by exactly one. In the second case, at least one vertex $u$ in each hyperedge of $v$ must have formed a communication clique, reducing the number of edges that $u$ must visit by exactly 1. Assume that $v$ does not form a partnership until all of its neighbors have updated all of their other edges. The algorithm will have run for $\Delta_p$ rounds, where $\Delta_p$ is the largest degree of a vertex in the neighborhood of $v$. $v$ must now form a communication clique for each of its edges, and the algorithm will continue for $\Delta_v$ rounds, where $\Delta_v$ is the degree of $v$. Assuming that both $\Delta_l$ and $\Delta_p$ are the highest degrees in the Graph, we see that the algorithm is still bounded by $O(\Delta)$ in the worst case.
 
-Our algorithm can be viewed as a special ordering of the sequential algorithm. Each pair of vertexes examines only one edge in a communication round. These edges are disjoint, that is, no two edges being examined share a common vertex, so the weighting of any edge in a given round is independent of the weighting of any other edge evaluated in that round. Establishing a weight for each of these edges and determining whether any endpoint fits into the cover in parallel is therefore equivalent to making the same determination for each edge in sequence. From this it follows that if the sequential algorithm is correct and produces a 2-approximate minimum weighted vertex cover, the distributed algorithm is also correct and also produces a 2-approximate minimum weighted vertex cover.   
-
-Algorithm~\ref{alg:main} is the first example in the literature of a fully distributed 2-approximation for the minimum vertex cover problem that is bounded by $\Delta$ rather than the size of the graph.\cite{1435381}
+Algorithm~\ref{alg:dhgmm} is the first example in the literature of a fully distributed 2-approximation for the minimum vertex cover problem in Graphs and Hypergraphs that is bounded by $\Delta$ rather than the size of the graph.\cite{1435381}
 
 \section{Results} 
-In this section, we evaluate the performance of our algorithm in two cases. First, we compare our results to a baseline 2-approximation algorithm for unweighted vertex cover.\cite{500824} 
-\subsection{Unweighted Cover}
-To calculate the unweighted cover, a graph containing 100 unweighted nodes was assigned a random number of edges in logarithmic steps between 100 and 4500 (forming a clique). 20 graphs were generated in each size. Vertex covers were calculated separately using the framework algorithm versus the standard reduction algorithm. The framework produced covers that were consitent with a constant 2-$\epsilon$ approximation. Figure~\ref{fig:unweight_covers} shows the average performance of both algorithms with the total degree of the tested graphs compared to the size of the vertex cover. Sensors were deployed in a square area and assumed to start with some small variation in battery life. Communication rounds were not modeled. The 2-approximation algorithm is known to have a communications cost of $O(log p)$ and the framework algorithm is bounded by $O(\Delta^\Delta)$, which can be viewed as a constant for sparse graphs.
+In this section, we evaluate the performance of our algorithm in two cases. First, we compare the performance of Distributed GMM to sequential GMM. Second, we confirm the $O(\Delta)$ communication rounds experimentally. 
+\subsection{Design}
+Both algorithms were coded in Python.{\footnote Software is licensed under an MIT open license and available for download from Google Code} Graphs were generated with random topology. For each experimental run, two separate cases are evaluated. In the first the nodes of the graph are kept constant with the average degree of the graph increasing until a clique is generated. In the second, the average degree of the graph is kept constant while the number of nodes is increased.
+\subsection{Results}
 \begin{center}
 \begin{figure}[width=2in]
   \label{fig:unweight_covers}

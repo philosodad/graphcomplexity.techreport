@@ -1,0 +1,59 @@
+\documentclass[conference, 11pt]{IEEEtran} 
+\usepackage{verbatim}
+\usepackage{multirow} \usepackage{enumerate}
+\usepackage{amsmath,enumerate} \usepackage{amsthm}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{pstricks}
+\usepackage{amssymb, latexsym}
+\usepackage{graphicx}
+\DeclareGraphicsRule{*}{mps}{*}{}
+
+\usepackage{pgf}
+\usepackage{tikz}
+\usetikzlibrary{decorations.pathmorphing} % LATEX and plain TEX when using Tik Z
+\usetikzlibrary{positioning}
+\usetikzlibrary{er}
+\tikzstyle{vx}=[draw,circle,fill=black!50,minimum size=2pt, inner sep=1pt, node distance=15mm]
+\tikzstyle{bup}=[semithick, decoration={bent, aspect=.3, amplitude=4}, decorate, ->, >=stealth]
+\tikzstyle{bdn}=[semithick, decoration={bent, aspect=.3, amplitude=-4}, decorate, ->, >=stealth]
+\tikzstyle{BUP}=[thick, decoration={bent, aspect=.3, amplitude=8}, decorate, ->, >=stealth]
+\tikzstyle{BDN}=[thick, decoration={bent, aspect=.3, amplitude=-8}, decorate, ->, >=stealth]
+\tikzstyle{MUP}=[thick, decoration={bent, aspect=.3, amplitude=16}, decorate, ->, >=stealth]
+\tikzstyle{MDN}=[thick, decoration={bent, aspect=.3, amplitude=-16}, decorate, ->, >=stealth]
+\tikzstyle{str}=[semithick, decorate, ->, >=stealth]
+\tikzstyle{cr}=[draw, circle, fill=black!25,minimum size=150pt]
+
+% \paperheight=11in \paperwidth=8.5in \textheight=9.0in
+% \textwidth=6.5in \voffset=-.875in \hoffset=-.875in
+\newenvironment{code} {\begin {quote}\begin{footnotesize}}
+    {\end{footnotesize}\end{quote}}
+
+% \oddsidemargin 0.0 in \evensidemargin 0.0 in
+\newenvironment{enumeratealpha}
+{\begin{enumerate}[(a{\textup{)}}]}{\end{enumerate}}
+
+\theoremstyle{definition}
+\newtheorem{lem-rule}{Rule}
+\newtheorem{thm}{Theorem}
+\newtheorem{lem}{Lemma}[thm]
+\newtheorem{prop}{Proposition}[thm]
+\newtheorem{dfn}{Definitions}[thm]
+% text macros
+\def\cI{{\mathcal I}} \def\cR{{\mathcal R}} \def\cE{{\mathcal E}}
+\def\cC{{\mathcal C}} \def\cF{{\mathcal F}} \def\cU{{\mathcal U}}
+\def\cH{{\mathcal H}} \def\cD{{\mathcal D}} \def\cB{{\mathcal B}}
+\def\cQ{{\mathcal Q}} \def\cV{{\mathcal V}} \def\cS{{\mathcal S}}
+\def\cG{{\mathcal G}} \def\cA{{\mathcal A}}
+
+\def\cId{{$\mathcal I$}} \def\cRd{{$\mathcal R$}} \def\cEd{{$\mathcal
+    E$}} \def\cCd{{$\mathcal C$}} \def\cFd{{$\mathcal F$}}
+\def\cUd{{$\mathcal U$}} \def\cHd{{$\mathcal H$}} \def\cDd{{$\mathcal
+    D$}} \def\cBd{{$\mathcal B$}} \def\cQd{{$\mathcal Q$}}
+\def\cVd{{$\mathcal V$}} \def\cSd{{$\mathcal S$}} \def\cGd{{$\mathcal
+    G$}} \def\cAd{{$\mathcal A$}}
+
+\bibliographystyle {IEEEtranS}
+\begin {document}
+\input{alg-dhgmm.tex}
+\end{document}

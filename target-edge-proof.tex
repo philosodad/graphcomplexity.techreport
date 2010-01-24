@@ -1,0 +1,24 @@
+\begin{thm}
+  For a given network $N(S,T)$ with sensors $s\in S$ and targets $t\in T$, there exists an equivalent hypergraph $G(V,E)$ such that any solution to the target coverage problem (TC) in $N$ is an edge cover (EC) in $G$, and any edge cover of $G$ is a target cover for $N$.
+\label{thm:equiv}
+\end{thm}
+\begin{proof}[Proof of Theorem~\ref{thm:equiv}]
+\begin{enumerate}
+\item For $N(S,T)$, identify $t \in T | t_i = s \in S $ such that $s$ covers $t$. That is, if sensors $s_1, s_4, s_7$ are all of the sensors that cover $t_3$, $t_3 = \{s_1, s_4, s_5\}$. \label{equiv:assum1}
+\item To construct the equivalent hypergraph $G(V,E)$, define $f:S\to V$ and $g:T\to E$ as bijective functions such that $ s_j \in t_i \implies f(s_j) \in g(t_i)$. \label{equiv:assum2}
+\end{enumerate}
+
+To be shown: if $S' \subset S$ is a solution for target coverage in $N$, $f(S')$ is an edge cover of $G$. 
+
+We proceed by direct proof. Let us define $S'\subset S$ such that $S'$ is a target cover of $N$. 
+
+\begin{enumerate}
+\item $\forall t \in T, \exists s \in S' | s \in t$. (By definition of target cover)
+\item $\forall t \in T, \exists $ a unique $e \in E$, defined as $g(t)$. (By assumption~\ref{equiv:assum2})
+\item $s \in t, f(s) \in g(t) \implies \forall t \in T, \exists s \in S' | f(s) \in g(t)$. (By Substitution). 
+
+That is, for every target, there is a sensor in the set $S'$, such that the corresponding vertex of graph $G$, denoted by $f(s)$, is in the corresponding edge of $G$, $g(t)$. 
+\item Because $g(T) = E$, $f(S')$ must be an edge cover of $G$, as was to be shown.
+\end{enumerate}
+The second part of the theorem follows from the definition of bijection. 
+\end{proof}
