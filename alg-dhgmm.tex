@@ -1,0 +1,22 @@
+\begin{algorithm}
+\caption{Distributed Hypergraph General Maximal Matching} 
+\begin{algorithmic}
+\REQUIRE $\forall v \in V \varpi_v \leftarrow \omega_v$
+\REQUIRE Saturation State $s_v \leftarrow \text{FALSE}$ 
+\FORALL {$u \in V$ in parrallel}
+\FORALL {$e\{u, v_0, v_1, v_2\}$}
+\STATE Form an exclusive communication clique $u, v_0, v_1, ... v_n$
+\IF {$\forall v\in e$, $s_v = \text{FALSE}$}
+\STATE Find the lowest incident weight $min_\varpi$
+\FORALL {$v \in e$}
+\STATE $\varpi_v \leftarrow \varpi_v - \min_\varpi$
+\IF {$varpi_v = 0$} 
+\STATE $s_v \leftarrow \text{TRUE}$ 
+\ENDIF
+\ENDFOR
+\ENDIF
+\ENDFOR
+\ENDFOR
+\end{algorithmic}
+\label{alg:dhgmm}
+\end{algorithm}

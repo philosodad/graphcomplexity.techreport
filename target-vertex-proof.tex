@@ -1,0 +1,40 @@
+\begin{thm}
+  For a given network $N(S,T)$ with sensors $s\in S$ and targets $t\in T$, there exists an equivalent hypergraph $G(V,E)$ such that any solution to the target coverage problem in $N$ is a vertex cover in $G$, and any vertex cover of $G$ is a target cover for $N$.
+\label{thm:equiv}
+\end{thm}
+\begin{proof}[Proof of Theorem~\ref{thm:equiv}]
+\begin{prop}
+For $N(S,T)$, define set of all sensors which can cover a target as $c(t_i)$ = \{$s \in S | $s$ covers $t$\}.  For example, if sensors $s_1, s_4, s_7$ are all of the sensors that cover $t_3$, $c(t_3) = \{s_1, s_4, s_5\}$. \label{prp:network}
+\end{prop}
+\begin{prop}To construct the equivalent hypergraph $G(V,E)$, as $V = S$ and $E$ is the set of hyper edges $c(t_i)$, for all $t_i \in T$. 
+\label{prp:graph}
+\end{prop}
+
+To be shown: if $S' \subset S$ is a solution for target coverage in $N$, $f(S')$ is an edge cover of $G$. 
+
+We proceed by direct proof. Let us define $S'\subset S$ such that $S'$ is a target cover of $N$. If $S'$ is a target cover, we know that 
+\begin{equation}
+\forall t \in T, \exists s \in t | s \in S'
+\label{eqn:tcover}
+\end{equation}
+That is, for every target, there is a sensor in $S'$ that covers that target.
+
+We also know that there exists an equivalent edge in $G$ for each target, defined as $g(t)$. We rewrite equation~\ref{eqn:tcover} to include proposition~\ref{prp:graph},
+\begin{equation}
+\forall t \in T, \exists s \in t | s \in S' \land f(s) \in g(t)
+\label{eqn:extcover}
+\end{equation}
+
+Since the range of $g$ is comprehensive of $E$, this implies that for all edges,
+\begin{equation}
+\forall e \in E, \exists s \in S' | f(s) \in e
+\end{equation}
+Therefore, if we apply $f(s)$ to every $s \in S'$, we will create a vertex set $V'$ such that
+\begin{equation}
+\forall e \in E, \exists v \in V' | v \in e
+\label{eqn:vcover}
+\end{equation}
+Equation~\ref{eqn:vcover} describes a vertex cover of $G$, which is what we wanted to find.
+
+The second part of the theorem follows from the definition of bijection. 
+\end{proof}
