@@ -3,22 +3,38 @@
 \label{thm:equiv}
 \end{thm}
 \begin{proof}[Proof of Theorem~\ref{thm:equiv}]
-\begin{enumerate}
-\item For $N(S,T)$, identify $t \in T | t_i = s \in S $ such that $s$ covers $t$. That is, if sensors $s_1, s_4, s_7$ are all of the sensors that cover $t_3$, $t_3 = \{s_1, s_4, s_5\}$. \label{equiv:assum1}
-\item To construct the equivalent hypergraph $G(V,E)$, define $f:S\to V$ and $g:T\to E$ as bijective functions such that $ s_j \in t_i \implies f(s_j) \in g(t_i)$. \label{equiv:assum2}
-\end{enumerate}
+\begin{prop}
+For $N(S,T)$, identify $t \in T | t_i = s \in S $ such that $s$ covers $t$. That is, if sensors $s_1, s_4, s_7$ are all of the sensors that cover $t_3$, $t_3 = \{s_1, s_4, s_5\}$. \label{prp:network}
+\end{prop}
+\begin{prop}To construct the equivalent hypergraph $G(V,E)$, define $f:S\to V$ and $g:T\to E$ as bijective functions $f(s)$ and $g(t)$, that is, every sensor and every target should have a corresponding vertex and edge, and these are the only vertexes and edges in $G$. We impose a further restriction that $ s_j \in t_i \implies f(s_j) \in g(t_i)$. 
+\label{prp:graph}
+\end{prop}
 
 To be shown: if $S' \subset S$ is a solution for target coverage in $N$, $f(S')$ is an edge cover of $G$. 
 
-We proceed by direct proof. Let us define $S'\subset S$ such that $S'$ is a target cover of $N$. 
+We proceed by direct proof. Let us define $S'\subset S$ such that $S'$ is a target cover of $N$. If $S'$ is a target cover, we know that 
+\begin{equation}
+\forall t \in T, \exists s \in t | s \in S'
+\label{eqn:tcover}
+\end{equation}
+That is, for every target, there is a sensor in $S'$ that covers that target.
 
-\begin{enumerate}
-\item $\forall t \in T, \exists s \in S' | s \in t$. (By definition of target cover)
-\item $\forall t \in T, \exists $ a unique $e \in E$, defined as $g(t)$. (By assumption~\ref{equiv:assum2})
-\item $s \in t, f(s) \in g(t) \implies \forall t \in T, \exists s \in S' | f(s) \in g(t)$. (By Substitution). 
+We also know that there exists an equivalent edge in $G$ for each target, defined as $g(t)$. We rewrite equation~\ref{eqn:tcover} to include proposition~\ref{prp:graph},
+\begin{equation}
+\forall t \in T, \exists s \in t | s \in S' \land f(s) \in g(t)
+\label{eqn:extcover}
+\end{equation}
 
-That is, for every target, there is a sensor in the set $S'$, such that the corresponding vertex of graph $G$, denoted by $f(s)$, is in the corresponding edge of $G$, $g(t)$. 
-\item Because $g(T) = E$, $f(S')$ must be an edge cover of $G$, as was to be shown.
-\end{enumerate}
+Since the range of $g$ is comprehensive of $E$, this implies that for all edges,
+\begin{equation}
+\forall e \in E, \exists s \in S' | f(s) \in e
+\end{equation}
+Therefore, is we apply $f(s)$ to every $s \in S'$, we will create a vertex set $V'$ such that
+\begin{equation}
+\forall e \in E, \exists v \in V' | v \in e
+\label{eqn:vcover}
+\end{equation}
+Equation~\ref{eqn:vcover} describes a vertex cover of $G$, which is what we wanted to find.
+
 The second part of the theorem follows from the definition of bijection. 
 \end{proof}
