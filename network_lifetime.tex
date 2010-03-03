@@ -1,0 +1,36 @@
+\input{preamble.tex}
+
+\begin{document}
+\section{Problem Definition}
+The sensor network target coverage lifetime problem is a scheduling problem in wireless networks. The problem assumes that there is some set of sensors and some set of targets. Each target can be covered by some set of sensors. The sensors have limited lifetimes, eventually, an active sensor will use its battery up and cease to be a part of the network. The question is: how to schedule active sensors in such a way as to maximize the useful life of the network, that is, the length of time that all targets are covered?
+
+\subsection{Problem Complexity}
+This problem is generally assumed to be NP-complete.\cite{978-3-540-77220-0_36} We will show that while the problem is not polynomial to the number of sensors or targets in the network, it is polynomial to the number of covers. To do this, it is worthwhile to define what a cover is considered to be and to define the number of covers in the network.
+
+We define a network, $N(S,T)$, with sensors $s \in S$ and targets $t \in T$. A {\em cover} of the network is some active subset $S' \subset S$ such that for every target, there is at least one sensor in $S'$ that covers that target. The number of covers is arrived at by combination. For each target, there is some subset of sensors that covers that target. These subsets obviously have some cardinality. So if, for all sensors, we find the product of the sensor cardinality, we know the number of covers. Formally, \begin{equation}
+\text{Number of covers } = \prod_{i = 1}^{|T|} |t_i|
+\end{equation}
+Which is bounded by $|S|^{|T|}$
+
+In order to find the maximum lifetime of the network, we must find an ordering among these covers. 
+
+\subsection{Maximal Ordering}
+The set of all covers is not disjoint. All covers will share sensors with some other covers if the total number of covers exceeds one. This is implicit in the method described above for determining the number of covers.
+
+Because covers share dependencies between each other, we can see that each cover will, when activated, reduce the total remaining lifetime of other covers. Given a set of covers $C$, for each $c \in C$, there is some subset $C' \subset C$ where the covers in $C'$ will share the weakest sensor of $c$. This set of covers will be burned if $c$ is burned. 
+
+The maximal ordering of covers is the sequence of covers that, when burned in order, allow the longest possible lifetime for the network.\cite{978-3-540-89894-8_26}
+
+\section{Polynomial Complexity of Maximal Ordering}
+If we are given a complete set of covers, discovering the maximal ordering of these covers can be accomplished in polynomial time. In order to show this, we show that discovering all possible orderings is an factorial time problem, and then show that evaluating these orderings is also factorial.
+\subsection{Finding all Possible Orderings}
+The first step in finding all the orderings of $C$ is to construct the {\em Lifetime Dependency Graph} ($L$)for $C$.\cite{978-3-540-89894-8_26}
+
+We define $L(C, E)$ as a graph with covers $c \in C$ and edges $e \in E$ where an edge exists between two covers ${u,v}$ if those covers share either the weakest sensor in $u$ or the weakest sensor in $v$. To construct the graph in polynomial time, we examine each cover in turn. For each cover, we find it's weakest sensor, then search each of the remaining covers to find covers that share this sensor. 
+
+Finding the weakest sensor in a cover can be accomplished in at most $|S|$ time, and this step must be repeated $|C|$ times. For each of these weakest sensors $|C|-1$ covers must be searched at most $|S|$ times to determine if the weakest sensor is in any othe cover. Constructing $L$ is therefore $O(c^2s)$.
+
+To find all possible orderings using $L$, we employ a recursive algorithm. For each cover $c$ in $L$, we construct a tree as follows. If an edge $e$ exists between $c$ and another cover $c'$, we remove $c'$ and $e$ from the graph, creating graph $L'$. Each remaining cover becomes a child of $c$, and the graph $L'$ is passed to each of these children. This process is repeated until no more covers remain.
+
+The resulting forest $F$ represents all possible orderings for $C$. Construction of $F$ is also polynomial. We must repeat the algorithm $|C|$ times to construct a tree that begins with each cover.   
+\end{document}
