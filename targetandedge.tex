@@ -1,0 +1,19 @@
+\input{preamble.tex}
+
+\begin{document}
+\begin{thm}
+Iterating A Modified Minimum Weighted Vertex Cover is an effective means of extending network lifetime for a target-covering sensor network.
+\end{thm}
+
+\begin{proof}
+\begin{smy}
+The Vertex Cover problem in hypergraphs can be shown to be equivalent to the target coverage problem in networks. If the basic mapping of targets to edges in MVC is extended to set the battery life of sensors as a weight for each vertex in a hypergraph, the Weighted Minimum Vertex Cover of a graph would provide the set of nodes in the network which covered all of the targets and had the lowest cumulative battery life. At first glance, this is not an overly useful set of nodes. Lowest cumulative battery life simply means that of all covers of the graph, this particular cover has, when all batteries are summed together, the lowest value. This does not mean that this particular cover will last a longer or shorter time than any other particular cover, so it doesn't immediately follow that this cover will be of any value.
+
+We gain some perspective, however, by looking at the network from the point of view of each target being covered. If the cover has minimum cumulative weight, this means that for each target being covered, no activated sensor is redundant. If it were, it could be removed from the cover to produce a cover of minimum weight. It also means that for each target being covered, either there is at least one stronger or equivalent sensor that can cover that target that is not being used, or there is not. In the first case, when the sensor under consideration is burned, a new sensor can take over and network lifetime will be extended. If there is not, then this specific node is a bottleneck node, and the network will not be able to cover all targets once the node dies. In that case, the network lifetime is unavoidably bounded and all covers will have the same lifetime.
+
+There are specific configurations of sensors that except those general rules. For example, given 3 targets A,B,\&C, and four sensors 1,2,3\&4, consider the case that sensors 1\& 2 cover target A, sensors 2 \& 3 cover target B, and sensors 3 \$ 4 cover target C. If sensors 2 and 3 are both weaker than sensors 1 and 2, they will be active in the first round. However, once they burn out, there is no sensor remaining to cover target B, and the network would die. It would actually be much more effective to activate 1 \& 3 and then 2 \& 4 under this circumstance, regardless of cumulative sensor weight. 
+
+Scenarios such as this can be created to defeat practically any scheme for maximizing network lifetime, and in this case it is relatively easy to check for cases where every sensor in a target neighborhood is activated and take steps to modify the network to compensate for this.
+\end{smy}
+\end{proof}
+\end{document}

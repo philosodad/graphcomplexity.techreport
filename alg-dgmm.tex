@@ -1,0 +1,12 @@
+\begin{algorithm}
+\caption{Distributed General Maximal Matching}
+\begin{algorithmic}
+\FORALL {$v_u \in V$ in parrallel}
+\FORALL {$v_v \in n_u$}
+\STATE Form a Partnership with $v_v$
+\STATE Update edge weight $e(u,v)$, saturation state and incident weight ${n_u, n_v}$
+\ENDFOR
+\ENDFOR
+\end{algorithmic}
+\label{alg:dgmm}
+\end{algorithm}

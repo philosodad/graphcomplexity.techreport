@@ -1,65 +1,7 @@
-\documentclass[conference, 11pt]{IEEEtran} 
-\usepackage{verbatim}
-\usepackage{multirow} \usepackage{enumerate}
-\usepackage{amsmath,enumerate} \usepackage{amsthm}
-\usepackage{algorithm}
-\usepackage{algorithmic}
-\usepackage{pstricks}
-\usepackage{amssymb, latexsym}
-\usepackage{graphicx}
-\DeclareGraphicsRule{*}{mps}{*}{}
-
-\usepackage{pgf}
-\usepackage{tikz}
-\usetikzlibrary{decorations.pathmorphing} % LATEX and plain TEX when using Tik Z
-\usetikzlibrary{positioning}
-\usetikzlibrary{er}
-\tikzstyle{vx}=[draw,circle,fill=black!50,minimum size=2pt, inner sep=1pt, node distance=15mm]
-\tikzstyle{bup}=[semithick, decoration={bent, aspect=.3, amplitude=4}, decorate, ->, >=stealth]
-\tikzstyle{bdn}=[semithick, decoration={bent, aspect=.3, amplitude=-4}, decorate, ->, >=stealth]
-\tikzstyle{BUP}=[thick, decoration={bent, aspect=.3, amplitude=8}, decorate, ->, >=stealth]
-\tikzstyle{BDN}=[thick, decoration={bent, aspect=.3, amplitude=-8}, decorate, ->, >=stealth]
-\tikzstyle{MUP}=[thick, decoration={bent, aspect=.3, amplitude=16}, decorate, ->, >=stealth]
-\tikzstyle{MDN}=[thick, decoration={bent, aspect=.3, amplitude=-16}, decorate, ->, >=stealth]
-\tikzstyle{str}=[semithick, decorate, ->, >=stealth]
-\tikzstyle{cr}=[draw, circle, fill=black!25,minimum size=150pt]
-
-% \paperheight=11in \paperwidth=8.5in \textheight=9.0in
-% \textwidth=6.5in \voffset=-.875in \hoffset=-.875in
-\newenvironment{code} {\begin {quote}\begin{footnotesize}}
-    {\end{footnotesize}\end{quote}}
-
-% \oddsidemargin 0.0 in \evensidemargin 0.0 in
-\newenvironment{enumeratealpha}
-{\begin{enumerate}[(a{\textup{)}}]}{\end{enumerate}}
-
-\theoremstyle{definition}
-\newtheorem{lem-rule}{Rule}
-\newtheorem{thm}{Theorem}
-\newtheorem{lem}{Lemma}[thm]
-\newtheorem{prop}{Proposition}[thm]
-\newtheorem{dfn}{Definitions}[thm]
-% text macros
-\def\cI{{\mathcal I}} \def\cR{{\mathcal R}} \def\cE{{\mathcal E}}
-\def\cC{{\mathcal C}} \def\cF{{\mathcal F}} \def\cU{{\mathcal U}}
-\def\cH{{\mathcal H}} \def\cD{{\mathcal D}} \def\cB{{\mathcal B}}
-\def\cQ{{\mathcal Q}} \def\cV{{\mathcal V}} \def\cS{{\mathcal S}}
-\def\cG{{\mathcal G}} \def\cA{{\mathcal A}}
-
-\def\bI{{\mathbb I}} \def\bO{{\mathbb O}}
-\def\bId{{$\mathcal I$}} \def\bOd{{$\mathbb O$}}
-
-\def\cId{{$\mathcal I$}} \def\cRd{{$\mathcal R$}} \def\cEd{{$\mathcal
-    E$}} \def\cCd{{$\mathcal C$}} \def\cFd{{$\mathcal F$}}
-\def\cUd{{$\mathcal U$}} \def\cHd{{$\mathcal H$}} \def\cDd{{$\mathcal
-    D$}} \def\cBd{{$\mathcal B$}} \def\cQd{{$\mathcal Q$}}
-\def\cVd{{$\mathcal V$}} \def\cSd{{$\mathcal S$}} \def\cGd{{$\mathcal
-    G$}} \def\cAd{{$\mathcal A$}}
-
-\bibliographystyle {IEEEtranS}
+\input{preamble.tex}
 \begin {document}
 
-\title{IEEE Paper} 
+\title{Generalized Maximal Matching for Extended Sensor Network Lifetimes} 
 
 \author{\IEEEauthorblockN{J. Paul Daigle}
 \IEEEauthorblockA{Department of Computer Science\\
@@ -77,7 +19,7 @@ Email: jdaigle1@student.gsu.edu}
 The generalized maximal matching algorithm presented by Gonzalex is a linear time 2-approximation of the vertex cover problem that does not rely on linear programming or combinatorics.\cite{Gonzalez1995129} The algorithm proceeds by considering each edge of the graph in turn. For each edge, a weight is evaluated and one vertex of the edge will be denoted as {\em saturated} as described below. When each edge has been evaluated, the algorithm terminates and the saturated edges form a vertex cover.
 
 \subsection{Definitions}
-\begin{description}
+\begin{description}[\setlabelwidth{Incident Difference}]
 \item [Graph] A vertex and edge weighted graph $G(V,E,W_v, W_e)$
 \item [Neighborhood] $n_e$ for $v\in V$, such that $u \in n_v$ if $\exists e(u,v) \in E$
 \item [Incident Weight] $i_v | i = w_v - \sum w_e \forall e(u,v) \forall u \in n_v$, that is, the sum of the weights of the edges incident to a vertex.
@@ -95,27 +37,17 @@ Gonzalex presents a simple proof of 2-approximation based on the insight that th
 The time complexity of our algorithm relies on several assumptions and limitations. We first assume that the network is initialized and that every node is aware of its neighbors. Second, we assume that some communication scheme has been established to allow nodes to communicate to their neighbors reliably, and that this communication scheme is bounded by the size of the local neighborhood rather than the total size of the network. We follow the literature in ignoring the questions of network initialization, collision, and collection and instead analyze only the specific communication and computation costs of the algorithm itself.
 
 We rely on the established fact that a maximal matching is a vertex cover with an approximation of 2.\cite{1435381}  
-\subsection{Algorithm}
-Algorithm~\ref{alg:main} proceeds in steps. Each node in the network considers itself to have an edge with each of its neighbors. In each communication phase, one edge will be considered, that is, each node in the graph will communicate reciprocally and exclusively with one of its neighbors to determine whether one of them should become part of the cover, based on the sequential algorithm described in section~\ref{sec:sequential}.. Based on this procedure, each node will update the weight of the considered edge and move on to communicate to another neighbor. When each node has communicated with each of its neighbors, the algorithm halts.
- 
-\begin{algorithm}
-\caption{Distributed General Maximal Matching}
-\begin{algorithmic}
-\FORALL {$v_u \in V$ in parrallel}
-\FORALL {$v_v \in n_u$}
-\STATE Form a Partnership with $v_v$
-\STATE Update edge weight $e(u,v)$, saturation state and incident weight ${n_u, n_v}$
-\ENDFOR
-\ENDFOR
-\end{algorithmic}
-\label{alg:main}
-\end{algorithm}
+\subsection{Distributed Algorithm}
+\label{sub:alg-dgmm}
+Algorithm~\ref{alg:dgmm} proceeds in steps. Each node in the network considers itself to have an edge with each of its neighbors. In each communication phase, one edge will be considered, that is, each node communicates reciprocally and exclusively with one of its neighbors to determine whether one of them should become part of the cover, based on the sequential algorithm described in section~\ref{sec:sequential}. We replace edge weight in the algorithm with {\em incident weight}, a value that begins as equal to the weight of the node and is decreased each time a node compares its current incident weight to any neighbors. When each node has communicated with each of its neighbors, the algorithm halts.
+
+\input{alg-dgmm.tex}
 
 The distributed algorithm can be viewed as a special ordering of the sequential algorithm. Each pair of vertexes examines only one edge in a communication round. These edges are disjoint, that is, no two edges being examined share a common vertex, so the weighting of any edge in a given round is independent of the weighting of any other edge evaluated in that round. Establishing a weight for each of these edges and determining whether any endpoint fits into the cover in parallel is therefore equivalent to making the same determination for each edge in sequence. From this it follows that if the sequential algorithm is correct and produces a 2-approximate minimum weighted vertex cover, the distributed algorithm is also correct and also produces a 2-approximate minimum weighted vertex cover.   
 
 \section{Extension to Hypergraphs}
 \subsection{Equivalence to Target Coverage}
-\input{target-edge-proof.tex}
+\input{target-vertex-proof.tex}
 \subsection{The Algorithm for Edge Equivalence in Hypergraphs}
 To design the hypergraph algorithm, we assume that each vertex is aware of the membership of each of its edges. Each vertex will therefore attempt to establish an exclusive communication clique for each of its hyperedge. One possible method of doing so would be to hash the edges according to unique sensor ids, assuring that each edge in the graph has a unique, sortable identifier without requiring network wide communication.
 
@@ -130,10 +62,10 @@ Algorithm~\ref{alg:dhgmm} is correct if at least one vertex for each hyperedge i
 A slight modification of the proof in \cite{Gonzalez1995129} produces a proof that Algorithm~\ref{alg:dhgmm} is a 2-approximation for edge cover in hypergraphs.
 \input{two-equiv-proof.tex}
 
-\section{Analysis of Algorithm~\ref{alg:main} and Algorithm~\ref{alg:dhgmm}}
+\section{Analysis of Algorithm~\ref{alg:dgmm} and Algorithm~\ref{alg:dhgmm}}
 There are two factors to be considered in the analysis of the algorithms. The first is the difficulty of finding partners in an ad hoc network. This problem is related to channel allocation, that is, each network node wants to communicate to each of it's neighbors, and each such communication must be scheduled in some conflict free manner. This problem has been well studied, and the communication delay for the network can be calculated to be no more than $O(\Delta^{\Delta})$ for the pair matching and communication phase to complete for all nodes in the graph.\cite{4053985}
 
-For the purpose of analysis, Algorithm~\ref{alg:main} can be treated as a special case of Algorithm~\ref{alg:dhgmm} in which each hyperedge contains only two vertexes.
+For the purpose of analysis, Algorithm~\ref{alg:dgmm} can be treated as a special case of Algorithm~\ref{alg:dhgmm} in which each hyperedge contains only two vertexes.
  
 It is trivial to show that the communication time of the algorithm is bounded by the degree of the graph, as each vertex communicates only with its neighbors and communicates with each neighbor only once. This communication is a constant, that is, each vertex simply communicates its incident weight to its partner for the round. The vertices can then independently determine the correct weight to assign to the edge, determine their saturation states, and update their incident weights without any further information being exchanged.
 
@@ -144,7 +76,7 @@ Algorithm~\ref{alg:dhgmm} is the first example in the literature of a fully dist
 \section{Results} 
 In this section, we evaluate the performance of our algorithm in two cases. First, we compare the performance of Distributed GMM to sequential GMM. Second, we confirm the $O(\Delta)$ communication rounds experimentally. 
 \subsection{Design}
-Both algorithms were coded in Python.{\footnote Software is licensed under an MIT open license and available for download from Google Code} Graphs were generated with random topology. For each experimental run, two separate cases are evaluated. In the first the nodes of the graph are kept constant with the average degree of the graph increasing until a clique is generated. In the second, the average degree of the graph is kept constant while the number of nodes is increased.
+Both algorithms were coded in Python.\footnote{Software is licensed under an MIT open license and available for download from Google Code} Graphs were generated with random topology. For each experimental run, two separate cases are evaluated. In the first the nodes of the graph are kept constant with the average degree of the graph increasing until a clique is generated. In the second, the average degree of the graph is kept constant while the number of nodes is increased.
 \subsection{Results}
 \begin{center}
 \begin{figure}[width=2in]
