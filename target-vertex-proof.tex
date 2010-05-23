@@ -10,9 +10,9 @@ For $N(S,T)$, define set of all sensors which can cover a target as $c(t_i) = \{
 \label{defn:graph}
 \end{defn}
 
-To be shown: if $S' \subset S$ is a solution for target coverage in $N$, it is a vertex cover of $G$. 
+To be shown: if $S' \subset S$ is a solution for target coverage in $N$, $S'$ is a vertex cover of $G$. 
 
-We proceed by direct proof. Let us define $S'\subset S$ such that $S'$ is a target cover of $N$. If $S'$ is a target cover, we know by definition~\ref{defn:graph} that there is an isomorphic set $V'$ in $G$. It is to be shown that $V'$ is an edge cover.
+We proceed by direct proof. Let us define $S'\subset S$ such that $S'$ is a target cover of $N$. If $S'$ is a target cover, we know by definition~\ref{defn:graph} that there is an isomorphic set $V'$ in $G$. It is to be shown that $V'$ is a vertex cover in $G$.
 
 By the definition of a target cover, we know that:
 \begin{equation}
@@ -27,10 +27,10 @@ By substituting isomorphic sets, equation~\ref{eqn:tcover} implies that:
 \label{eqn:tvbridge}
 \end{equation}
 
-Since we know by definition~\ref{defn:network} that each target has one and exactly one cover, which is isomorphic to one and exactly one edge, we can substitute again, yielding:
+Since we know by definition~\ref{defn:network} that each target has a unique set of neighboring sensors covering it, which is isomorphic to one and exactly one edge, we can substitute again, yielding:
 \begin{equation}
 \forall e \in E, \exists v\in V' | v \in e
 \end{equation}
 
-Therefore $V'$ must be a vertex cover of $G$, as was to be shown.  
+Therefore $V'$ must be a vertex cover of $G$.  
 \end{proof}
