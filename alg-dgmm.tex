@@ -1,11 +1,42 @@
 \begin{algorithm}
-\caption{Distributed General Maximal Matching}
+\caption{Distributed Weighted Vertex Cover}
 \begin{algorithmic}
+\REQUIRE {$G(V,E)$: a graph}
 \FORALL {$v_u \in V$ in parrallel}
-\FORALL {$v_v \in n_u$}
-\STATE Form a Partnership with $v_v$
-\STATE Update edge weight $e(u,v)$, saturation state and incident weight ${n_u, n_v}$
-\ENDFOR
+\STATE $S_u \leftarrow False$
+\STATE state $\leftarrow$ Choose
+\REPEAT
+\STATE Broadcast $S_u$
+\IF {$S_v = True$ for $v_v$ incident to self}
+\STATE Set Weight $e_{u,v} \leftarrow 0$
+\ENDIF
+\IF {state = Choose}
+\STATE {Choose A State (Invite, Listen)}
+\ELSIF {state = Invite}
+\STATE {Select an unweighted edge, $e_{u,v}$}
+\STATE {Broadcast an Invitation to $v_v$}
+\STATE {state $\leftarrow$ Wait}
+\ELSIF {state = Listen}
+\STATE {Collect Invitations}
+\STATE {state $\leftarrow$ Respond}
+\ELSIF {state = Wait}
+\STATE {Collect Responses}
+\IF {Response Matches Invitation}
+\STATE {Update Weight $e_{u,v}$}
+\IF {$\sum_{w_e} e incident v_u = w_u$}
+\STATE $S_u \leftarrow true$
+\ENDIF
+\ENDIF
+\STATE {state $\leftarrow$ Choose}
+\ELSIF {state = Respond}
+\STATE Choose Invitation, Broadcast Response
+\STATE {Update Weight $e_{u,v}$}
+\IF {$\sum_{w_e} e incident v_u = w_u$}
+\STATE $S_u \leftarrow true$
+\ENDIF
+\STATE {state $\leftarrow$ Choose}
+\ENDIF
+\UNTIL {$S_u = true$ OR $S_v = true$ for all $v_v$ incident $v_u$}
 \ENDFOR
 \end{algorithmic}
 \label{alg:dgmm}
