@@ -1,0 +1,87 @@
+\input{preamble.tex}
+\begin{document}
+\title{Distributed Vertex and Area Coverage Algorithms over Sensor Networks} 
+
+\author{\IEEEauthorblockN{J. Paul Daigle}
+\IEEEauthorblockA{Department of Computer Science\\
+Georgia State University\\
+Atlanta, Georgia 30303\\
+Email: jdaigle1@student.gsu.edu}
+}
+
+\maketitle
+
+\section{Introduction}
+``Macroscopes'' composed of a network of wireless sensors are a valuable research tool in several science and security domains~\cite{1098925,990703}. Because such sensors have limited data processing capacities and limited battery life, it is important to use sensors efficiently. A common problem in sensor networks is the area coverage problem, which concerns the ability of the network to record data over an area or areas of interest. If the sensors are installed in some location where batteries can be replaced and the properties of the network are understood before deployment, this is not a difficult problem. However, sensor networks can also be randomly distributed in areas that are difficult to reach. In that case it is advantageous to have local, distributed algorithms to solve problems like area coverage.
+
+The area and target coverage problems have previously been studied as dominating set and set cover problems. This paper considers the vertex cover problem, shows it's equivalence to area coverage, and develops new algorithms. The Section~\ref{sec:proof} presents a proof that the area coverage problem in a homogenous sensor network is equivalent to the minimum vertex cover problem in the hypergraph. Section~\ref{sec:life-depend} presents a rationale for extending this to the minimum weighted vertex cover (MWVC) problem, followed by an extension of prior work on target coverage \cite{978-3-540-77220-0_36} modified to search for weighted vertex solutions on the graph. Another algorithm, initially designed as a serial MWVC algorithm\cite{Gonzalez1995129} is modified to work in a distributed environment in section~\ref{sec:dgmm}. Section~\ref{sec:experiment} compares implementations of these algorithms, followed by discussion in section~\ref{sec:discuss}. 
+\section{Prior Work}
+
+\section{Coverage Problems}
+The coverage problems in this paper are common coverage problems which are known to be NP-Complete. For convenience, the problem definitions are provided here.
+\subsection{Problem Definitions}
+\input{vertex-cover-def.tex}
+\input{target-cover-def.tex}
+
+\subsection{Area Cover as Vertex Cover}
+\label{sec:proof}
+The area coverage problem in sensor networks has been shown to be equivalent to target coverage.\cite{IPDPS.2008.45361} This can be extended to the vertex cover problem in Hypergraphs. Intuitively, there is an obvious relationship between the collection of vertices that make up a given edge and the collection of sensors that cover a given target.  Theorem~\ref{thm:equiv} formally expresses this equivalency.
+
+\input{target-vertex-proof.tex}
+
+It follows from the proof that if a target cover is minimal for the sensor network, the equivalent cover in the hypergraph is minimal to that graph. Similarly, a MVC of the isomophic hypergraph is a minimum target cover for the sensor network. It also follows that target coverage is equivalent to vertex cover in a graph, because a graph is a 2-cardinal hypergraph.
+
+\section{Distributed Minimum Weighted Vertex Cover Algorithm}
+\label{sec:dgmm}
+Algorithm~\ref{alg:dgmm} is our distributed implementation of the 2-approximate minimum weighted vertex cover algorithm presented by Gonzalez.\cite{Gonzalez1995129} It proceeds in rounds, with each vertex attempting to cover one edge in each round. The selection of edges to cover is achieved by a coin flip, with each vertex choosing to either send an invitation to one of it's neighbors or choosing to wait for invitations, responding to only one. If any two vertices form a partnership in this manner, at least one of them will be placed in the cover. The probability that the algorithm will not select an edge in a given round is roughly equivalent to the probability that $n$ simultaneous coin tosses will be the same, where $n$ is the number of undecided vertices.
+
+Each vertex maintains a weight for each of its edges. Initially, this weight starts out at a null value. When two vertices form a partnership, they evaluate each others {\em remaining weight}, that is, the sum of all weighted edges - the weight of the vertex. Each vertex takes the lower remaining weight and assigns that value to the edge under consideration. Any vertex that has no remaining weight becomes part of the vertex cover, and any of its unweighted edges are given a value of 0. At the beginning of each round, vertices broadcast their state, and so vertices incident to vertices in the cover are able to update the relevant edges before making their next choice.
+
+\input{alg-dgmm.tex}
+
+\subsection{Proof of 2-Approximation}
+The linear version of Algorithm~\ref{alg:dgmm} has been shown to be 2-approximate for any ordering of edges. The distributed version never selects contiguous edges in a single round, so in each round, the simultaneous selection of vertices to join the cover is equivalent to the linear selection of vertices by selecting each edge under consideration in turn.\footnote{This algorithm could therefore also be used to provide an edge coloring in approximately the same time, equivalent to a greedy linear algorithm.}
+
+\section{Dependency Graph Automata}
+\label{sec:life-depend}
+Target Coverage and Minimum Weighted Vertex Cover are both NP-Complete problems. It has also been proved that MWVC cannot be approximated to a constant factor locally within any constant number of communication rounds~\cite{1011811}, and as we have shown this limitation must apply to target coverage as well. The Dependency Graph is a heuristic framework for such problems~\cite{IPDPS.2008.45361}. It has been shown to produce good results when applied to the Lifetime Maximization problem in sensor networks~\cite{978-3-540-89894-8_26}.
+
+The framework applies to problems where local solutions can be combined to form a feasible global solution. The essential steps of the framework are: 
+\begin{enumerate}
+\item Establish that combined local solutions lead to a feasible global solution
+\item Model the state space of the local solutions
+\item Determine a priority heuristic for local solutions
+\item Design a reasonable negotiating strategy between neighbors
+\end{enumerate} 
+A detailed description of each of these steps can be found in~\cite{IPDPS.2008.45361}.
+
+The application of the framework relies on dependencies between local solutions. In the case of the MWVC problem, there are several approaches that can be taken to determine what a local solution is. The simplest approach is to have each vertex only consider edges incident to itself. Naively, each vertex would have exactly two local solutions, the cover containing itself and the cover containing all of its neighbors. This would be insufficient for allowing for any negotiation between neighbors, as shown in Figure~\ref{fig:negprob}. If each vertex can {\em only} choose either itself or all its neighbors, the feasible solutions give weights of 34 and 29, but the optimal solution for that graph is 13. Other graphs could be constructed in which no solution would be possible with these constraints, such as a 4-clique. So even for this simple case, a large number of possible covers have to be considered. The number of possible local covers for a vertex of degree $\Delta$ is $\sum_{i=0}^\Delta \binom{\Delta}{i}$. While this is manageable for small values of $\Delta$, it rapidly becomes unmanageable. A solution to this problem is to create and prioritize these covers dynamically as part of the negotiation process, which is the approach we take.
+
+\subsection{Dependency Graph}
+Given a Weighted Graph $G(V,E)$, a {\em Dependency Graph} $H(S,D)$ for $v \in V$ is defined by local solutions $s \in S$ and dependencies $d_{u,v} \in D$ between those solutions. In the case of the MWVC, each solution is made up of a set of vertices that cover the edges incident to $v$. The goal is to use the local solutions to build $\cC$, a vertex cover of $G$. The initial dependency graph for each vertex $v$ consists of the set containing the vertex $\{v\}$, and the set containing the neighbors of $v$, $\{n_v)\}$. 
+
+\subsection{Prioritizing Local Solutions}
+
+Given two local covers $c_1, c_2$, we define the weight of a cover ($w(c)$) as $\sum w(v)\:|\: v \in c, v \notin \cC$. 
+
+\subsection{Negotiation Strategies}
+Initially, each vertex $v$ is only aware of two solutions, the solution containing itself $s_s$ and the solution containing all of its neighbors $s_n$, which have no dependencies between them. In order to ensure 2-approximation, $v$ can only safely join $\cC$ if its own weight $w_v$ is at most half of the cumulative weight of all $w_u, u \in s_n $. If that condition cannot be met, then a vertex can join $\cC$ if it is the smallest node in it's local neighborhood not in $\cC$. A vertex that cannot meet either of these conditions waits for the next round. 
+
+Some nodes will turn on, and in doing so will create new covers for their neighbors. At the beginning of each round, each vertex notes whether any vertexes in $s_n$ have joined $\cC$, and if so, it creates a new solution $s$ composed of itself and those vertexes. This solution will have a dependency to both $s_s$ and $s_n$, and the decision criteria can be applied to this new solution. 
+\section{Experiments}
+\label{sec:experiment}
+\subsection{Minimum Weighted Vertex Cover}
+\label{sub:mwvc-exp}
+Given the relationship between the target coverage and vertex cover problems, it is a reasonable hypothesis that a solution to the target coverage problem designed to maximize the lifetime of a network by reducing dependencies between covers would be a reasonable solution to the minimum weighted vertex cover. To test this hypothesis, Algorithm~\ref{alg:ldg} and \ref{alg:dgmm} were compared on a triangular grid.
+\subsection{Experimental Design}
+Vertexes were laid out in a triangular grid pattern. In order to form a graph, edges were added by choosing a vertex location and randomly walking contiguous intersections in the grid, creating edges between vertices  as each vertex was touched, stopping when every vertex had a degree of at least 2. Graphs formed in this fashion had a maximum degree of 6.
+
+After a graph was formed, both algorithms were run on the graph and the weight of the cover output by each algorithm was recorded. The experiment was run repeatedly on graphs of 81 (9x9), 361 (19x19), and 1521(39*39) vertices. Results were averaged and can be seen in Table~\ref{tab:exp1r}.  
+
+\subsection{Experimental Results}
+
+\input{tab-exp1r.tex}
+\section{Discussion}
+\label{sec:discuss}
+\bibliography{vertex_bib}
+\end{document}

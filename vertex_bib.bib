@@ -2,12 +2,54 @@
 %% http://bibdesk.sourceforge.net/
 
 
-%% Created for John Daigle at 2010-05-17 13:51:24 -0400 
+%% Created for John Daigle at 2010-05-23 18:52:24 -0400 
 
 
 %% Saved with string encoding Unicode (UTF-8) 
 
 
+
+@inproceedings{1378540,
+	Abstract = {Whether local algorithms can compute constant approximations of NP-hard problems is of both practical and theoretical interest. So far, no algorithms achieving this goal are known, as either the approximation ratio or the running time exceed O(1), or the nodes are provided with non-trivial additional information. In this paper, we present the first distributed algorithm approximating a minimum dominating set on a planar graph within a constant factor in constant time. Moreover, the nodes do not need any additional information.},
+	Address = {New York, NY, USA},
+	Annote = {Lenzen, Oswald, and Wattenhofer present a local algorithm that solves the Minimum Dominating Set problem on planar graphs. The Approximation ratio given for the algorithm is 74. However, no other constant local approximation of this problem for planar graphs had been found at the time of publication.
+
+The proof of correctness and locality is quite rigorous and makes up the bulk of the paper. The algorithm as presented is linear but is trivially distributable. Essentially, each node elects a neighbor to join the DS, then if some node has more than a constant number of neighbors in the DS, it joins the DS and tells its neighbors to leave the set. These steps are repeated once, and then any uncovered nodes choose a neighbor to join the set.
+
+Open questions are whether this algorithm could be improved upon in planar graphs or modified for another class of graphs. Some limitations on local approximation are discussed.},
+	Author = {Lenzen, Christoph and Oswald, Yvonne Anne and Wattenhofer, Roger},
+	Booktitle = {SPAA '08: Proceedings of the twentieth annual symposium on Parallelism in algorithms and architectures},
+	Date-Added = {2010-05-22 23:15:43 -0400},
+	Date-Modified = {2010-05-22 23:15:43 -0400},
+	Doi = {http://doi.acm.org/10.1145/1378533.1378540},
+	Isbn = {978-1-59593-973-9},
+	Keywords = {approximation, distributed algorithms, dominating sets, local algorithms, planar graphs},
+	Location = {Munich, Germany},
+	Pages = {46--54},
+	Publisher = {ACM},
+	Title = {What can be approximated locally?: case study: dominating sets in planar graphs},
+	Year = {2008},
+	Bdsk-File-1 = {YnBsaXN0MDDUAQIDBAUIJidUJHRvcFgkb2JqZWN0c1gkdmVyc2lvblkkYXJjaGl2ZXLRBgdUcm9vdIABqAkKFRYXGyIjVSRudWxs0wsMDQ4RFFpOUy5vYmplY3RzV05TLmtleXNWJGNsYXNzog8QgASABqISE4ACgAOAB1lhbGlhc0RhdGFccmVsYXRpdmVQYXRo0hgNGRpXTlMuZGF0YU8RAYYAAAAAAYYAAgAADE1hY2ludG9zaCBIRAAAAAAAAAAAAAAAAAAAAMarQ7ZIKwAAAAl6oQ5wNDYtbGVuemVuLnBkZgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM2+vxv0s+lBERiAAAAAAAAQAAwAACSAAAAAAAAAAAAAAAAAAAAAGQmlibGlvABAACAAAxqt79gAAABEACAAAxv1lOgAAAAEAEAAJeqEACXoTAAiZSgAAkOcAAgA3TWFjaW50b3NoIEhEOlVzZXJzOnBhdWw6RG9jdW1lbnRzOkJpYmxpbzpwNDYtbGVuemVuLnBkZgAADgAeAA4AcAA0ADYALQBsAGUAbgB6AGUAbgAuAHAAZABmAA8AGgAMAE0AYQBjAGkAbgB0AG8AcwBoACAASABEABIAKlVzZXJzL3BhdWwvRG9jdW1lbnRzL0JpYmxpby9wNDYtbGVuemVuLnBkZgATAAEvAAAVAAIAC///AACABdIcHR4fWCRjbGFzc2VzWiRjbGFzc25hbWWjHyAhXU5TTXV0YWJsZURhdGFWTlNEYXRhWE5TT2JqZWN0XxArLi4vLi4vLi4vLi4vRG9jdW1lbnRzL0JpYmxpby9wNDYtbGVuemVuLnBkZtIcHSQloiUhXE5TRGljdGlvbmFyeRIAAYagXxAPTlNLZXllZEFyY2hpdmVyAAgAEQAWAB8AKAAyADUAOgA8AEUASwBSAF0AZQBsAG8AcQBzAHYAeAB6AHwAhgCTAJgAoAIqAiwCMQI6AkUCSQJXAl4CZwKVApoCnQKqAq8AAAAAAAACAQAAAAAAAAAoAAAAAAAAAAAAAAAAAAACwQ==},
+	Bdsk-Url-1 = {http://doi.acm.org/10.1145/1378533.1378540}}
+
+@article{1514028,
+	Abstract = {In this paper, we consider the connected target coverage (CTC) problem with the objective of maximizing the network lifetime by scheduling sensors into multiple sets, each of which can maintain both target coverage and connectivity among all the active sensors and the sink.We model the CTC problem as a maximum cover tree (MCT) problem and prove that the MCT problem is NP-Complete. We determine an upper bound on the network lifetime for the MCT problem and then develop a (1+w) H (M) approximation algorithm to solve it, where is an arbitrarily small number, H(M) = Σ1≤i≤M (1/i) and M is the maximum number of targets in the sensing area of any sensor. As the protocol cost of the approximation algorithm may be high in practice, we develop a faster heuristic algorithm based on the approximation algorithm called Communication Weighted Greedy Cover (CWGC) algorithm and present a distributed implementation of the heuristic algorithm. We study the performance of the approximation algorithm and CWGC algorithm by comparing them with the lifetime upper bound and other basic algorithms that consider the coverage and connectivity problems independently. Simulation results show that the approximation algorithm and CWGC algorithm perform much better than others in terms of the network lifetime and the performance improvement can be up to 45% than the best-known basic algorithm. The lifetime obtained by our algorithms is close to the upper bound. Compared with the approximation algorithm, the CWGC algorithm can achieve a similar performance in terms of the network lifetime with a lower protocol cost.},
+	Address = {Piscataway, NJ, USA},
+	Author = {Zhao, Qun and Gurusamy, Mohan},
+	Date-Added = {2010-05-22 20:06:34 -0400},
+	Date-Modified = {2010-05-22 20:06:34 -0400},
+	Doi = {http://dx.doi.org/10.1109/TNET.2007.911432},
+	Issn = {1063-6692},
+	Journal = {IEEE/ACM Trans. Netw.},
+	Keywords = {NP-complete, approximation algorithms, coverage, network lifetime, sensor activity scheduling, wireless sensor networkss},
+	Number = {6},
+	Pages = {1378--1391},
+	Publisher = {IEEE Press},
+	Title = {Lifetime maximization for connected target coverage in wireless sensor networks},
+	Volume = {16},
+	Year = {2008},
+	Bdsk-File-1 = {YnBsaXN0MDDUAQIDBAUIJidUJHRvcFgkb2JqZWN0c1gkdmVyc2lvblkkYXJjaGl2ZXLRBgdUcm9vdIABqAkKFRYXGyIjVSRudWxs0wsMDQ4RFFpOUy5vYmplY3RzV05TLmtleXNWJGNsYXNzog8QgASABqISE4ACgAOAB1lhbGlhc0RhdGFccmVsYXRpdmVQYXRo0hgNGRpXTlMuZGF0YU8RAYYAAAAAAYYAAgAADE1hY2ludG9zaCBIRAAAAAAAAAAAAAAAAAAAAMarQ7ZIKwAAAAl6oQ5wMTM3OC16aGFvLnBkZgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAARKzYyBbwxwAAAAAAAAAAAAQAAwAACSAAAAAAAAAAAAAAAAAAAAAGQmlibGlvABAACAAAxqt79gAAABEACAAAyBcpBwAAAAEAEAAJeqEACXoTAAiZSgAAkOcAAgA3TWFjaW50b3NoIEhEOlVzZXJzOnBhdWw6RG9jdW1lbnRzOkJpYmxpbzpwMTM3OC16aGFvLnBkZgAADgAeAA4AcAAxADMANwA4AC0AegBoAGEAbwAuAHAAZABmAA8AGgAMAE0AYQBjAGkAbgB0AG8AcwBoACAASABEABIAKlVzZXJzL3BhdWwvRG9jdW1lbnRzL0JpYmxpby9wMTM3OC16aGFvLnBkZgATAAEvAAAVAAIAC///AACABdIcHR4fWCRjbGFzc2VzWiRjbGFzc25hbWWjHyAhXU5TTXV0YWJsZURhdGFWTlNEYXRhWE5TT2JqZWN0XxArLi4vLi4vLi4vLi4vRG9jdW1lbnRzL0JpYmxpby9wMTM3OC16aGFvLnBkZtIcHSQloiUhXE5TRGljdGlvbmFyeRIAAYagXxAPTlNLZXllZEFyY2hpdmVyAAgAEQAWAB8AKAAyADUAOgA8AEUASwBSAF0AZQBsAG8AcQBzAHYAeAB6AHwAhgCTAJgAoAIqAiwCMQI6AkUCSQJXAl4CZwKVApoCnQKqAq8AAAAAAAACAQAAAAAAAAAoAAAAAAAAAAAAAAAAAAACwQ==},
+	Bdsk-Url-1 = {http://dx.doi.org/10.1109/TNET.2007.911432}}
 
 @article{990703,
 	Abstract = {Thousands of tiny low-power devices spread over large physical spaces collaboratively monitor the environment, guide vehicles, and predict potential faults in buildings, bridges, roads, and rails.},
