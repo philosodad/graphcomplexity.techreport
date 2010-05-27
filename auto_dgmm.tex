@@ -62,7 +62,7 @@ Given a Weighted Graph $G(V,E)$, a {\em Dependency Graph} $H(S,D)$ for $v \in V$
 
 \subsection{Prioritizing Local Solutions}
 
-Given two local covers $c_1, c_2$, we define the weight of a cover ($w(c)$) as $\sum w(v)\:|\: v \in c, v \notin \cC$. 
+Given two local covers $c_1, c_2$, we define the degree of a cover ($w(c)$) as $\sum w(v)\:|\: v \in c, v \notin \cC$.  
 
 \subsection{Negotiation Strategies}
 Initially, each vertex $v$ is only aware of two solutions, the solution containing itself $s_s$ and the solution containing all of its neighbors $s_n$, which have no dependencies between them. In order to ensure 2-approximation, $v$ can only safely join $\cC$ if its own weight $w_v$ is at most half of the cumulative weight of all $w_u, u \in s_n $. If that condition cannot be met, then a vertex can join $\cC$ if it is the smallest node in it's local neighborhood not in $\cC$. A vertex that cannot meet either of these conditions waits for the next round. 
