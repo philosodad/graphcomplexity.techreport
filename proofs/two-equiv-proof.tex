@@ -13,7 +13,7 @@ The second set, \bOd\, consists of vertices that are in the approximate cover, b
 \cAd\ can be divided into two sets, \bId\ and \bOd, that is, those vertices that are in \cAd\ and also in the optimal edge cover, and those vertices that are in \cAd\ but are not in the optimal edge cover. In the formal proof below, the optimal cover is referred to by \cCd. \footnote{The mnemonics for this proof are as follows: we are using calligraphic letters to refer to the {\em Approximate} cover and the optimal {\em Cover}. The approximate cover is divided into the two sets denoted by blackboard style, those vertices that are {\em In} the optimal cover and those that are {\em Out} of the optimal cover. Weight of any set or vertex is denoted with an $\omega$ because of the similarity to w on the one hand, but also because the symbol $\varpi$ looks like a w plus an edge, which conceptually relates to the concept of {\em incident weight}. Incidence is illustrated by placing a line over the incident vertices.} What we would like to show is that both the set of vertices that are in both \cAd\ and \cCd\ and the set of vertices that are exclusive to \cAd\ have a total weight less than or equal to that of the optimal cover. If this is true, than the sum of the weights of the two sets is less than or equal to twice the weight of the optimal cover, and Algorithm~\ref{alg:dhgmm} produces a 2-approximate cover.
   \end{smy}
     
-  \begin{dfn}
+  \begin{defn}
     \begin{description}
     \item[$G$] A hypergraph $G(V,E)$ with vertices $v \in V$ and edges $e\{u,v,...,z\} \in E$
     \item[\cCd] The optimal edge cover of $G$
@@ -24,7 +24,7 @@ The second set, \bOd\, consists of vertices that are in the approximate cover, b
     \item[$\varpi_v$] The incident weight of v
     \item[$ \overline{uv} $] u is incident to v in $G$
     \end{description}
-  \end{dfn}
+  \end{defn}
   \begin{prop}
     $\omega_{\bI} \le \omega_{\cC} \land \omega_{\bO} \le \omega_{\cC} \implies \omega_{\cA} \le 2(\omega_{\cC})$, which is what must be shown as explained in the summary.
     \label{prp:weightcomp}

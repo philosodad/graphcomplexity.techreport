@@ -20,14 +20,14 @@ The area and target coverage problems have previously been studied as dominating
 \section{Coverage Problems}
 The coverage problems in this paper are common coverage problems which are known to be NP-Complete. For convenience, the problem definitions are provided here.
 \subsection{Problem Definitions}
-\input{vertex-cover-def.tex}
-\input{target-cover-def.tex}
+\input{defs/vertex-cover-def.tex}
+\input{defs/target-cover-def.tex}
 
 \subsection{Area Cover as Vertex Cover}
 \label{sec:proof}
 The area coverage problem in sensor networks has been shown to be equivalent to target coverage.\cite{IPDPS.2008.45361} This can be extended to the vertex cover problem in Hypergraphs. Intuitively, there is an obvious relationship between the collection of vertices that make up a given edge and the collection of sensors that cover a given target.  Theorem~\ref{thm:equiv} formally expresses this equivalency.
 
-\input{target-vertex-proof.tex}
+\input{proofs/target-vertex-proof.tex}
 
 It follows from the proof that if a target cover is minimal for the sensor network, the equivalent cover in the hypergraph is minimal to that graph. Similarly, a MVC of the isomophic hypergraph is a minimum target cover for the sensor network. It also follows that target coverage is equivalent to vertex cover in a graph, because a graph is a 2-cardinal hypergraph.
 
@@ -37,7 +37,7 @@ Algorithm~\ref{alg:dgmm} is our distributed implementation of the 2-approximate 
 
 Each vertex maintains a weight for each of its edges. Initially, this weight starts out at a null value. When two vertices form a partnership, they evaluate each others {\em remaining weight}, that is, the sum of all weighted edges - the weight of the vertex. Each vertex takes the lower remaining weight and assigns that value to the edge under consideration. Any vertex that has no remaining weight becomes part of the vertex cover, and any of its unweighted edges are given a value of 0. At the beginning of each round, vertices broadcast their state, and so vertices incident to vertices in the cover are able to update the relevant edges before making their next choice.
 
-\input{alg-dgmm.tex}
+\input{alg/alg-dgmm.tex}
 
 \subsection{Proof of 2-Approximation}
 The linear version of Algorithm~\ref{alg:dgmm} has been shown to be 2-approximate for any ordering of edges. The distributed version never selects contiguous edges in a single round, so in each round, the simultaneous selection of vertices to join the cover is equivalent to the linear selection of vertices by selecting each edge under consideration in turn.\footnote{This algorithm could therefore also be used to provide an edge coloring in approximately the same time, equivalent to a greedy linear algorithm.}
@@ -72,7 +72,7 @@ Some nodes will turn on, and in doing so will create new covers for their neighb
 \label{sec:experiment}
 \subsection{Minimum Weighted Vertex Cover}
 \label{sub:mwvc-exp}
-Given the relationship between the target coverage and vertex cover problems, it is a reasonable hypothesis that a solution to the target coverage problem designed to maximize the lifetime of a network by reducing dependencies between covers would be a reasonable solution to the minimum weighted vertex cover. To test this hypothesis, Algorithm~\ref{alg:ldg} and \ref{alg:dgmm} were compared on a triangular grid.
+Given the relationship between the target coverage and vertex cover problems, it is a reasonable hypothesis that a solution to the target coverage problem designed to maximize the lifetime of a network by reducing dependencies between covers would be a reasonable solution to the minimum weighted vertex cover. To test this hypothesis, Algorithm~\ref{alg:ldg} and Algorithm~\ref{alg:dgmm} were compared on a triangular grid.
 \subsection{Experimental Design}
 Vertexes were laid out in a triangular grid pattern. In order to form a graph, edges were added by choosing a vertex location and randomly walking contiguous intersections in the grid, creating edges between vertices  as each vertex was touched, stopping when every vertex had a degree of at least 2. Graphs formed in this fashion had a maximum degree of 6.
 
