@@ -1,43 +1,43 @@
 \begin{algorithm}
 \caption{Distributed Weighted Vertex Cover}
 \begin{algorithmic}
-\REQUIRE {$G(V,E)$: a graph}
-\FORALL {$v_u \in V$ in parrallel}
-\STATE $S_u \leftarrow False$
-\STATE state $\leftarrow$ Choose
-\REPEAT
-\STATE Broadcast $S_u$
-\IF {$S_v = True$ for $v_v$ incident to self}
-\STATE Set Weight $e_{u,v} \leftarrow 0$
-\ENDIF
-\IF {state = Choose}
-\STATE {Choose A State (Invite, Listen)}
-\ELSIF {state = Invite}
-\STATE {Select an unweighted edge, $e_{u,v}$}
-\STATE {Broadcast an Invitation to $v_v$}
-\STATE {state $\leftarrow$ Wait}
-\ELSIF {state = Listen}
-\STATE {Collect Invitations}
-\STATE {state $\leftarrow$ Respond}
-\ELSIF {state = Wait}
-\STATE {Collect Responses}
-\IF {Response Matches Invitation}
-\STATE {Update Weight $e_{u,v}$}
-\IF {$\sum_{w_e} e incident v_u = w_u$}
-\STATE $S_u \leftarrow true$
-\ENDIF
-\ENDIF
-\STATE {state $\leftarrow$ Choose}
-\ELSIF {state = Respond}
-\STATE Choose Invitation, Broadcast Response
-\STATE {Update Weight $e_{u,v}$}
-\IF {$\sum_{w_e} e incident v_u = w_u$}
-\STATE $S_u \leftarrow true$
-\ENDIF
-\STATE {state $\leftarrow$ Choose}
-\ENDIF
-\UNTIL {$S_u = true$ OR $S_v = true$ for all $v_v$ incident $v_u$}
-\ENDFOR
+\Require {$G(V,E)$: a graph}
+\ForAll {$v_u \in V$ in parrallel}
+\State $S_u \leftarrow False$
+\State state $\leftarrow$ Choose
+\Repeat
+\State Broadcast $S_u$
+\If {$S_v = True$ for $v_v$ incident to self}
+\State Set Weight $e_{u,v} \leftarrow 0$
+\EndIf
+\If {state = Choose}
+\State {Choose A State (Invite, Listen)}
+\ElsIf {state = Invite}
+\State {Select an unweighted edge, $e_{u,v}$}
+\State {Broadcast an Invitation to $v_v$}
+\State {state $\leftarrow$ Wait}
+\ElsIf {state = Listen}
+\State {Collect Invitations}
+\State {state $\leftarrow$ Respond}
+\ElsIf {state = Wait}
+\State {Collect Responses}
+\If {Response Matches Invitation}
+\State {Update Weight $e_{u,v}$}
+\If {$\sum_{w_e} e incident v_u = w_u$}
+\State $S_u \leftarrow true$
+\EndIf
+\EndIf
+\State {state $\leftarrow$ Choose}
+\ElsIf {state = Respond}
+\State Choose Invitation, Broadcast Response
+\State {Update Weight $e_{u,v}$}
+\If {$\sum_{w_e} e incident v_u = w_u$}
+\State $S_u \leftarrow true$
+\EndIf
+\State {state $\leftarrow$ Choose}
+\EndIf
+\Until {$S_u = true$ OR $S_v = true$ for all $v_v$ incident $v_u$}
+\EndFor
 \end{algorithmic}
 \label{alg:dgmm}
 \end{algorithm}
