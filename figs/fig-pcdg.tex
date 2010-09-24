@@ -1,0 +1,66 @@
+\begin{figure}[htp]
+  \caption{Partial Cover Dependency Graph}
+  \begin{center}
+  \subfloat[Weighted Graph $G$]
+  {\begin{tikzpicture}
+%      \draw [help lines] (0,-2) grid (4,2);
+      \path [help lines] (0,-2) grid (4,2); 
+      \node [vx, label=below:30]  (0) at (.5,-1) {0};
+      \node [vx, label=above:40] (1) at (0, 0) {1};
+      \node [vx, label=below:40] (2) at (1.5,-1.5) {2};
+      \node [vx, label=right:70] (3) at (1, 0) {3};
+      \node [vx, label=above:10] (4) at (2, 1) {4};
+      \node [vx, label=right:30] (5) at (2.5, 0) {5};
+      \node [vx, label=above:50] (6) at (1, 1.5) {6};
+      \node [vx, label=above:60] (7) at (3, 1) {7};
+      \node [vx, label=below:20] (8) at (3,-1) {8};
+
+      \path [draw] 
+      (0) -- (1)
+      (0) -- (2)
+      (0) -- (3)
+      (1) -- (3)
+      (1) -- (6)
+      (2) -- (3)
+      (2) -- (5)
+      (3) -- (4)
+      (3) -- (6)
+      (4) -- (5)
+      (4) -- (6)
+      (4) -- (7)
+      (5) -- (7)
+      (5) -- (8);
+    \end{tikzpicture}}
+  \\
+  \subfloat[PCDG for Vertex 7]{
+    \begin{tikzpicture}
+%      \draw [help lines] (0,-3) grid (6,3);
+     \path [help lines] (0,-2) grid (4,2);
+      \node [ex, label={above: $w=220$}, label={below: $d=4$}] (C7) at (1,2) {$\cC_7: \{7,6,3,2\}$};
+      \node [ex, label={above: $w=40$}, label={below: $d=4$}] (CN7) at (5,2) {$\cC_{n7}: \{4,5\}$};
+      \node [ex, label={above: $w=140$}, label={below: $d=4$}] (C4) at (1,0) {$\cC_4: \{4,8,2,1,0\}$};
+      \node [ex, label={above: $w=210$}, label={below: $d=4$}] (CN4) at (5,0) {$\cC_{n4}: \{3,5,6,7\}$};
+      \node [ex, label={above: $w=180$}, label={below: $d=4$}] (C5) at (1,-2) {$\cC_5: \{5,6,0,3\}$};
+      \node [ex, label={above: $w=130$}, label={below: $d=4$}] (CN5) at (5,-2) {$\cC_{n5}: \{2,4,7,8\}$};
+
+      \path [draw] 
+      (C7.east) -- (CN5.west)
+      (C7.east) -- (CN4.west)
+      (CN4.west) -- (C5.east);
+      \path [draw, decoration={bent, amplitude=16}, decorate]
+      (C7.east) -- (C5.east)
+      (C7.east) -- (C4.east)
+      (C4.east) -- (C5.east);
+      \path [draw]
+      (CN7.west) -- (C5.east)
+      (CN7.west) -- (C4.east)
+      (CN5.west) -- (C4.east);
+      \path [draw, decoration={bent, amplitude=-16}, decorate]
+      (CN7.west) -- (CN5.west)
+      (CN7.west) -- (CN4.west)
+      (CN4.west) -- (CN5.west);
+    \end{tikzpicture}
+  }
+  \end{center}
+  \label{fig:pcdg}
+\end{figure}

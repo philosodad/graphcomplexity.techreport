@@ -2,12 +2,27 @@
 %% http://bibdesk.sourceforge.net/
 
 
-%% Created for John Daigle at 2010-05-27 07:36:37 -0400 
+%% Created for John Daigle at 2010-09-21 23:49:49 -0400 
 
 
 %% Saved with string encoding Unicode (UTF-8) 
 
 
+
+@conference{Dhawan:hipc-09,
+	Abstract = {A key problem in Wireless Sensor Networks is that of scheduling sensors into sleep-sense cycles that maximize the lifetime of the network while ensuring coverage of a set of targets. This is a known NP-complete problem, due to the exponential number of possible ways to select a subset of sensors to turn on. Our earlier work had presented a unique model for this problem by introducing a lifetime dependency (LD) graph in which these possible cover sets are nodes and edges represent shared sensors between them. Using the graph properties, we presented a range of effective distributed heuristics. Even though the local subgraphs are practically tractable, their theoretically exponential growth has remained a persistent issue. In this paper, we present a theoretical model for representing this exponential space of possible cover sets that groups related covers together, thereby reducing this exponential space virtually to a linear one. We then present an equivalence class (EC) graph as a model for this reduction. We use these underlying theoretical properties to develop a smart linear time sampling algorithm of this exponential space. To demonstrate the effectiveness of our sampling technique, we employ the sampled localized LD subgraph as input to our previous heuristics. Simulation studies show about twofold speedup while reducing solution quality (network lifetime) only by under 10% when compared to our previous heuristics that operate on the exponential space. We also compare our algorithms to two other state-of-art greedy algorithms and show that ours still manage to achieve improvements of around 8-10% over them.},
+	Author = {Dhawan, A. and Prasad, S.K.},
+	Booktitle = {High Performance Computing (HiPC), 2009 International Conference on},
+	Date-Added = {2010-09-21 23:49:36 -0400},
+	Date-Modified = {2010-09-21 23:49:36 -0400},
+	Doi = {10.1109/HIPC.2009.5433213},
+	Keywords = {NP-complete problem;equivalence class graph;exponential state space;maximum lifetime sensor cover problem;smart linear time sampling algorithm;wireless sensor networks;equivalence classes;greedy algorithms;optimisation;wireless sensor networks;},
+	Month = {December},
+	Pages = {170 -178},
+	Title = {Taming the exponential state space of the maximum lifetime sensor cover problem},
+	Year = {2009},
+	Bdsk-File-1 = {YnBsaXN0MDDUAQIDBAUIJidUJHRvcFgkb2JqZWN0c1gkdmVyc2lvblkkYXJjaGl2ZXLRBgdUcm9vdIABqAkKFRYXGyIjVSRudWxs0wsMDQ4RFFpOUy5vYmplY3RzV05TLmtleXNWJGNsYXNzog8QgASABqISE4ACgAOAB1lhbGlhc0RhdGFccmVsYXRpdmVQYXRo0hgNGRpXTlMuZGF0YU8RAXoAAAAAAXoAAgAADE1hY2ludG9zaCBIRAAAAAAAAAAAAAAAAAAAAMarQ7ZIKwAAAAl6oQs1NDMzMjEzLnBkZgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAbJfqyGK3wgAAAAAAAAAAAAQAAwAACSAAAAAAAAAAAAAAAAAAAAAGQmlibGlvABAACAAAxqt79gAAABEACAAAyGLwAgAAAAEAEAAJeqEACXoTAAiZSgAAkOcAAgA0TWFjaW50b3NoIEhEOlVzZXJzOnBhdWw6RG9jdW1lbnRzOkJpYmxpbzo1NDMzMjEzLnBkZgAOABgACwA1ADQAMwAzADIAMQAzAC4AcABkAGYADwAaAAwATQBhAGMAaQBuAHQAbwBzAGgAIABIAEQAEgAnVXNlcnMvcGF1bC9Eb2N1bWVudHMvQmlibGlvLzU0MzMyMTMucGRmAAATAAEvAAAVAAIAC///AACABdIcHR4fWCRjbGFzc2VzWiRjbGFzc25hbWWjHyAhXU5TTXV0YWJsZURhdGFWTlNEYXRhWE5TT2JqZWN0XxAoLi4vLi4vLi4vLi4vRG9jdW1lbnRzL0JpYmxpby81NDMzMjEzLnBkZtIcHSQloiUhXE5TRGljdGlvbmFyeRIAAYagXxAPTlNLZXllZEFyY2hpdmVyAAgAEQAWAB8AKAAyADUAOgA8AEUASwBSAF0AZQBsAG8AcQBzAHYAeAB6AHwAhgCTAJgAoAIeAiACJQIuAjkCPQJLAlICWwKGAosCjgKbAqAAAAAAAAACAQAAAAAAAAAoAAAAAAAAAAAAAAAAAAACsg==},
+	Bdsk-Url-1 = {http://dx.doi.org/10.1109/HIPC.2009.5433213}}
 
 @book{574848,
 	Address = {New York, NY, USA},
@@ -227,15 +242,6 @@ We evaluate JazzyMac using detailed simulation over a range of traffic patterns 
 	Year = {2008},
 	Bdsk-File-1 = {YnBsaXN0MDDUAQIDBAUIJidUJHRvcFgkb2JqZWN0c1gkdmVyc2lvblkkYXJjaGl2ZXLRBgdUcm9vdIABqAkKFRYXGyIjVSRudWxs0wsMDQ4RFFpOUy5vYmplY3RzV05TLmtleXNWJGNsYXNzog8QgASABqISE4ACgAOAB1lhbGlhc0RhdGFccmVsYXRpdmVQYXRo0hgNGRpXTlMuZGF0YU8RAZ4AAAAAAZ4AAgAADE1hY2ludG9zaCBIRAAAAAAAAAAAAAAAAAAAAMarQ7ZIKwAAAAl6oRRJUERQUy4yMDA4LjQ1MzYxLnBkZgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM2X9xr453lBERiAAAAAAAAQAAwAACSAAAAAAAAAAAAAAAAAAAAAGQmlibGlvABAACAAAxqt79gAAABEACAAAxr5yHgAAAAEAEAAJeqEACXoTAAiZSgAAkOcAAgA9TWFjaW50b3NoIEhEOlVzZXJzOnBhdWw6RG9jdW1lbnRzOkJpYmxpbzpJUERQUy4yMDA4LjQ1MzYxLnBkZgAADgAqABQASQBQAEQAUABTAC4AMgAwADAAOAAuADQANQAzADYAMQAuAHAAZABmAA8AGgAMAE0AYQBjAGkAbgB0AG8AcwBoACAASABEABIAMFVzZXJzL3BhdWwvRG9jdW1lbnRzL0JpYmxpby9JUERQUy4yMDA4LjQ1MzYxLnBkZgATAAEvAAAVAAIAC///AACABdIcHR4fWCRjbGFzc2VzWiRjbGFzc25hbWWjHyAhXU5TTXV0YWJsZURhdGFWTlNEYXRhWE5TT2JqZWN0XxAxLi4vLi4vLi4vLi4vRG9jdW1lbnRzL0JpYmxpby9JUERQUy4yMDA4LjQ1MzYxLnBkZtIcHSQloiUhXE5TRGljdGlvbmFyeRIAAYagXxAPTlNLZXllZEFyY2hpdmVyAAgAEQAWAB8AKAAyADUAOgA8AEUASwBSAF0AZQBsAG8AcQBzAHYAeAB6AHwAhgCTAJgAoAJCAkQCSQJSAl0CYQJvAnYCfwKzArgCuwLIAs0AAAAAAAACAQAAAAAAAAAoAAAAAAAAAAAAAAAAAAAC3w==}}
 
-@inproceedings{Dhawan:hipc-09,
-	Author = {Akshaye Dhawan and Sushil K. Prasad},
-	Booktitle = {Procs. 16th International Conference on High Performance Computing},
-	Date-Added = {2009-12-28 03:16:56 -0500},
-	Date-Modified = {2009-12-28 03:16:56 -0500},
-	Month = {December},
-	Title = {Taming the Exponential State Space of the Maximum Lifetime Sensor Cover Problem},
-	Year = {2009}}
-
 @article{254190,
 	Abstract = { We survey approximation algorithms for some well-known and very natural combinatorial optimization problems, the minimum set covering, the minimum vertex covering, the maximum set packing, and maximum independent set problems; we discuss their approximation performance and their complexity. For already known results, any time we have conceived simpler proofs than those already published, we give these proofs, and, for the rest, we cite the simpler published ones. Finally, we discuss how one can relate the approximability behavior (from both a positive and a negative point of view) of vertex covering to the approximability behavior of a restricted class of independent set problems.  },
 	Address = {New York, NY, USA},
@@ -322,7 +328,7 @@ We evaluate JazzyMac using detailed simulation over a range of traffic patterns 
 	Publisher = {ACM},
 	Title = {What cannot be computed locally!},
 	Year = {2004},
-	Bdsk-File-1 = {YnBsaXN0MDDUAQIDBAUIJidUJHRvcFgkb2JqZWN0c1gkdmVyc2lvblkkYXJjaGl2ZXLRBgdUcm9vdIABqAkKFRYXGyIjVSRudWxs0wsMDQ4RFFpOUy5vYmplY3RzV05TLmtleXNWJGNsYXNzog8QgASABqISE4ACgAOAB1lhbGlhc0RhdGFccmVsYXRpdmVQYXRo0hgNGRpXTlMuZGF0YU8RAYIAAAAAAYIAAgAADE1hY2ludG9zaCBIRAAAAAAAAAAAAAAAAAAAAMarQ7ZIKwAAAAl6oQ1wMzAwLWt1aG4ucGRmAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACXwhxv0ozAAAAAAAAAAAAAQAAwAACSAAAAAAAAAAAAAAAAAAAAAGQmlibGlvABAACAAAxqt79gAAABEACAAAxv1hDAAAAAEAEAAJeqEACXoTAAiZSgAAkOcAAgA2TWFjaW50b3NoIEhEOlVzZXJzOnBhdWw6RG9jdW1lbnRzOkJpYmxpbzpwMzAwLWt1aG4ucGRmAA4AHAANAHAAMwAwADAALQBrAHUAaABuAC4AcABkAGYADwAaAAwATQBhAGMAaQBuAHQAbwBzAGgAIABIAEQAEgApVXNlcnMvcGF1bC9Eb2N1bWVudHMvQmlibGlvL3AzMDAta3Vobi5wZGYAABMAAS8AABUAAgAL//8AAIAF0hwdHh9YJGNsYXNzZXNaJGNsYXNzbmFtZaMfICFdTlNNdXRhYmxlRGF0YVZOU0RhdGFYTlNPYmplY3RfECouLi8uLi8uLi8uLi9Eb2N1bWVudHMvQmlibGlvL3AzMDAta3Vobi5wZGbSHB0kJaIlIVxOU0RpY3Rpb25hcnkSAAGGoF8QD05TS2V5ZWRBcmNoaXZlcgAIABEAFgAfACgAMgA1ADoAPABFAEsAUgBdAGUAbABvAHEAcwB2AHgAegB8AIYAkwCYAKACJgIoAi0CNgJBAkUCUwJaAmMCkAKVApgCpQKqAAAAAAAAAgEAAAAAAAAAKAAAAAAAAAAAAAAAAAAAArw=},
+	Bdsk-File-1 = {YnBsaXN0MDDUAQIDBAUIJidUJHRvcFgkb2JqZWN0c1gkdmVyc2lvblkkYXJjaGl2ZXLRBgdUcm9vdIABqAkKFRYXGyIjVSRudWxs0wsMDQ4RFFpOUy5vYmplY3RzV05TLmtleXNWJGNsYXNzog8QgASABqISE4ACgAOAB1lhbGlhc0RhdGFccmVsYXRpdmVQYXRo0hgNGRpXTlMuZGF0YU8RAYIAAAAAAYIAAgAADE1hY2ludG9zaCBIRAAAAAAAAAAAAAAAAAAAAMarQ7ZIKwAAAAl6oQ1wMzAwLWt1aG4ucGRmAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAActtqxv0ozFBERiAAAAAAAAQAAwAACSAAAAAAAAAAAAAAAAAAAAAGQmlibGlvABAACAAAxqt79gAAABEACAAAxv1hDAAAAAEAEAAJeqEACXoTAAiZSgAAkOcAAgA2TWFjaW50b3NoIEhEOlVzZXJzOnBhdWw6RG9jdW1lbnRzOkJpYmxpbzpwMzAwLWt1aG4ucGRmAA4AHAANAHAAMwAwADAALQBrAHUAaABuAC4AcABkAGYADwAaAAwATQBhAGMAaQBuAHQAbwBzAGgAIABIAEQAEgApVXNlcnMvcGF1bC9Eb2N1bWVudHMvQmlibGlvL3AzMDAta3Vobi5wZGYAABMAAS8AABUAAgAL//8AAIAF0hwdHh9YJGNsYXNzZXNaJGNsYXNzbmFtZaMfICFdTlNNdXRhYmxlRGF0YVZOU0RhdGFYTlNPYmplY3RfECouLi8uLi8uLi8uLi9Eb2N1bWVudHMvQmlibGlvL3AzMDAta3Vobi5wZGbSHB0kJaIlIVxOU0RpY3Rpb25hcnkSAAGGoF8QD05TS2V5ZWRBcmNoaXZlcgAIABEAFgAfACgAMgA1ADoAPABFAEsAUgBdAGUAbABvAHEAcwB2AHgAegB8AIYAkwCYAKACJgIoAi0CNgJBAkUCUwJaAmMCkAKVApgCpQKqAAAAAAAAAgEAAAAAAAAAKAAAAAAAAAAAAAAAAAAAArw=},
 	Bdsk-Url-1 = {http://doi.acm.org/10.1145/1011767.1011811}}
 
 @article{1125998,
@@ -397,7 +403,7 @@ For any covering problem with monotone constraints and submodular cost, a distri
 	Publisher = {ACM},
 	Title = {Distributed and parallel algorithms for weighted vertex cover and other covering problems},
 	Year = {2009},
-	Bdsk-File-1 = {YnBsaXN0MDDUAQIDBAUIJidUJHRvcFgkb2JqZWN0c1gkdmVyc2lvblkkYXJjaGl2ZXLRBgdUcm9vdIABqAkKFRYXGyIjVSRudWxs0wsMDQ4RFFpOUy5vYmplY3RzV05TLmtleXNWJGNsYXNzog8QgASABqISE4ACgAOAB1lhbGlhc0RhdGFccmVsYXRpdmVQYXRo0hgNGRpXTlMuZGF0YU8RAaoAAAAAAaoAAgAADE1hY2ludG9zaCBIRAAAAAAAAAAAAAAAAAAAAMarQ7ZIKwAAAAl6oRdwMTcxLWtvdWZvZ2lhbm5ha2lzLnBkZgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACXvMxxWHHgAAAAAAAAAAAAQAAwAACSAAAAAAAAAAAAAAAAAAAAAGQmlibGlvABAACAAAxqt79gAAABEACAAAxxXNbgAAAAEAEAAJeqEACXoTAAiZSgAAkOcAAgBATWFjaW50b3NoIEhEOlVzZXJzOnBhdWw6RG9jdW1lbnRzOkJpYmxpbzpwMTcxLWtvdWZvZ2lhbm5ha2lzLnBkZgAOADAAFwBwADEANwAxAC0AawBvAHUAZgBvAGcAaQBhAG4AbgBhAGsAaQBzAC4AcABkAGYADwAaAAwATQBhAGMAaQBuAHQAbwBzAGgAIABIAEQAEgAzVXNlcnMvcGF1bC9Eb2N1bWVudHMvQmlibGlvL3AxNzEta291Zm9naWFubmFraXMucGRmAAATAAEvAAAVAAIAC///AACABdIcHR4fWCRjbGFzc2VzWiRjbGFzc25hbWWjHyAhXU5TTXV0YWJsZURhdGFWTlNEYXRhWE5TT2JqZWN0XxA0Li4vLi4vLi4vLi4vRG9jdW1lbnRzL0JpYmxpby9wMTcxLWtvdWZvZ2lhbm5ha2lzLnBkZtIcHSQloiUhXE5TRGljdGlvbmFyeRIAAYagXxAPTlNLZXllZEFyY2hpdmVyAAgAEQAWAB8AKAAyADUAOgA8AEUASwBSAF0AZQBsAG8AcQBzAHYAeAB6AHwAhgCTAJgAoAJOAlACVQJeAmkCbQJ7AoICiwLCAscCygLXAtwAAAAAAAACAQAAAAAAAAAoAAAAAAAAAAAAAAAAAAAC7g==},
+	Bdsk-File-1 = {YnBsaXN0MDDUAQIDBAUIJidUJHRvcFgkb2JqZWN0c1gkdmVyc2lvblkkYXJjaGl2ZXLRBgdUcm9vdIABqAkKFRYXGyIjVSRudWxs0wsMDQ4RFFpOUy5vYmplY3RzV05TLmtleXNWJGNsYXNzog8QgASABqISE4ACgAOAB1lhbGlhc0RhdGFccmVsYXRpdmVQYXRo0hgNGRpXTlMuZGF0YU8RAaoAAAAAAaoAAgAADE1hY2ludG9zaCBIRAAAAAAAAAAAAAAAAAAAAMarQ7ZIKwAAAAl6oRdwMTcxLWtvdWZvZ2lhbm5ha2lzLnBkZgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYxGFxxWHHlBERiAAAAAAAAQAAwAACSAAAAAAAAAAAAAAAAAAAAAGQmlibGlvABAACAAAxqt79gAAABEACAAAxxXNbgAAAAEAEAAJeqEACXoTAAiZSgAAkOcAAgBATWFjaW50b3NoIEhEOlVzZXJzOnBhdWw6RG9jdW1lbnRzOkJpYmxpbzpwMTcxLWtvdWZvZ2lhbm5ha2lzLnBkZgAOADAAFwBwADEANwAxAC0AawBvAHUAZgBvAGcAaQBhAG4AbgBhAGsAaQBzAC4AcABkAGYADwAaAAwATQBhAGMAaQBuAHQAbwBzAGgAIABIAEQAEgAzVXNlcnMvcGF1bC9Eb2N1bWVudHMvQmlibGlvL3AxNzEta291Zm9naWFubmFraXMucGRmAAATAAEvAAAVAAIAC///AACABdIcHR4fWCRjbGFzc2VzWiRjbGFzc25hbWWjHyAhXU5TTXV0YWJsZURhdGFWTlNEYXRhWE5TT2JqZWN0XxA0Li4vLi4vLi4vLi4vRG9jdW1lbnRzL0JpYmxpby9wMTcxLWtvdWZvZ2lhbm5ha2lzLnBkZtIcHSQloiUhXE5TRGljdGlvbmFyeRIAAYagXxAPTlNLZXllZEFyY2hpdmVyAAgAEQAWAB8AKAAyADUAOgA8AEUASwBSAF0AZQBsAG8AcQBzAHYAeAB6AHwAhgCTAJgAoAJOAlACVQJeAmkCbQJ7AoICiwLCAscCygLXAtwAAAAAAAACAQAAAAAAAAAoAAAAAAAAAAAAAAAAAAAC7g==},
 	Bdsk-Url-1 = {http://doi.acm.org/10.1145/1582716.1582746}}
 
 @inproceedings{1577454,
