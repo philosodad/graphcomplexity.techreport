@@ -1,0 +1,30 @@
+\begin{figure}[htp]
+  \begin{center}
+    \caption{Redundancy Checking Algorithm}
+    \begin{tikzpicture}
+     % \draw[help lines] (0, -2) grid (5,2);
+      \path [help lines] (0, -2) grid (5,2);
+      \node [state, initial] (D) {\cDd};
+      \node [state] (F) at (1.5, 0) {\cFd};
+      \node [state] (R) at (3, 0) {\cRd};
+      \node [state, accepting] (I) at (4.5, 1.5) {\cId};
+      \node [state, accepting] (O) at (4.5, -1.5) {\cOd};
+
+      \path [->] (D) edge node [below] {d} (F)
+                     edge [loop above] node {w} ()
+                 (F) edge node [below] {r} (R)
+                     edge [loop above] node {w} ()
+                 (R) edge node [above right]{b, o} (O)
+                     edge node [below right]{s, n} (I);
+      \node [text width=7cm] (key) at (2, -2.25) {$d$: All neighbors in \cDd, \cFd \hspace{4cm}
+        $r$: All neighbors in \cFd, \cId, \cOd  \hspace{4cm}
+        $w$: Some neighbors undecided  \hspace{5cm}
+        $o$: Not in cover \hspace{5cm}
+        $n$: Not redundant/no redundant neighbor  \hspace{4cm}
+        $s$: Lighter than redundant neighbor  \hspace{4cm}
+        $b$: Heaviest local redundant vertex  \hspace{4cm}};
+                     
+    \end{tikzpicture}
+  \label{fig:red}
+  \end{center}
+\end{figure}

@@ -8,7 +8,9 @@
 %\usepackage{algorithmic}
 \usepackage{pstricks}
 \usepackage{amssymb, latexsym}
+\usepackage{mathtools}
 \usepackage{graphicx}
+\usepackage{subfig}
 \DeclareGraphicsRule{*}{mps}{*}{}
 
 \usepackage{pgf}
@@ -16,7 +18,10 @@
 \usetikzlibrary{decorations.pathmorphing} % LATEX and plain TEX when using Tik Z
 \usetikzlibrary{positioning}
 \usetikzlibrary{er}
-\tikzstyle{vx}=[draw,circle,fill=black!50,minimum size=2pt, inner sep=1pt, node distance=15mm]
+\usetikzlibrary{automata}
+\usetikzlibrary{shapes.geometric}
+\tikzstyle{vx}=[draw,circle,fill=white,minimum size=2pt, inner sep=1pt, node distance=15mm]
+\tikzstyle{ex}=[draw,rectangle,fill=white,minimum size=2pt, inner sep=3pt, node distance=15mm]
 \tikzstyle{bup}=[semithick, decoration={bent, aspect=.3, amplitude=4}, decorate, ->, >=stealth]
 \tikzstyle{bdn}=[semithick, decoration={bent, aspect=.3, amplitude=-4}, decorate, ->, >=stealth]
 \tikzstyle{BUP}=[thick, decoration={bent, aspect=.3, amplitude=8}, decorate, ->, >=stealth]
@@ -52,16 +57,17 @@
 \def\cC{{\mathcal C}} \def\cF{{\mathcal F}} \def\cU{{\mathcal U}}
 \def\cH{{\mathcal H}} \def\cD{{\mathcal D}} \def\cB{{\mathcal B}}
 \def\cQ{{\mathcal Q}} \def\cV{{\mathcal V}} \def\cS{{\mathcal S}}
-\def\cG{{\mathcal G}} \def\cA{{\mathcal A}}
+\def\cG{{\mathcal G}} \def\cA{{\mathcal A}} \def\cO{{\mathcal O}}
+\def\cW{{\mathcal W}} \def\cL{{\mathcal L}} 
 
 \def\bI{{\mathbb I}} \def\bO{{\mathbb O}}
 \def\bId{{$\mathbb I$}} \def\bOd{{$\mathbb O$}}
 
-\def\cId{{$\mathcal I$}} \def\cRd{{$\mathcal R$}} \def\cEd{{$\mathcal
-    E$}} \def\cCd{{$\mathcal C$}} \def\cFd{{$\mathcal F$}}
-\def\cUd{{$\mathcal U$}} \def\cHd{{$\mathcal H$}} \def\cDd{{$\mathcal
-    D$}} \def\cBd{{$\mathcal B$}} \def\cQd{{$\mathcal Q$}}
-\def\cVd{{$\mathcal V$}} \def\cSd{{$\mathcal S$}} \def\cGd{{$\mathcal
-    G$}} \def\cAd{{$\mathcal A$}}
+\def\cId{{$\mathcal I$}} \def\cRd{{$\mathcal R$}} \def\cEd{{$\mathcal E$}} 
+\def\cCd{{$\mathcal C$}} \def\cFd{{$\mathcal F$}} \def\cUd{{$\mathcal U$}} 
+\def\cHd{{$\mathcal H$}} \def\cDd{{$\mathcal D$}} \def\cBd{{$\mathcal B$}} 
+\def\cQd{{$\mathcal Q$}} \def\cVd{{$\mathcal V$}} \def\cSd{{$\mathcal S$}} 
+\def\cGd{{$\mathcal G$}} \def\cAd{{$\mathcal A$}} \def\cOd{{$\mathcal O$}}
+\def\cWd{{$\mathcal W$}} \def\cLd{{$\mathcal L$}}
 
 \bibliographystyle {IEEEtranS}

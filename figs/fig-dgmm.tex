@@ -1,0 +1,29 @@
+\begin{figure}[htp]
+  \caption{DGMM Automata}
+  \begin{center}
+  \begin{tikzpicture}[shorten >=1pt,node distance=1cm,on grid,auto, bend angle=75, every state/.style={scale=1, minimum size=18pt, inner sep=2pt}]
+    %\draw [help lines] (0,-2) grid (4,2);
+    \path [help lines] (0,-2) grid (4,2); 
+    \node [state, initial]   (C)          {\cCd};
+    \node [state] (I)            at (1,1) {\cId};
+    \node [state] (L)            at (1,-1) {\cLd};
+    \node [state] (W)            at (2,1)       {\cWd};
+    \node [state] (R)            at (2,-1)       {\cRd};
+    \node [state] (U)            at (3,0) {\cUd};
+    \node [state] (E)            at (3,-1)       {\cEd};
+    \node [state, accepting] (D) at (4,0)   {\cDd};
+
+    \path [->] (C) edge              node {} (I)
+                   edge              node {} (L)
+               (L) edge              node {} (R)
+               (I) edge              node {} (W)
+               (W) edge              node {} (U)
+               (R) edge              node {} (U)
+               (U) edge              node {} (E)
+               (E) edge              node {} (D)               
+               (W) edge              node {} (U)
+               (E) edge [bend left]  node {} (C);
+  \end{tikzpicture}
+  \end{center}
+  \label{fig:dgmm-auto}
+\end{figure}
