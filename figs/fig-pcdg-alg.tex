@@ -1,0 +1,29 @@
+\begin{figure}[htp]
+  \begin{center}
+    \caption{Partial Cover Dependency Algorithm}
+    \begin{tikzpicture}
+     % \draw[help lines] (0, -2) grid (5,2);
+      \path [help lines] (0, -2) grid (5,2);
+      \node [state, initial] (B) {\cBd};
+      \node [state] (E) at (1.5, 0) {\cEd};
+      \node [state] (A) at (3, 0) {\cAd};
+      \node [state, accepting] (I) at (4.5, 1.5) {\cId};
+      \node [state, accepting] (O) at (4.5, -1.5) {\cOd};
+
+      \path [->] (B) edge node [below] {b} (E)
+                 (E) edge node [below] {2} (A)
+                     edge [loop above] node {1} ()
+                 (A) edge node [above right]{o} (O)
+                     edge node [below right]{c, s} (I);
+      \node [text width=8cm] (key) at (2, -2.25) {
+        $o$: All neighbors in \cId  \hspace{7cm}
+        $c$: In best cover  \hspace{7cm}
+        $s$: Share cover with all neighbors in \cId \hspace{5cm}
+        $b$: First cover built  \hspace{7cm}
+        $1$: Shared covers once  \hspace{7cm}
+        $2$: Gathered covers twice  \hspace{4cm}};
+                     
+    \end{tikzpicture}
+  \label{fig:red}
+  \end{center}
+\end{figure}

@@ -1,0 +1,13 @@
+\begin{figure}[htp]
+\begin{center}
+\caption{Redundancy Applied to Koufogiannakis/Young}
+\begin{tikzpicture}
+  \begin{axis}[xlabel=Nodes + Link Density, ylabel=Total Weight, legend style={at={(1,0.25)}, anchor=east}]
+    \addplot table [x=density, y=star-reg]{\average};
+    \addplot table [x=density, y=star-red]{\average};
+    \legend{K/Y, K/Y+Redundant}
+  \end{axis}
+\end{tikzpicture}
+\label{plt:star}
+\end{center}
+\end{figure}

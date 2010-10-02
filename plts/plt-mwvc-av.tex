@@ -1,0 +1,13 @@
+\begin{figure}[htp]
+\begin{center}
+\caption{Average Weights For MWVC}
+\begin{tikzpicture}
+  \begin{axis}[xlabel=Nodes + Link Density, ylabel=Total Weight, legend style={at={(1,0.25)}, anchor=east}]
+    \addplot table [x=density, y=mat-red]{\average};
+    \addplot table  [x=density, y=star-red]{\average};
+    \legend{Match+Redundant, K/Y + Redundant}
+  \end{axis}
+\end{tikzpicture}
+\label{plt:mwvc-av}
+\end{center}
+\end{figure}

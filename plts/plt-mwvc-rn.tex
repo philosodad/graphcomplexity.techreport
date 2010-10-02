@@ -1,0 +1,13 @@
+\begin{figure}[htp]
+\begin{center}
+\caption{Rounds to resolve MWVC}
+\begin{tikzpicture}
+  \begin{axis}[xlabel=Nodes + Link Density, ylabel=Communication Rounds, legend style={at={(0.5,.5)}, anchor=north}, legend columns=2]
+    \addplot table [x=density, y=mat-reg]{\runs};
+    \addplot table [x=density, y=star-reg]{\runs};
+    \legend{Match, K/Y}
+  \end{axis}
+\end{tikzpicture}
+\label{plt:mwvc-rn}
+\end{center}
+\end{figure}

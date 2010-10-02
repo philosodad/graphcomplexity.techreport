@@ -2,12 +2,45 @@
 %% http://bibdesk.sourceforge.net/
 
 
-%% Created for John Daigle at 2010-09-21 23:49:49 -0400 
+%% Created for John Daigle at 2010-10-01 23:59:03 -0400 
 
 
 %% Saved with string encoding Unicode (UTF-8) 
 
 
+
+@article{Bar-Yehuda:1981lr,
+	Author = {Bar-Yehuda, R., and Even, S.},
+	Date-Added = {2010-10-01 23:50:55 -0400},
+	Date-Modified = {2010-10-01 23:50:55 -0400},
+	Journal = {J. of Algorithms},
+	Pages = {198-203},
+	Title = {A Linear-Time Approximation Algorithm for the Weighted Vertex Cover Problems},
+	Volume = {2},
+	Year = {1981}}
+
+@article{:fk,
+	Date-Added = {2010-10-01 23:50:55 -0400},
+	Date-Modified = {2010-10-01 23:50:55 -0400}}
+
+@inproceedings{1640702,
+	Abstract = {Energy consumption in monitoring and communication protocols for wireless sensor networks became one of the most important performance objective. We assume a commonly accepted sensor network model in which sensors can interchange idle and active modes both for monitoring and communicating. We introduce a reliability requirement for distributed target-monitoring protocols and prove that previously considered protocols (P. Berman et al., 2004) are reliable. In this paper we propose a new deterministic energy-efficient protocol for sensor networks (DEEPS) aimed at prolonging the lifetime. We prove that DEEPS is reliable and compare DEEPS with several known target-monitoring protocols in NS2 environment using LEACH (W. Heizelman et al., 2002) protocol for data delivery to the base. We implemented the full-fledged simulation of the monitoring protocols on NS2 combined with LEACH as a communication protocol, and performed extensive experimental study of several protocols showing almost 2 times increase in the lifetime for DEEPS over known protocols},
+	Annote = {Brinza and Zelikovsky present a simple protocol (DEEPS) for extending network lifetime in a sensor network while maintaining target coverage. They show that the protocal is reliable, in that while it is possible to maintain coverage, the network will maintain coverage. They also compare their algorithm to previous work with simulation using NS2.
+
+DEEPS essentially uses 1 set up rule and two behavior rules. The setup rule places a sensor in charge of each target. The first behavior rule is that a sensor that is the only sensor covering a target will always switch itself on, the second is that a sensor that is in charge of a target will remain on until some other sensor covers its target. In simulation DEEPS outperforms a prior protocol (LBP).},
+	Author = {Brinza, D. and Zelikovsky, A.},
+	Bdsk-Color = {3439290111},
+	Date-Added = {2010-10-01 23:14:08 -0400},
+	Date-Modified = {2010-10-01 23:14:08 -0400},
+	Doi = {10.1109/SNPD-SAWN.2006.31},
+	Journal = {Software Engineering, Artificial Intelligence, Networking, and Parallel/Distributed Computing, 2006. SNPD 2006. Seventh ACIS International Conference on},
+	Keywords = {LEACH protocol;NS2 environment;communication protocols;data delivery;deterministic energy-efficient protocol;distributed target-monitoring protocols;energy consumption;monitoring protocols;reliability requirement;wireless sensor networks;protocols;wireless sensor networks;},
+	Month = {june},
+	Pages = {261 -266},
+	Title = {DEEPS: Deterministic Energy-Efficient Protocol for Sensor networks},
+	Year = {2006},
+	Bdsk-File-1 = {YnBsaXN0MDDUAQIDBAUIJidUJHRvcFgkb2JqZWN0c1gkdmVyc2lvblkkYXJjaGl2ZXLRBgdUcm9vdIABqAkKFRYXGyIjVSRudWxs0wsMDQ4RFFpOUy5vYmplY3RzV05TLmtleXNWJGNsYXNzog8QgASABqISE4ACgAOAB1lhbGlhc0RhdGFccmVsYXRpdmVQYXRo0hgNGRpXTlMuZGF0YU8RAXoAAAAAAXoAAgAADE1hY2ludG9zaCBIRAAAAAAAAAAAAAAAAAAAAMarQ7ZIKwAAAAl6oQsxNjQwNzAyLnBkZgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM2b6x9wMCQAAAAAAAAAAAAQAAwAACSAAAAAAAAAAAAAAAAAAAAAGQmlibGlvABAACAAAxqt79gAAABEACAAAx9xESQAAAAEAEAAJeqEACXoTAAiZSgAAkOcAAgA0TWFjaW50b3NoIEhEOlVzZXJzOnBhdWw6RG9jdW1lbnRzOkJpYmxpbzoxNjQwNzAyLnBkZgAOABgACwAxADYANAAwADcAMAAyAC4AcABkAGYADwAaAAwATQBhAGMAaQBuAHQAbwBzAGgAIABIAEQAEgAnVXNlcnMvcGF1bC9Eb2N1bWVudHMvQmlibGlvLzE2NDA3MDIucGRmAAATAAEvAAAVAAIAC///AACABdIcHR4fWCRjbGFzc2VzWiRjbGFzc25hbWWjHyAhXU5TTXV0YWJsZURhdGFWTlNEYXRhWE5TT2JqZWN0XxAoLi4vLi4vLi4vLi4vRG9jdW1lbnRzL0JpYmxpby8xNjQwNzAyLnBkZtIcHSQloiUhXE5TRGljdGlvbmFyeRIAAYagXxAPTlNLZXllZEFyY2hpdmVyAAgAEQAWAB8AKAAyADUAOgA8AEUASwBSAF0AZQBsAG8AcQBzAHYAeAB6AHwAhgCTAJgAoAIeAiACJQIuAjkCPQJLAlICWwKGAosCjgKbAqAAAAAAAAACAQAAAAAAAAAoAAAAAAAAAAAAAAAAAAACsg==},
+	Bdsk-Url-1 = {http://dx.doi.org/10.1109/SNPD-SAWN.2006.31}}
 
 @conference{Dhawan:hipc-09,
 	Abstract = {A key problem in Wireless Sensor Networks is that of scheduling sensors into sleep-sense cycles that maximize the lifetime of the network while ensuring coverage of a set of targets. This is a known NP-complete problem, due to the exponential number of possible ways to select a subset of sensors to turn on. Our earlier work had presented a unique model for this problem by introducing a lifetime dependency (LD) graph in which these possible cover sets are nodes and edges represent shared sensors between them. Using the graph properties, we presented a range of effective distributed heuristics. Even though the local subgraphs are practically tractable, their theoretically exponential growth has remained a persistent issue. In this paper, we present a theoretical model for representing this exponential space of possible cover sets that groups related covers together, thereby reducing this exponential space virtually to a linear one. We then present an equivalence class (EC) graph as a model for this reduction. We use these underlying theoretical properties to develop a smart linear time sampling algorithm of this exponential space. To demonstrate the effectiveness of our sampling technique, we employ the sampled localized LD subgraph as input to our previous heuristics. Simulation studies show about twofold speedup while reducing solution quality (network lifetime) only by under 10% when compared to our previous heuristics that operate on the exponential space. We also compare our algorithms to two other state-of-art greedy algorithms and show that ours still manage to achieve improvements of around 8-10% over them.},
