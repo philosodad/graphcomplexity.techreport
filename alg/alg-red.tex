@@ -2,41 +2,41 @@
 \caption{Remove Redundant Vertex} 
 \begin{algorithmic}[1]
   \Require {$G(V,E), w(v)$: A vertex-weighted graph}
-  \Require {state$(v_v) = $ DECIDED or FINISH}
-  \Ensure {state$(v_v) = $ DONE} 
+  \Require {state$(v_v) =  \cD \vee \cF$}
+  \Ensure {state$(v_v) = (\cI \vee \cO)$} 
   \ForAll {$v_v \in V$ synchronously}
-  \If {state $=$ DECIDED}
+  \If {state $=$ \cDd}
   \State {DO check-finished}
-  \ElsIf {state $=$ FINISH}
+  \ElsIf {state $=$ \cFd}
   \State {DO check-redundant}
   \EndIf
   \Procedure{check-finished}{}
-  \If {$\forall v_u$ incident $v_v$, state $=$ DECIDED $\vee$ state $=$ FINISH}
+  \If {$\forall v_u$ incident $v_v$, state$(v_u) = \cD \vee \cF$}
   \If {$v_v \in \cC$} \Comment Where \cCd\ is the Cover
   \If {$\forall v_u$ incident $v_v, v_n \in \cC$}
   \State {redundant $\gets$ TRUE}
   \EndIf
-  \State {state $\gets$ FINISH}
+  \State {state $\gets$ \cFd}
   \EndIf
   \Else 
-  \State {state $\gets$ DECIDED}
+  \State {state $\gets$ \cDd}
   \EndIf
   \EndProcedure
   \Procedure{check-redundant}{}
-  \If {$\forall v_u$ incident $v_v$, state($v_u) =$ FINISH $\vee$ state$(v_u) =$ DONE}
+  \If {$\forall v_u$ incident $v_v$, state$(v_u) = \cF \vee \cI \vee \cO)$}
   \If {redundant $=$ TRUE}
   \If {$\forall v_u$ incident $v_v$, redundant$(v_u) =$ FALSE}
   \State {remove $v_v$ from \cCd}
   \Else
-  \State {$a \gets [w(v_v)] + [w(v_u) \forall v_u$ incident $v_v$]}
+  \State {$a \gets [w(v_v)] + [w(v_u) \forall v_u$ incident $v_v]$}
   \If {maximum of $a = v_v$} \Comment {$v_v$ has the largest weight in its neighborhood}
   \State {remove $v_v$ from \cCd}
   \EndIf
   \EndIf
   \EndIf
-  \State {state $\gets$ DONE}
+  \State {state $\gets \cI \vee \cO$}
   \Else
-  \State {state $\gets$ FINISH}
+  \State {state $\gets$ \cFd}
   \EndIf
   \EndProcedure
   \EndFor

@@ -13,6 +13,18 @@
 \usepackage{subfig}
 \DeclareGraphicsRule{*}{mps}{*}{}
 
+\usepackage{pgfplots}
+\pgfplotstableread{plts/experiment8b_av.tab}\average
+\pgfplotstableset{
+  create on use/density/.style={
+    create col/expr={\thisrow{nodes}+\thisrow{links}}}
+    }
+\pgfplotstableread{plts/experiment8b_rn.tab}\runs
+\pgfplotstableread{plts/experiment9a_av.tab}\costless
+\pgfplotstableset{
+  create on use/node_x_links/.style={
+    create col/expr={(\thisrow{nodes}*\thisrow{links})}}
+    }
 \usepackage{pgf}
 \usepackage{tikz}
 \usetikzlibrary{decorations.pathmorphing} % LATEX and plain TEX when using Tik Z
