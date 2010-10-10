@@ -1,0 +1,72 @@
+\begin{thm}
+  Algorithm~\ref{alg:dgmm} (DGMM) will always generate a 2-optimal cover in $O(\Delta)$ communication rounds.
+\label{thm:dgmm-term}
+\end{thm}
+\begin{note}[Mapping to Sequential Algorithm]
+\label{not:gmm-dgmm}
+DGMM is based on a sequential algorithm (GMM), which takes as an input a graph and produces a 2-optimal vertex cover of that graph. The sequential algorithm selects each edge of the graph in turn, in arbitrary order, and compares the endpoints of that edge. The edge is assigned a weight according to Equation~\ref{eqn:gmm}. If one endpoint is already in the cover, the resulting weight will be zero, otherwise, one endpoint will be added to the cover. When each edge has been assigned a weight, the algorithm terminates and outputs the cover.
+
+For DGMM, the Graph is represented as a network of compute nodes, with the nodes representing vertexes and connections between the nodes representing edges. When the algorithm terminates, every node in the network that is in the cover should be in an ``on'' state, and every node that is not should either be an ``off'' state.
+\end{note}
+\begin{note}[Communication Model]
+\label{not:com-model}
+As mentioned in Section~\ref{ssb:com-model}, we assume a message passing model of distributed computing. In each communication round, it is assumed that every node can communicate with its neighbors. Communication is assumed to be synchronous and symetric: if node $a$ is a neighbor of node $b$, node $b$ is a neighbor of node $a$, and if node $a$ has counted $x$ communication steps, so has node $b$.
+
+A ``communication round'' is actually three steps: an invitation sending step, an information response step, and an exchange step where neighbors share changes in status.\footnote{It should be noted that the K/Y algorithm also requires three communication events per round.} 
+\end{note}
+\begin{note}[Local Information]
+\label{not:dgmm-local-info}
+At the beginning of each communication round, each node has a list of it's neighbors, their current state, the edges associated with those neighbors, and the results of any previous computation performed on those edges.
+\end{note}\begin{proof}[Proof of Theorem~\ref{thm:dgmm-term}]
+\label{prf:correct}
+
+\begin{lem}
+\label{lem:dgmm-edge}
+  DGMM examines each edge once in a manner equivalent to GMM.
+\end{lem}
+\begin{proof}[Proof of Lemma~\ref{lem:dgmm-edge}]
+
+\end{proof}
+
+\begin{enumerate}
+\item Each edge in the graph will be evaluated once and only once.
+\item Each time an edge is evaluated, one endpoint will be placed in the cover.
+\item DGMM terminates in $O(\Delta)$ communication rounds.
+\item DGMM produces a 2-optimal solution
+\end{enumerate}
+
+Figure~\ref{fig:dgmm} shows the communication rounds for DGMM. If nodes proceed synchronously, then each node will travel through rounds as follows:
+\begin{enumerate}
+\item all nodes will start in initial state: \cCd
+\item all nodes will transition to either 
+  \begin{itemize} 
+  \item state \cId
+  \item state \cLd
+  \end {itemize}
+\item all nodes will transition
+  \begin{itemize}
+  \item from \cId to \cWd
+  \item from \cLd to \cRd
+  \end{itemize}
+\item all nodes will transition to state \cUd
+\item all nodes will transition to state \cEd
+\item all nodes will transition to either
+  \begin{itemize}
+  \item accepting state: \cDd
+  \item initial state: \cCd
+  \end{itemize}
+\end{enumerate}
+\end{proof}
+
+We now show that this process is free from deadlocks. 
+
+In the initial state, each node makes an independent decision to choose it's next state, with no data dependencies. Nodes that choose the \cId state will transmit an invitation with the id of one of their neighbors. Nodes that choose the \cLd state do not transmit any data in this round, but gather the invitations that are addressed to them specifically. In the next round, these roles are reversed: nodes that recieved invitations choose one to accept, and nodes that sent invitations wait to recieve replies.
+
+If node $a$ is waiting for a reply from node $b$, it will recieve any broadcast from $b$. If that broadcast contains the information that $b$ has accepted an invitation from node $c$, $a$ will simply proceed to the next round. The only reason under the model for $b$ to send no messages in the third round is if $b$ is itself waiting for a reply. Therefore, if no reply is forthcoming, $a$ proceeds to the next round as if $b$ had formed a pair with some other node.
+
+Nodes in the \cId state therefore avoid deadlock conditions. The same logic applies to nodes in the \cId path, so we know that all node pairs reach the \cUd state with symetric information, and all nodes reach the \cUd synchronously.
+
+
+ As shown in Figure~\ref{fig:dgmm-auto}, nodes proceed stepwise in such a way that at the point where a node updates its state, all nodes are updating their states. It is also true at this point that if a node $u$ has formed a pair with a node $v$, this relationship is symmetric, $v$ has also formed a pair with $u$. Ensuring this symmetry is the purpose of the Invitation/Response formality. In any given update round, the only decisions that are made are decisions about the specific edge represented by such node-pairs, both of which have the same exact information. These decisions are then transmitted to neighbors in an exchange round. If the assumption of the model--that all nodes can send and exchange one message with all neighbors in a given communication round--is correct, this will ensure that at the beginning of each cycle, if $u,v$ are neighbors, if $u$ is in the cover, $v$ will know that $u$ is in the cover. Because each node continues to process until but only until it knows the status of each of its neighbors, Algorithm~\ref{alg:dgmm} will terminate.
+
+In each communication round, roughly half of the nodes will choose to receive invitations. For each of these nodes, roughly half of their neighbors will be sending invitations, and the probability of receiving an invitation from one of these neighbors is $1:\Delta$. Taken together. As each node that receives one or more invitations will definitely respond to one invitation, in any given round, the probability of joining a node pair is $1:\Delta$. Of the two node pairs, one will weight a single edge, while the other will weight $\Delta$ edges, each of which will also be updated for $\Delta$ neighbors. This means that in a given round, roughly half of the nodes will make a decision for 1 of their edges, leading to a communications complexity of $O(2\Delta)$.

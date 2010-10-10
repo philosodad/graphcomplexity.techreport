@@ -1,9 +1,9 @@
 \begin{algorithm}
-\caption{Distributed Weighted Vertex Cover}
+\caption{Distributed Maximal-Matching-based Minimum-Weighted Vertex Cover  Algorithm (Match)}
 \begin{algorithmic}
 \Require {$G(V,E)$: a graph}
 \ForAll {$v_u \in V$ in parrallel}
-\State $S_u \leftarrow False$
+\State $S_u \leftarrow False$ \Comment $u$ is not in the cover
 \State state $\leftarrow$ \cCd
 \Repeat
 \State Broadcast $S_u$
@@ -11,7 +11,7 @@
 \State Set Weight $e_{u,v} \leftarrow 0$
 \EndIf
 \If {state = \cCd}
-\State {Choose A State (\cId, \cLd)}
+\State {Choose State (\cId, \cLd)}
 \ElsIf {state = \cId}
 \State {Select an unweighted edge, $e_{u,v}$}
 \State {Broadcast an Invitation to $v_v$}
@@ -24,15 +24,15 @@
 \If {Response Matches Invitation}
 \State {Update Weight $e_{u,v}$}
 \If {$\sum_{w(e(i,u))} \forall i \ne u  = w(u)$}
-\State $S_u \leftarrow true$
+\State $S_u \leftarrow true$ \Comment $u$ joins the cover
 \State {state $\leftarrow$ \cDd}
 \Else 
 \State {state $\leftarrow$ \cCd}
 \EndIf
 \EndIf
-\ElsIf {state = Respond}
+\ElsIf {state = \cRd}
 \State Choose Invitation, Broadcast Response
-\State {Update Weight $e_{u,v}$}
+\State {Update Weight $e_{u,v}$} \Comment Equation~\ref{eqn:gmm}
 \If {$\sum_{w(e(i,u))} \forall i \ne u  = w(u)$}
 \State $S_u \leftarrow true$
 \State {state $\leftarrow$ \cDd}
@@ -40,7 +40,7 @@
 \State {state $\leftarrow$ \cCd}
 \EndIf
 \EndIf
-\Until {$S_u = true$ OR $S_v = true$ for all $v_v$ incident $v_u$}
+\Until {$S_u = true$ OR $S_v = true$  $\forall v_v$ incident $v_u$}
 \EndFor
 \end{algorithmic}
 \label{alg:dgmm}

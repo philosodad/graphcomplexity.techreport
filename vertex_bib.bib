@@ -2,12 +2,53 @@
 %% http://bibdesk.sourceforge.net/
 
 
-%% Created for John Daigle at 2010-10-01 23:59:03 -0400 
+%% Created for John Daigle at 2010-10-08 04:41:42 -0400 
 
 
 %% Saved with string encoding Unicode (UTF-8) 
 
 
+
+@inproceedings{4697802,
+	Abstract = {The nodes of wireless sensor networks (WSNs) have the dual function of gathering information and relaying it to a central collection point, the sink. For the latter function the key is connectivity involving paths over which data is passed from node to node to the sink. We derive connectivity, as expressed by the probability that a node lies on a path to the sink, as a function of the probability that adjacent cells in a grid are connected. This result is then applied to the typical scenario where nodes are randomly scattered throughout the area being monitored. Useful upper and lower bounds for the probability of adjacent cells being connected are derived as a function of the node density in a cell. For battery powered nodes, lifetime is an important factor. The effect of the demise of nodes on the nodal density and, in turn, on network connectivity is quantified.},
+	Annote = {Continuous equations for lifetime analysis. The network structure seems somewhat arbitrary, but overall, the relationship between network density and network connectivity lifetime is fleshed out. },
+	Author = {Legakis, H. and Mehmet-Ali, M. and Hayes, J.F.},
+	Bdsk-Color = {3439290111},
+	Booktitle = {Global Telecommunications Conference, 2008. IEEE GLOBECOM 2008. IEEE},
+	Date-Added = {2010-10-02 22:50:34 -0400},
+	Date-Modified = {2010-10-02 22:50:34 -0400},
+	Doi = {10.1109/GLOCOM.2008.ECP.27},
+	Issn = {1930-529X},
+	Keywords = {WSN nodes;battery powered nodes;information gathering;lifetime analysis;network connectivity;nodal density;probability;wireless sensor networks;probability;telecommunication network reliability;wireless sensor networks;},
+	Month = {nov.},
+	Pages = {1 -6},
+	Title = {Lifetime Analysis for Wireless Sensor Networks},
+	Year = {2008},
+	Bdsk-File-1 = {YnBsaXN0MDDUAQIDBAUIJidUJHRvcFgkb2JqZWN0c1gkdmVyc2lvblkkYXJjaGl2ZXLRBgdUcm9vdIABqAkKFRYXGyIjVSRudWxs0wsMDQ4RFFpOUy5vYmplY3RzV05TLmtleXNWJGNsYXNzog8QgASABqISE4ACgAOAB1lhbGlhc0RhdGFccmVsYXRpdmVQYXRo0hgNGRpXTlMuZGF0YU8RAXoAAAAAAXoAAgAADE1hY2ludG9zaCBIRAAAAAAAAAAAAAAAAAAAAMarQ7ZIKwAAAAl6oQs0Njk3ODAyLnBkZgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa2hvyF9XJgAAAAAAAAAAAAQAAwAACSAAAAAAAAAAAAAAAAAAAAAGQmlibGlvABAACAAAxqt79gAAABEACAAAyF+PZgAAAAEAEAAJeqEACXoTAAiZSgAAkOcAAgA0TWFjaW50b3NoIEhEOlVzZXJzOnBhdWw6RG9jdW1lbnRzOkJpYmxpbzo0Njk3ODAyLnBkZgAOABgACwA0ADYAOQA3ADgAMAAyAC4AcABkAGYADwAaAAwATQBhAGMAaQBuAHQAbwBzAGgAIABIAEQAEgAnVXNlcnMvcGF1bC9Eb2N1bWVudHMvQmlibGlvLzQ2OTc4MDIucGRmAAATAAEvAAAVAAIAC///AACABdIcHR4fWCRjbGFzc2VzWiRjbGFzc25hbWWjHyAhXU5TTXV0YWJsZURhdGFWTlNEYXRhWE5TT2JqZWN0XxAoLi4vLi4vLi4vLi4vRG9jdW1lbnRzL0JpYmxpby80Njk3ODAyLnBkZtIcHSQloiUhXE5TRGljdGlvbmFyeRIAAYagXxAPTlNLZXllZEFyY2hpdmVyAAgAEQAWAB8AKAAyADUAOgA8AEUASwBSAF0AZQBsAG8AcQBzAHYAeAB6AHwAhgCTAJgAoAIeAiACJQIuAjkCPQJLAlICWwKGAosCjgKbAqAAAAAAAAACAQAAAAAAAAAoAAAAAAAAAAAAAAAAAAACsg==},
+	Bdsk-Url-1 = {http://dx.doi.org/10.1109/GLOCOM.2008.ECP.27}}
+
+@inproceedings{1498475,
+	Abstract = { A critical aspect of applications with wireless sensor networks is network lifetime. Power-constrained wireless sensor networks are usable as long as they can communicate sensed data to a processing node. Sensing and communications consume energy, therefore judicious power management and sensor scheduling can effectively extend network lifetime. To cover a set of targets with known locations when ground access in the remote area is prohibited, one solution is to deploy the sensors remotely, from an aircraft. The lack of precise sensor placement is compensated by a large sensor population deployed in the drop zone, that would improve the probability of target coverage. The data collected from the sensors is sent to a central node (e.g. cluster head) for processing. In this paper we propose un efficient method to extend the sensor network life time by organizing the sensors into a maximal number of set covers that are activated successively. Only the sensors from the current active set are responsible for monitoring all targets and for transmitting the collected data, while all other nodes are in a low-energy sleep mode. By allowing sensors to participate in multiple sets, our problem formulation increases the network lifetime compared with related work [M. Cardei et al], that has the additional requirements of sensor sets being disjoint and operating equal time intervals. In this paper we model the solution as the maximum set covers problem and design two heuristics that efficiently compute the sets, using linear programming and a greedy approach. Simulation results are presented to verify our approaches.},
+	Annote = {Foundational paper in sensor network lifetimes. Introduces the idea of dividing the network into non-disjoint sets and shows that this is a more effective way to observe the network. The paper proposes the Maximum Set Covers (MSC) problem as an abstraction of the target coverage problem in Sensor Networks. 
+
+The authors demonstrate that MSC is NP-Complete and that non-disjoint set covers, as used in MSC, are superior to disjoint set covers as in previous work. They produce an optimization version of the problem and a LP to solve it. They also present a much simpler greedy heuristic. Greedy performance versus LP degrades as the number of targets increases. 
+
+Both Greedy and LP approaches are sequential algorithms, run from a central location.},
+	Author = {Cardei, M. and Thai, M.T. and Yingshu Li and Weili Wu},
+	Bdsk-Color = {3439290111},
+	Booktitle = {INFOCOM 2005. 24th Annual Joint Conference of the IEEE Computer and Communications Societies. Proceedings IEEE},
+	Date-Added = {2010-10-02 22:50:13 -0400},
+	Date-Modified = {2010-10-02 22:50:13 -0400},
+	Doi = {10.1109/INFCOM.2005.1498475},
+	Issn = {0743-166X},
+	Keywords = {energy consumption; greedy approach; heuristics design; linear programming; network lifetime; power management; power-constrained wireless sensor networks; sensor scheduling; greedy algorithms; linear programming; wireless sensor networks;},
+	Month = {13-17},
+	Pages = {1976 - 1984 vol. 3},
+	Title = {Energy-efficient target coverage in wireless sensor networks},
+	Volume = {3},
+	Year = {2005},
+	Bdsk-File-1 = {YnBsaXN0MDDUAQIDBAUIJidUJHRvcFgkb2JqZWN0c1gkdmVyc2lvblkkYXJjaGl2ZXLRBgdUcm9vdIABqAkKFRYXGyIjVSRudWxs0wsMDQ4RFFpOUy5vYmplY3RzV05TLmtleXNWJGNsYXNzog8QgASABqISE4ACgAOAB1lhbGlhc0RhdGFccmVsYXRpdmVQYXRo0hgNGRpXTlMuZGF0YU8RAXoAAAAAAXoAAgAADE1hY2ludG9zaCBIRAAAAAAAAAAAAAAAAAAAAMarQ7ZIKwAAAAl6oQsxNDk4NDc1LnBkZgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAbADwyF9cvVBERiAAAAAAAAQAAwAACSAAAAAAAAAAAAAAAAAAAAAGQmlibGlvABAACAAAxqt79gAAABEACAAAyF+U/QAAAAEAEAAJeqEACXoTAAiZSgAAkOcAAgA0TWFjaW50b3NoIEhEOlVzZXJzOnBhdWw6RG9jdW1lbnRzOkJpYmxpbzoxNDk4NDc1LnBkZgAOABgACwAxADQAOQA4ADQANwA1AC4AcABkAGYADwAaAAwATQBhAGMAaQBuAHQAbwBzAGgAIABIAEQAEgAnVXNlcnMvcGF1bC9Eb2N1bWVudHMvQmlibGlvLzE0OTg0NzUucGRmAAATAAEvAAAVAAIAC///AACABdIcHR4fWCRjbGFzc2VzWiRjbGFzc25hbWWjHyAhXU5TTXV0YWJsZURhdGFWTlNEYXRhWE5TT2JqZWN0XxAoLi4vLi4vLi4vLi4vRG9jdW1lbnRzL0JpYmxpby8xNDk4NDc1LnBkZtIcHSQloiUhXE5TRGljdGlvbmFyeRIAAYagXxAPTlNLZXllZEFyY2hpdmVyAAgAEQAWAB8AKAAyADUAOgA8AEUASwBSAF0AZQBsAG8AcQBzAHYAeAB6AHwAhgCTAJgAoAIeAiACJQIuAjkCPQJLAlICWwKGAosCjgKbAqAAAAAAAAACAQAAAAAAAAAoAAAAAAAAAAAAAAAAAAACsg==},
+	Bdsk-Url-1 = {http://dx.doi.org/10.1109/INFCOM.2005.1498475}}
 
 @article{Bar-Yehuda:1981lr,
 	Author = {Bar-Yehuda, R., and Even, S.},

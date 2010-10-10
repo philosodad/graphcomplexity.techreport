@@ -1,0 +1,17 @@
+\begin{figure}[htp]
+\begin{center}
+\begin{tikzpicture}
+  \begin{axis}[xlabel=Cost, ylabel=Lifetime, legend style={at={(1,0.25)}, anchor=east}]
+    \addplot table [x=cost, y=deeps_step]{\costcompone};
+    \addplot table [x=cost, y=deeps_run]{\costcompone};
+    \addplot table [x=cost, y=deeps_step]{\costcomptwo};
+    \addplot table [x=cost, y=deeps_run]{\costcomptwo};
+    \addplot table [x=cost, y=deeps_step]{\costcompthree};
+    \addplot table [x=cost, y=deeps_run]{\costcompthree};
+    \legend{DEEPS, DEEPS+R,DEEPS, DEEPS+R}
+  \end{axis}
+\end{tikzpicture}
+\caption{Deeps with Communication Costs}
+\label{plt:deep-cost}
+\end{center}
+\end{figure}

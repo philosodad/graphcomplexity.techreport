@@ -1,13 +1,17 @@
 \begin{figure}[htp]
 \begin{center}
-\caption{Performance of Deeps}
 \begin{tikzpicture}
-  \begin{axis}[xlabel=Nodes * Link Density, ylabel=Lifetime, legend style={at={(1,0.25)}, anchor=east}]
-    \addplot table [x=node_x_links, y=pcd]{\costless};
-    \addplot table [x=node_x_links, y=deeps]{\costless};
+  \begin{axis}[xlabel=Average Degree, ylabel=Lifetime, legend style={at={(1,0.25)}, anchor=east}]
+    \addplot table [x=links, y=pcd]{\steppingone};
+    \addplot table [x=links, y=deeps]{\steppingone};
+    \addplot table [x=links, y=pcd]{\steppingtwo};
+    \addplot table [x=links, y=deeps]{\steppingtwo};
+    \addplot table [x=links, y=pcd]{\steppingthree};
+    \addplot table [x=links, y=deeps]{\steppingthree};
     \legend{PCDG, DEEPS}
   \end{axis}
 \end{tikzpicture}
-\label{plt:match}
+\caption{Performance of Deeps}
+\label{plt:deeps-good}
 \end{center}
 \end{figure}
