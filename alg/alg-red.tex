@@ -1,19 +1,20 @@
 \begin{algorithm}
-\caption{Remove Redundant Vertex} 
+\caption{ Redundancy checking algorithm (RC)} 
 \begin{algorithmic}[1]
   \Require {$G(V,E), w(v)$: A vertex-weighted graph}
-  \Require {state$(v_v) =  \cD \vee \cF$}
-  \Ensure {state$(v_v) = (\cI \vee \cO)$} 
+  \Require {state$(v_v) =  \cD \vee \cF$} \Comment See Fig~\ref{fig:dgmm-auto}
+  \Ensure {state$(v_v) = (\cI \vee \cO)$}
   \ForAll {$v_v \in V$ synchronously}
   \If {state $=$ \cDd}
   \State {DO check-finished}
   \ElsIf {state $=$ \cFd}
   \State {DO check-redundant}
   \EndIf
+  \EndFor
   \Procedure{check-finished}{}
   \If {$\forall v_u$ incident $v_v$, state$(v_u) = \cD \vee \cF$}
-  \If {$v_v \in \cC$} \Comment Where \cCd\ is the Cover
-  \If {$\forall v_u$ incident $v_v, v_n \in \cC$}
+  \If {$v_v \in \bC$} \Comment Where \bCd\ is the Cover
+  \If {$\forall v_u$ incident $v_v, v_n \in \bC$}
   \State {redundant $\gets$ TRUE}
   \EndIf
   \State {state $\gets$ \cFd}
@@ -26,11 +27,11 @@
   \If {$\forall v_u$ incident $v_v$, state$(v_u) = \cF \vee \cI \vee \cO)$}
   \If {redundant $=$ TRUE}
   \If {$\forall v_u$ incident $v_v$, redundant$(v_u) =$ FALSE}
-  \State {remove $v_v$ from \cCd}
+  \State {remove $v_v$ from \bCd}
   \Else
   \State {$a \gets [w(v_v)] + [w(v_u) \forall v_u$ incident $v_v]$}
   \If {maximum of $a = v_v$} \Comment {$v_v$ has the largest weight in its neighborhood}
-  \State {remove $v_v$ from \cCd}
+  \State {remove $v_v$ from \bCd}
   \EndIf
   \EndIf
   \EndIf
@@ -39,7 +40,6 @@
   \State {state $\gets$ \cFd}
   \EndIf
   \EndProcedure
-  \EndFor
 \end{algorithmic}
 \label{alg:red}
 \end{algorithm}

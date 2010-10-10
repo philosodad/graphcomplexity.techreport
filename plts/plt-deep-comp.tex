@@ -1,0 +1,15 @@
+\begin{figure}[htp]
+\begin{center}
+\begin{tikzpicture}
+  \begin{axis}[xlabel=Average Degree, ylabel=Total Lifetime, legend style={at={(1,0.25)}, anchor=east}]
+    \addplot table [x=links, y=deeps]{\stepping};
+    \addplot table [x=links, y=deeps]{\runningone};
+    \addplot table [x=links, y=deeps]{\runningtwo};
+    \addplot table [x=links, y=deeps]{\runningthree};
+    \legend{DEEPS With Steps, DEEPS+R}
+  \end{axis}
+\end{tikzpicture}
+\caption{DEEPS without Communication Costs}
+\label{plt:pcdg-comp}
+\end{center}
+\end{figure}

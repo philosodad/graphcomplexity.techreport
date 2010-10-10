@@ -1,13 +1,19 @@
 \begin{figure}[htp]
 \begin{center}
-\caption{Average Weights For MWVC}
 \begin{tikzpicture}
-  \begin{axis}[xlabel=Nodes + Link Density, ylabel=Total Weight, legend style={at={(1,0.25)}, anchor=east}]
-    \addplot table [x=density, y=mat-red]{\average};
-    \addplot table  [x=density, y=star-red]{\average};
-    \legend{Match+Redundant, K/Y + Redundant}
+  \begin{axis}[xlabel=Average Degree, ylabel=Total Weight, legend style={at={(.5,1)}, anchor=south}]
+    \addplot table [x=links, y=mat-red]{\averageone};
+    \addplot table  [x=links, y=star-red]{\averageone};
+    \addplot table [x=links, y=mat-red]{\averagetwo};
+    \addplot table  [x=links, y=star-red]{\averagetwo};
+    \addplot table [x=links, y=mat-red]{\averagethree};
+    \addplot table  [x=links, y=star-red]{\averagethree};
+    \addplot table [x=links, y=mat-red]{\averagefour};
+    \addplot table  [x=links, y=star-red]{\averagefour};
+    \legend{Match+R, K/Y+R}
   \end{axis}
 \end{tikzpicture}
+\caption{Average Weights For MWVC}
 \label{plt:mwvc-av}
 \end{center}
 \end{figure}

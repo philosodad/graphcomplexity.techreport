@@ -1,0 +1,17 @@
+\begin{figure}[htp]
+\begin{center}
+\begin{tikzpicture}
+  \begin{axis}[xlabel=Cost, ylabel=Lifetime, legend style={at={(1,0.25)}, anchor=east}]
+    \addplot table [x=cost, y=pcd_step]{\costcompone};
+    \addplot table [x=cost, y=pcd_run]{\costcompone};
+    \addplot table [x=cost, y=pcd_step]{\costcomptwo};
+    \addplot table [x=cost, y=pcd_run]{\costcomptwo};
+    \addplot table [x=cost, y=pcd_step]{\costcompthree};
+    \addplot table [x=cost, y=pcd_run]{\costcompthree};
+    \legend{PCDG, PCDG+R}
+  \end{axis}
+\end{tikzpicture}
+\caption{PCDG with Communication Costs}
+\label{plt:pcdg-cost}
+\end{center}
+\end{figure}

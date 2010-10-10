@@ -1,0 +1,13 @@
+\begin{figure}[htp]
+\begin{center}
+\caption{Redundancy Applied to Matching}
+\begin{tikzpicture}
+  \begin{axis}[xlabel=Nodes + Link Density, ylabel=Total Weight, legend style={at={(1,0.25)}, anchor=east}]
+    \addplot table [x=density, y=pcd_step]{\costcomp};
+    \addplot table [x=density, y=pcd_run]{\costcomp};
+    \legend{Maintenance Cost for PCDG, PCDG+R}
+  \end{axis}
+\end{tikzpicture}
+\label{plt:pcdg-comp}
+\end{center}
+\end{figure}

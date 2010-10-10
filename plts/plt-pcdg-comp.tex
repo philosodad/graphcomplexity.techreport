@@ -1,0 +1,17 @@
+\begin{figure}[htp]
+\begin{center}
+\begin{tikzpicture}
+  \begin{axis}[xlabel=Average Degree, ylabel=Total Lifetime, legend style={at={(1,0.25)}, anchor=east}]
+    \addplot table [x=links, y=pcd]{\steppingone};
+    \addplot table [x=links, y=pcd]{\steppingtwo};
+    \addplot table [x=links, y=pcd]{\steppingthree};
+    \addplot table [x=links, y=pcd]{\runningone};
+    \addplot table [x=links, y=pcd]{\runningtwo};
+    \addplot table [x=links, y=pcd]{\runningthree};
+    \legend{PCD With Steps, PCDG+R}
+  \end{axis}
+\end{tikzpicture}
+\caption{PCDG Without Communication Costs}
+\label{plt:pcdg-comp}
+\end{center}
+\end{figure}

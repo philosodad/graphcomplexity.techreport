@@ -1,13 +1,19 @@
 \begin{figure}[htp]
 \begin{center}
-\caption{Redundancy Applied to Koufogiannakis/Young}
 \begin{tikzpicture}
-  \begin{axis}[xlabel=Nodes + Link Density, ylabel=Total Weight, legend style={at={(1,0.25)}, anchor=east}]
-    \addplot table [x=density, y=star-reg]{\average};
-    \addplot table [x=density, y=star-red]{\average};
+  \begin{axis}[xlabel=Average Degree, ylabel=Total Weight, legend style={at={(1,0.25)}, anchor=east}]
+    \addplot table [x=links, y=star-reg]{\averageone};
+    \addplot table [x=links, y=star-red]{\averageone};
+    \addplot table [x=links, y=star-reg]{\averagetwo};
+    \addplot table [x=links, y=star-red]{\averagetwo};
+    \addplot table [x=links, y=star-reg]{\averagethree};
+    \addplot table [x=links, y=star-red]{\averagethree};
+    \addplot table [x=links, y=star-reg]{\averagefour};
+    \addplot table [x=links, y=star-red]{\averagefour};
     \legend{K/Y, K/Y+Redundant}
   \end{axis}
 \end{tikzpicture}
+\caption{Redundancy Applied to Koufogiannakis/Young}
 \label{plt:star}
 \end{center}
 \end{figure}

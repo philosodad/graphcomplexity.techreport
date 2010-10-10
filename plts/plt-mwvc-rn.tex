@@ -1,13 +1,19 @@
 \begin{figure}[htp]
 \begin{center}
-\caption{Rounds to resolve MWVC}
 \begin{tikzpicture}
-  \begin{axis}[xlabel=Nodes + Link Density, ylabel=Communication Rounds, legend style={at={(0.5,.5)}, anchor=north}, legend columns=2]
-    \addplot table [x=density, y=mat-reg]{\runs};
-    \addplot table [x=density, y=star-reg]{\runs};
+  \begin{axis}[xlabel=Average Degree, ylabel=Communication Rounds, legend style={at={(0.5,.5)}, anchor=north}, legend columns=2]
+    \addplot table [x=links, y=mat-reg]{\runsone};
+    \addplot table [x=links, y=star-reg]{\runsone};
+    \addplot table [x=links, y=mat-reg]{\runstwo};
+    \addplot table [x=links, y=star-reg]{\runstwo};
+    \addplot table [x=links, y=mat-reg]{\runsthree};
+    \addplot table [x=links, y=star-reg]{\runsthree};
+    \addplot table [x=links, y=mat-reg]{\runsfour};
+    \addplot table [x=links, y=star-reg]{\runsfour};
     \legend{Match, K/Y}
   \end{axis}
 \end{tikzpicture}
+\caption{Rounds to resolve MWVC}
 \label{plt:mwvc-rn}
 \end{center}
 \end{figure}

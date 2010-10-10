@@ -14,15 +14,39 @@
 \DeclareGraphicsRule{*}{mps}{*}{}
 
 \usepackage{pgfplots}
-\pgfplotstableread{plts/experiment8b_av.tab}\average
+\usepackage{pgfplotstable}
+\pgfplotstableread{plts/experiment8b1_av.tab}\averageone
+\pgfplotstableread{plts/experiment8b2_av.tab}\averagetwo
+\pgfplotstableread{plts/experiment8b3_av.tab}\averagethree
+\pgfplotstableread{plts/experiment8b4_av.tab}\averagefour
+\pgfplotstableread{plts/experiment9a_av.tab}\stepping
+\pgfplotstableread{plts/experiment9a1_av.tab}\steppingone
+\pgfplotstableread{plts/experiment9a2_av.tab}\steppingtwo
+\pgfplotstableread{plts/experiment9a3_av.tab}\steppingthree
+\pgfplotstableread{plts/experiment9a4_av.tab}\steppingfour
+\pgfplotstableread{plts/experiment9b1_av.tab}\runningone
+\pgfplotstableread{plts/experiment9b2_av.tab}\runningtwo
+\pgfplotstableread{plts/experiment9b3_av.tab}\runningthree
+\pgfplotstableread{plts/experiment9b4_av.tab}\runningfour
+\pgfplotstableread{plts/experiment9b_av.tab}\running
+\pgfplotstableread{plts/experiment9c_av.tab}\costcomp
+\pgfplotstableread{plts/experiment9c1_av.tab}\costcompone
+\pgfplotstableread{plts/experiment9c2_av.tab}\costcomptwo
+\pgfplotstableread{plts/experiment9c3_av.tab}\costcompthree
+\pgfplotstableread{plts/experiment8b1_rn.tab}\runsone
+\pgfplotstableread{plts/experiment8b2_rn.tab}\runstwo
+\pgfplotstableread{plts/experiment8b3_rn.tab}\runsthree
+\pgfplotstableread{plts/experiment8b4_rn.tab}\runsfour
 \pgfplotstableset{
   create on use/density/.style={
     create col/expr={\thisrow{nodes}+\thisrow{links}}}
     }
-\pgfplotstableread{plts/experiment8b_rn.tab}\runs
-\pgfplotstableread{plts/experiment9a_av.tab}\costless
 \pgfplotstableset{
-  create on use/node_x_links/.style={
+  create on use/delta/.style={
+    create col/expr={\thisrow{links}*2}}
+    }
+\pgfplotstableset{
+  create on use/nodebylinks/.style={
     create col/expr={(\thisrow{nodes}*\thisrow{links})}}
     }
 \usepackage{pgf}
@@ -73,7 +97,9 @@
 \def\cW{{\mathcal W}} \def\cL{{\mathcal L}} 
 
 \def\bI{{\mathbb I}} \def\bO{{\mathbb O}}
+\def\bC{{\mathbb C}}
 \def\bId{{$\mathbb I$}} \def\bOd{{$\mathbb O$}}
+\def\bCd{{$\mathbb C$}}
 
 \def\cId{{$\mathcal I$}} \def\cRd{{$\mathcal R$}} \def\cEd{{$\mathcal E$}} 
 \def\cCd{{$\mathcal C$}} \def\cFd{{$\mathcal F$}} \def\cUd{{$\mathcal U$}} 
