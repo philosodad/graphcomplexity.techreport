@@ -1,16 +1,16 @@
 \begin{figure}[htp]
 \begin{center}
 \begin{tikzpicture}
-  \begin{axis}[xlabel=Average Degree, ylabel=Total Weight, legend style={at={(.5,1)}, anchor=south}]
-    \addplot table [x=links, y=mat-red]{\averageone};
-    \addplot table  [x=links, y=star-red]{\averageone};
-    \addplot table [x=links, y=mat-red]{\averagetwo};
-    \addplot table  [x=links, y=star-red]{\averagetwo};
-    \addplot table [x=links, y=mat-red]{\averagethree};
-    \addplot table  [x=links, y=star-red]{\averagethree};
-    \addplot table [x=links, y=mat-red]{\averagefour};
-    \addplot table  [x=links, y=star-red]{\averagefour};
-    \legend{Match+R, K/Y+R}
+  \begin{axis}[xlabel=Average Degree, ylabel=Total Weight, legend style={at={(.5,1)}, anchor=south}, cycle list name={four}]
+    \addplot+[bls] table [x=links, y=mat-red]{\averageone};
+    \addplot+[bls] table [x=links, y=mat-red]{\averagetwo};
+    \addplot+[bls] table [x=links, y=mat-red]{\averagethree};
+    \addplot+[bls] table [x=links, y=mat-red]{\averagefour};
+    \addplot+[grt] table  [x=links, y=star-red]{\averageone};
+    \addplot+[grt] table  [x=links, y=star-red]{\averagetwo};
+    \addplot+[grt] table  [x=links, y=star-red]{\averagethree};
+    \addplot+[grt] table  [x=links, y=star-red]{\averagefour};
+    \legend{Match+R,,,, K/Y+R}
   \end{axis}
 \end{tikzpicture}
 \caption{Average Weights For MWVC}

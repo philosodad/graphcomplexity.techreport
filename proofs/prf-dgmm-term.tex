@@ -2,6 +2,9 @@
   Algorithm~\ref{alg:dgmm} (DGMM) will always generate a 2-optimal cover in $O(\Delta)$ communication rounds.
 \label{thm:dgmm-term}
 \end{thm}
+\begin{smy}
+We show first that our algorithm conducts the same steps in the same order as a sequential algorithm that is known to produce a 2-optimal result, next that the algorithm will terminate in $O(\Delta)$ communication rounds.
+\end{smy} 
 \begin{note}[Mapping to Sequential Algorithm]
 \label{not:gmm-dgmm}
 DGMM is based on a sequential algorithm (GMM), which takes as an input a graph and produces a 2-optimal vertex cover of that graph. The sequential algorithm selects each edge of the graph in turn, in arbitrary order, and compares the endpoints of that edge. The edge is assigned a weight according to Equation~\ref{eqn:gmm}. If one endpoint is already in the cover, the resulting weight will be zero, otherwise, one endpoint will be added to the cover. When each edge has been assigned a weight, the algorithm terminates and outputs the cover.

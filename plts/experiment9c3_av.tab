@@ -1,0 +1,4 @@
+nodes	links	cost	pcd_step	pcd_run	deeps_step	deeps_run	match_step	match_run	
+80	6	0	647.2	645.1	993.9	702.4	669.9	634.6	
+80	6	50	423.6	633.3	567.5	683.3	430.2	625.5	
+80	6	100	319.2	635.4	398.9	690.6	325.4	631.4	
