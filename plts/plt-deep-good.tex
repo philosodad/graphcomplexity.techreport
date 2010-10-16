@@ -1,14 +1,14 @@
 \begin{figure}[htp]
 \begin{center}
 \begin{tikzpicture}
-  \begin{axis}[xlabel=Average Degree, ylabel=Lifetime, legend style={at={(1,0.25)}, anchor=east}]
-    \addplot table [x=links, y=pcd]{\steppingone};
-    \addplot table [x=links, y=deeps]{\steppingone};
-    \addplot table [x=links, y=pcd]{\steppingtwo};
-    \addplot table [x=links, y=deeps]{\steppingtwo};
-    \addplot table [x=links, y=pcd]{\steppingthree};
-    \addplot table [x=links, y=deeps]{\steppingthree};
-    \legend{PCDG, DEEPS}
+  \begin{axis}[xlabel=Average Degree, ylabel=Lifetime, legend style={at={(0.95,0.95)}, anchor=north east}, cycle list name={three}]
+    \addplot+[bls] table [x=links, y=pcd]{\steppingone};
+    \addplot+[bls] table [x=links, y=pcd]{\steppingtwo};
+    \addplot+[bls] table [x=links, y=pcd]{\steppingthree};
+    \addplot+[grt] table [x=links, y=deeps]{\steppingone};
+    \addplot+[grt] table [x=links, y=deeps]{\steppingtwo};
+    \addplot+[grt] table [x=links, y=deeps]{\steppingthree};
+    \legend{PCDG,,, DEEPS};
   \end{axis}
 \end{tikzpicture}
 \caption{Performance of Deeps}

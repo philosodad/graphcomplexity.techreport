@@ -49,6 +49,17 @@
   create on use/nodebylinks/.style={
     create col/expr={(\thisrow{nodes}*\thisrow{links})}}
     }
+\pgfplotscreateplotcyclelist{three}{% 
+  every mark/.append style={fill=teal}\\% 
+  every mark/.append style={fill=green}\\% 
+  every mark/.append style={fill=orange}\\% 
+}
+\pgfplotscreateplotcyclelist{four}{%
+  every mark/.append style={fill=teal}\\%
+  every mark/.append style={fill=green}\\%
+  every mark/.append style={fill=orange}\\%
+  every mark/.append style={fill=pink}\\%
+}
 \usepackage{pgf}
 \usepackage{tikz}
 \usetikzlibrary{decorations.pathmorphing} % LATEX and plain TEX when using Tik Z
@@ -67,6 +78,9 @@
 \tikzstyle{str}=[semithick, decorate, ->, >=stealth]
 \tikzstyle{cr}=[draw, circle, fill=black!25,minimum size=150pt]
 
+%styles for plots?
+\tikzstyle{bls}=[blue, solid, mark=square*]
+\tikzstyle{grt}=[red, solid, mark=*]
 % \paperheight=11in \paperwidth=8.5in \textheight=9.0in
 % \textwidth=6.5in \voffset=-.875in \hoffset=-.875in
 \newenvironment{code} {\begin {quote}\begin{footnotesize}}

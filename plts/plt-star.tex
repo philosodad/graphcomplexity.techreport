@@ -1,16 +1,16 @@
 \begin{figure}[htp]
 \begin{center}
 \begin{tikzpicture}
-  \begin{axis}[xlabel=Average Degree, ylabel=Total Weight, legend style={at={(1,0.25)}, anchor=east}]
-    \addplot table [x=links, y=star-reg]{\averageone};
-    \addplot table [x=links, y=star-red]{\averageone};
-    \addplot table [x=links, y=star-reg]{\averagetwo};
-    \addplot table [x=links, y=star-red]{\averagetwo};
-    \addplot table [x=links, y=star-reg]{\averagethree};
-    \addplot table [x=links, y=star-red]{\averagethree};
-    \addplot table [x=links, y=star-reg]{\averagefour};
-    \addplot table [x=links, y=star-red]{\averagefour};
-    \legend{K/Y, K/Y+Redundant}
+  \begin{axis}[xlabel=Average Degree, ylabel=Total Weight, legend style={at={(.95,0.75)}, anchor=north east}, cycle list name={four}]
+    \addplot+[bls] table [x=links, y=star-reg]{\averageone};
+    \addplot+[bls] table [x=links, y=star-reg]{\averagetwo};
+    \addplot+[bls] table [x=links, y=star-reg]{\averagethree};
+    \addplot+[bls] table [x=links, y=star-reg]{\averagefour};
+    \addplot+[grt] table [x=links, y=star-red]{\averageone};
+    \addplot+[grt] table [x=links, y=star-red]{\averagetwo};
+    \addplot+[grt] table [x=links, y=star-red]{\averagethree};
+    \addplot+[grt] table [x=links, y=star-red]{\averagefour};
+    \legend{K/Y,,,, K/Y+R}
   \end{axis}
 \end{tikzpicture}
 \caption{Redundancy Applied to Koufogiannakis/Young}

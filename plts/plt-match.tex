@@ -1,16 +1,16 @@
 \begin{figure}[htp]
 \begin{center}
 \begin{tikzpicture}
-  \begin{axis}[xlabel=Average Degree, ylabel=Total Weight, legend style={at={(1,0.25)}, anchor=east}]
-    \addplot table [x=links, y=mat-reg]{\averageone};
-    \addplot table [x=links, y=mat-red]{\averageone};
-    \addplot table [x=links, y=mat-reg]{\averagetwo};
-    \addplot table [x=links, y=mat-red]{\averagetwo};
-    \addplot table [x=links, y=mat-reg]{\averagethree};
-    \addplot table [x=links, y=mat-red]{\averagethree};
-    \addplot table [x=links, y=mat-reg]{\averagefour};
-    \addplot table [x=links, y=mat-red]{\averagefour};
-    \legend{Match, Match+Redundant}
+  \begin{axis}[xlabel=Average Degree, ylabel=Total Weight, legend style={at={(1,0.25)}, anchor=east}, cycle list name={four} ]
+    \addplot+[bls] table [x=links, y=mat-reg]{\averageone};
+    \addplot+[bls] table [x=links, y=mat-reg]{\averagetwo};
+    \addplot+[bls] table [x=links, y=mat-reg]{\averagethree};
+    \addplot+[bls] table [x=links, y=mat-reg]{\averagefour};
+    \addplot+[grt] table [x=links, y=mat-red]{\averageone};
+    \addplot+[grt] table [x=links, y=mat-red]{\averagetwo};
+    \addplot+[grt] table [x=links, y=mat-red]{\averagethree};
+    \addplot+[grt] table [x=links, y=mat-red]{\averagefour};
+    \legend{Match,,,, Match+R}
   \end{axis}
 \end{tikzpicture}
 \caption{Redundancy Applied to Matching}

@@ -1,12 +1,14 @@
 \begin{figure}[htp]
 \begin{center}
 \begin{tikzpicture}
-  \begin{axis}[xlabel=Average Degree, ylabel=Total Lifetime, legend style={at={(1,0.25)}, anchor=east}]
-    \addplot table [x=links, y=deeps]{\stepping};
-    \addplot table [x=links, y=deeps]{\runningone};
-    \addplot table [x=links, y=deeps]{\runningtwo};
-    \addplot table [x=links, y=deeps]{\runningthree};
-    \legend{DEEPS With Steps, DEEPS+R}
+  \begin{axis}[xlabel=Average Degree, ylabel=Total Lifetime, legend style={at={(0.95,0.95)}, anchor=north east}, legend columns=3, cycle list name={three}]
+    \addplot+[bls] table [x=links, y=deeps]{\steppingone};
+    \addplot+[bls] table [x=links, y=deeps]{\steppingtwo};
+    \addplot+[bls] table [x=links, y=deeps]{\steppingthree};
+    \addplot+[grt] table [x=links, y=deeps]{\runningone};
+    \addplot+[grt] table [x=links, y=deeps]{\runningtwo};
+    \addplot+[grt] table [x=links, y=deeps]{\runningthree};
+    \legend{DEEPS,,,DEEP+R}
   \end{axis}
 \end{tikzpicture}
 \caption{DEEPS without Communication Costs}
