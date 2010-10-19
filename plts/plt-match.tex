@@ -1,7 +1,7 @@
 \begin{figure}[htp]
 \begin{center}
 \begin{tikzpicture}
-  \begin{axis}[xlabel=Average Degree, ylabel=Total Weight, legend style={at={(1,0.25)}, anchor=east}, cycle list name={four} ]
+  \begin{axis}[xlabel=Average Degree, ylabel=Total Weight, legend style={at={(.95,0.75)}, anchor=north east}, cycle list name={four} ]
     \addplot+[bls] table [x=links, y=mat-reg]{\averageone};
     \addplot+[bls] table [x=links, y=mat-reg]{\averagetwo};
     \addplot+[bls] table [x=links, y=mat-reg]{\averagethree};
@@ -13,7 +13,7 @@
     \legend{Match,,,, Match+R}
   \end{axis}
 \end{tikzpicture}
-\caption{Redundancy Applied to Matching}
+\caption{Redundancy Applied to DGMM}
 \label{plt:match}
 \end{center}
 \end{figure}

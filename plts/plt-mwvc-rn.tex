@@ -2,15 +2,15 @@
 \begin{center}
 \begin{tikzpicture}
   \begin{axis}[xlabel=Average Degree, ylabel=Communication Rounds, legend style={at={(0.95,0.95)}, anchor=north east}, cycle list name={four}]
-    \addplot+[bls] table [x=links, y=mat-reg]{\runsone};
-    \addplot+[bls] table [x=links, y=mat-reg]{\runstwo};
-    \addplot+[bls] table [x=links, y=mat-reg]{\runsthree};
-    \addplot+[bls] table [x=links, y=mat-reg]{\runsfour};
     \addplot+[grt] table [x=links, y=star-reg]{\runsone};
     \addplot+[grt] table [x=links, y=star-reg]{\runstwo};
     \addplot+[grt] table [x=links, y=star-reg]{\runsthree};
     \addplot+[grt] table [x=links, y=star-reg]{\runsfour};
-    \legend{Match, K/Y}
+    \addplot+[bls] table [x=links, y=mat-reg]{\runsone};
+    \addplot+[bls] table [x=links, y=mat-reg]{\runstwo};
+    \addplot+[bls] table [x=links, y=mat-reg]{\runsthree};
+    \addplot+[bls] table [x=links, y=mat-reg]{\runsfour};
+    \legend{K/Y,,,, DGMM}
   \end{axis}
 \end{tikzpicture}
 \caption{Rounds to resolve MWVC}
