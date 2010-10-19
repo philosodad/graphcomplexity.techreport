@@ -18,7 +18,9 @@ We also explore an important variant, the problem of finding a series of vertex 
 \section{Introduction}
 The Minimum Vertex Cover problem and its weighted variant are NP-Complete problems with several known linear time sequential algorithms that provide constant approximations. The existence of such algorithms suggests that there is a constant time distributed algorithm that would provide a constant approximation for MVC or MWVC, but it has been shown that a constant approximation of MWVC cannot be found by a distributed algorithm in a constant number of rounds\cite{1011811}. 
 
-Here we present a distributed 2-optimal algorithm to solve MWVC in an expected running time of $O(logn)$, based on the linear time sequential algorithm of Gonzalez\cite{Gonzalez1995129}. This is not the first such algorithm to appear in the literature, but there are implementation advantages to our approach. In addition, we present an interesting subroutine that runs in constant time and improves the quality of solutions for both our algorithm and the prior algorithm of Koufogiannakis and Young\cite{1582746}. This subroutine turns out to have practical value when applied to the related problem of sensor network lifetime. 
+Here we present a distributed 2-optimal algorithm to solve MWVC in an expected running time of $O(logn)$, based on the linear time sequential algorithm of Gonzalez\cite{Gonzalez1995129}. This is not the first such algorithm to appear in the literature, but there are implementation advantages to our approach. In addition, we present an interesting subroutine that runs in constant time and improves the quality of solutions for both our algorithm and the prior algorithm of Koufogiannakis and Young\cite{1582746}. This subroutine turns out to have practical value when applied to the related problem of sensor network lifetime.
+
+Definitions and descriptions of prior work is presented in Section~\ref{sec:background}. In Section~\ref{sec:algorithms} we describe our own distributed algorithms for both network lifetime and MWVC. Section~\ref{sec:simulator} contains the description of our simulation software design, which provides the engine for the experiments that are described in Section~\ref{sec:experiments}.
 
 \section{Background}
 \label{sec:background}
@@ -37,9 +39,18 @@ All of the distributed algorithms described are assumed to be running on a {\em 
 
 Sequential Linear time algorithms for covering problems are surveyed in detail in \cite{254190}. The seminal paper on Linear Programming techniques for constant ratio approximation of MWVC was published by Bar-Yehuda and Even in 1981 \cite{Bar-Yehuda:1981lr}. Gonzalez created a 2-optimal LP-Free linear time algorithm based on Maximal Matching in 1995 which is the basis of our distributed algorithm \cite{Gonzalez1995129}. 
 
-We are aware of two distributed algorithms for minimum weighted vertex cover. A 2-optimal algorithm based on maximal matching was published in 2008 by Grandoni et. al \cite{1435381}.This paper uses a simpler algorithm presented by Koufaganis and Young in 2009 for performance comparison \cite{1582746}. 
+We are aware of two distributed algorithms for minimum weighted vertex cover. A 2-optimal algorithm based on maximal matching was published in 2008 by Grandoni et. al \cite{1435381}. We implement a simpler algorithm presented by Koufaganis and Young in 2009 for performance comparison \cite{1582746}. The Koufaganis/Young algorithm is described in detail in Section~\ref{sec:k-y-alg}.
 
-The network lifetime problem is introduced in detail by Cardei et. al in \cite{1498475}. A mathematical analysis of the problem is provided by Legakis et all in \cite{4697802}. Brinza and Zelikovski's deterministic algorithm \cite{1640702} is used in this paper as a point of comparison. The issue of communication costs is addressed by Zhao et. all, along with a formal definition for the {\em Connected Target Coverage Problem}\cite{1514028}. Dhawan and Prasad introduce the use of Dependency Graphs for the network lifetime problem in \cite{978-3-540-77220-0_36}, this work provides the jumping off point for the algorithm introduced in Section~\ref{sec:PCDG}.
+The network lifetime problem is introduced in detail by Cardei et. al in \cite{1498475}. A mathematical analysis of the problem is provided by Legakis et all in \cite{4697802}. Brinza and Zelikovski's deterministic algorithm \cite{1640702}, detailed in Section~\ref{sec:deeps} is used in this paper as a point of comparison. The issue of communication costs is addressed by Zhao et. all, along with a formal definition for the {\em Connected Target Coverage Problem}\cite{1514028}. Dhawan and Prasad introduce the use of Dependency Graphs for the network lifetime problem in \cite{978-3-540-77220-0_36}, this work provides the jumping off point for the algorithm introduced in Section~\ref{sec:PCDG}. Dependency Graphs are explored further in Section~\ref{sec:dep-graphs}.
+
+\subsection{The Koufaganis/Young Algorithm}
+\label{sec:k-y-alg}
+
+\subsection{The DEEPS Algorithm}
+\label{sec:deeps}
+
+\subsection{Dependency Graphs}
+\label{sec:dep-graphs}
 
 \section{Algorithms}
 \label{sec:algorithms}
@@ -50,7 +61,7 @@ Algorithm~\ref{alg:dgmm} is our distributed implementation of the 2-optimal mini
 
 \input{eqns/eqn-gmm.tex}
 
-The distributed version of the algorithm chooses some disjoint set of edges and assigns weights as described. The precise method of choosing edges and updating weights is given in Algorithm~\ref{alg:dgmm}. The automaton capturing the state transitions of Algorithm~\ref{alg:dgmm} is given succinctly in~\ref{fig:dgmm-auto}. Each vertex begins in the \cCd\ state, and chooses to either send invitations (\cId), or listen for invitation (\cLd). Vertices in the \cId\ state choose one neighbor to send an invitation to and transition to a waiting state (\cWd), and vertices in the \cLd\ state choose one invitation to accept. The acceptence message is sent during the response state \cRd. All vertices then update their status (\cUd). Vertices that have either chosen to join the cover or which have no undecided neighbors will transition to the done state, (\cDd), and other vertices return to state \cCd.  
+The distributed version of the algorithm chooses some disjoint set of edges and assigns weights as described. The precise method of choosing edges and updating weights is given in Algorithm~\ref{alg:dgmm}. The automaton capturing the state transitions of Algorithm~\ref{alg:dgmm} is given succinctly in Figure~\ref{fig:dgmm-auto}. Each vertex begins in the \cCd\ state, and chooses to either send invitations (\cId), or listen for invitation (\cLd). Vertices in the \cId\ state choose one neighbor to send an invitation to and transition to a waiting state (\cWd), and vertices in the \cLd\ state choose one invitation to accept. The acceptence message is sent during the response state \cRd. All vertices then update their status (\cUd). Vertices that have either chosen to join the cover or which have no undecided neighbors will transition to the done state, (\cDd), and other vertices return to state \cCd.  
 
 \input{figs/fig-dgmm.tex}
 
@@ -126,9 +137,10 @@ After constructing $H$, each cover is assigned a {\em weight} and a {\em degree}
 The PCDG algorithm uses 2-hop information for immediate setup of the graph, as described in the previous section. After initial setup, the algorithm no longer updates any information beyond 1-hop. Figure~\ref{fig:pcdg-auto} shows the automaton for PCDG.
 \input{figs/fig-pcdg-alg.tex}
 
-
+\section{Simulation Software}
+\label{sec:simulator}
 \section{Experiments}
-\label{sec:experiment}
+\label{sec:experiments}
 Experiments were conducted to test algorithm performance and examine the relationship between maximizing network lifetime and minimizing vertex cover.
 \subsection{Minimum Weighted Vertex Cover}
 \label{sub:mwvc-exp}
@@ -155,7 +167,7 @@ We developed a discrete-event simulator in Ruby. Ruby was chosen primarily becau
 
 The source code for each algorithm and the simulation framework are open source and available for download.\footnote{Using the mercurial VCS, command hg clone https://rvertex.graphcomplexity.googlecode.com/hg/ graphcomplexity-rvertex will retrieve a copy of the code repository. This paper uses revision 67446e3ca7 of the code base} 
 
-For the MWVC problem, graphs were constructed with 120, 240, 480, and 960 vertices with link densities of 1.5, 3, 6, 12, 24, and 48. 50 random graphs were generated at each size, and the Koufogiannakis/Young distributed algorithm\cite{1582746}, our distributed modification of the Gonzalez Generalized Maximal Matching Algorithm\cite{Gonzalez1995129}, and versions of each with the redundancy checking algorithm were run on each generated graph.
+For the MWVC problem, graphs were constructed with 120, 240, 480, and 960 vertices with average degrees of 3, 6, 12, 24, 48, and 96. 50 random graphs were generated at each size, and the Koufogiannakis/Young distributed algorithm\cite{1582746}, our distributed modification of the Gonzalez Generalized Maximal Matching Algorithm\cite{Gonzalez1995129}, and versions of each with the redundancy checking algorithm were run on each generated graph, with results being averaged.
 
 For the Network Lifetime problem, the difficulty was to capture the communication cost associated with running the covering algorithms. We assume that in every case, a constant amount of energy is required to maintain the sensing and information sharing functions of the network. In our simulation, this cost is only applied to sensors that are ``on'' in a given round. The cost of re-organizing the sensors is a global cost, as every sensor in the network is required to participate in establishing a new vertex cover. This is applied as a constant drain on all sensors in the network. We conservatively simulate this drain as being on a spectrum from free to being equal to the cost of the information sharing and sensing function of the network. 
 
