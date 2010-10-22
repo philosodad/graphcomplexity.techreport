@@ -1,6 +1,6 @@
 \begin{algorithm}
 \caption{Distributed Maximal-Matching-based Minimum-Weighted Vertex Cover  Algorithm (DGMM)}
-\begin{algorithmic}
+\begin{algorithmic}[1]
 %\Require {$G(V,E)$: a Communicaton Network}
 \ForAll {$v_u \in V$ in parrallel}
 \State $S_u \leftarrow False$ \Comment $u$ is not in the cover
@@ -26,10 +26,10 @@
 \ElsIf {state = \cRd}
 \State {Randomly Select $I_v^u$} \Comment from stored invites
 \State {Broadcast $R_u^v$} \Comment $u$ accepts $v's$ invitation
-\State {Update Weight $e_{u,v}$} \Comment by Equation~\ref{eqn:gmm}
+\State {Update Weight $e_{u,v}$} \Comment by Equation~\ref{eqn:gmm} \label{alglin:dgmm-update-weight-R}
 
 \If {$\sum_{w(e(i,u))} = w(u)$}
-\State {$S_u \gets true$} \Comment $u$ joins the cover
+\State {$S_u \gets true$} \Comment $u$ joins the cover \label{alglin:dgmm-join-cover-R}
 \State {state $\gets \cD$}
 \Else 
 \State {state $\gets \cC$}
@@ -39,10 +39,10 @@
 \State {Recieve $R_x^y$} \Comment all local responses
 
 \If {$y = u$} \Comment response is to $v_u$
-\State {Update Weight $e_{u,v}$}
+\State {Update Weight $e_{u,v}$}\label{alglin:dgmm-update-weight-W}
 
 \If {$\sum_{w(e(i,u))} = w(u)$}
-\State $S_u \leftarrow true$ \Comment $u$ joins the cover
+\State $S_u \leftarrow true$ \Comment $u$ joins the cover\label{alglin:dgmm-join-cover-W}
 \State {state $\leftarrow$ \cDd}
 \Else 
 \State {state $\leftarrow$ \cCd}
@@ -52,7 +52,7 @@
 
 \EndIf
 
-\Until {$S_u = true$ OR $S_v = true$  $\forall v_v$ incident $v_u$}
+\Until {$S_u = true$ OR $S_v = true$  $\forall v_v$ incident $v_u$}\label{alglin:dgmm-end-while}
 \EndFor
 \end{algorithmic}
 \label{alg:dgmm}
