@@ -2,12 +2,7 @@
   Algorithm~\ref{alg:dgmm} (DGMM) will always generate a 2-optimal cover in $O(\Delta)$ communication rounds.
 \label{thm:dgmm-term}
 \end{thm}
-\begin{note}[Mapping to Sequential Algorithm]
-\label{not:gmm-dgmm}
-DGMM is based on a sequential algorithm (GMM), which takes as an input a graph and produces a 2-optimal vertex cover of that graph. The sequential algorithm selects each edge of the graph in turn, in arbitrary order, and compares the endpoints of that edge. The edge is assigned a weight according to Equation~\ref{eqn:gmm}. If one endpoint is already in the cover, the resulting weight will be zero, otherwise, one endpoint will be added to the cover. When each edge has been assigned a weight, the algorithm terminates and outputs the cover.
 
-For DGMM, the Graph is represented as a network of compute nodes, with the nodes representing vertexes and connections between the nodes representing edges. When the algorithm terminates, every node in the network that is in the cover should be in an ``on'' state, and every node that is not should either be an ``off'' state.
-\end{note}
 \begin{note}[Communication Model]
 \label{not:com-model}
 As mentioned in Section~\ref{ssb:com-model}, we assume a message passing model of distributed computing. In each communication round, it is assumed that every node can communicate with its neighbors. Communication is assumed to be synchronous and symetric: if node $a$ is a neighbor of node $b$, node $b$ is a neighbor of node $a$, and if node $a$ has counted $x$ communication steps, so has node $b$.
@@ -17,6 +12,12 @@ A ``communication round'' is actually three steps: an invitation sending step, a
 \begin{note}[Local Information]
 \label{not:dgmm-local-info}
 At the beginning of each communication round, each node has a list of it's neighbors, their current state, the edges associated with those neighbors, and the results of any previous computation performed on those edges.
+\end{note}
+\begin{note}[Mapping to Sequential Algorithm]
+\label{not:gmm-dgmm}
+DGMM is based on a sequential algorithm (GMM), which takes as an input a graph and produces a 2-optimal vertex cover of that graph. The sequential algorithm selects each edge of the graph in turn, in arbitrary order, and compares the endpoints of that edge. The edge is assigned a weight according to Equation~\ref{eqn:gmm}. If one endpoint is already in the cover, the resulting weight will be zero, otherwise, one endpoint will be added to the cover. When each edge has been assigned a weight, the algorithm terminates and outputs the cover.
+
+For DGMM, the Graph is represented as a network of compute nodes, with the nodes representing vertexes and connections between the nodes representing edges. Nodes form pairs over these connections and weight them, following the same rules as the sequential algorithm. Nodes turn off if they have no unweighted edges and have not joined the cover. When the algorithm terminates, every node in the network that is in the cover will be in an ``on'' state, and every node that is not will be in an ``off'' state.
 \end{note}
 \begin{proof}[Proof of Theorem~\ref{thm:dgmm-term}]
 \label{prf:correct}
@@ -34,10 +35,40 @@ We show first that our algorithm conducts the same steps in the same order as a 
 
 \begin{lem}
   \label{lem:dgmm-delta}
-  DGMM will terminate in $O(\Delta)$ communication rounds.
+  DGMM will weight all edges in approximately $2\Delta$ communication rounds.
 \end{lem}
 \begin{proof}[Proof of Lemma~\ref{lem:dgmm-delta}]
-In each communication round, roughly half of the nodes will choose to receive invitations. For each of these nodes, roughly half of their neighbors will be sending invitations, and the probability of receiving an invitation from one of these neighbors is $1:\Delta$. Taken together. As each node that receives one or more invitations will definitely respond to one invitation, in any given round, the probability of joining a node pair is $1:\Delta$. Of the two node pairs, one will weight a single edge, while the other will weight $\Delta$ edges, each of which will also be updated for $\Delta$ neighbors. This means that in a given round, roughly half of the nodes will make a decision for 1 of their edges, leading to a communications complexity of $O(2\Delta)$.
+
+Following the automata in Figure~\ref{fig:dgmm-auto}, each communication round starts with a choice phase (labeled \cCd), after which the nodes will be divided approximately in half, with half being senders in the next round and half being recievers. A given node $u$, then, will become a reciever (indicated by state \cLd) with .50\% probability. The degree of $u$ can be assumed, without loss of generality, to be the maximum degree in the graph, indicated as $\Delta$. 
+
+Roughly half of the neighbors of $u$ will be senders (indicated by state \cId). For each of these, we can assume a degree of $\Delta$ as well, meaning that for each neighbor $v$ of $u$, there is a probability of $1:\Delta$ that $v$ will invite $u$ to weight edge $(u,v)$ in this round. Since $u$ has $\frac{\Delta}{2}$ neighbors that are also senders, $u$ will recieve an invitation with a probability of $1:2$. 
+
+Therefore, in any given round, roughly $\frac{1}{4}$ of the nodes will recieve an invitation from a neighbor to weight an edge. Each node that recieves at least one invitation will reply to exactly one invitation. The inviting node and the invited node together form the endpoints of an edge, which will be weighted in that communication round. So approximately $\frac{1}{2}$ of the nodes will weight one edge in each communication round.
+
+A node that weighted an edge in each communication round would weight all of it's edges in $\Delta$ rounds. By the reasoning above, each node will weight an edge in a round with probability of $1:2$, so we can expect that every node will complete weighting all of its edges after approximately $2\Delta$ communication rounds.
+
+\end{proof}
+\begin{lem}
+\label{lem:dgmm-cover}
+If an edge is weighted, at least one endpoint must be in the cover.
+\end{lem}
+\begin{proof}
+
+Suppose that an edge become weighted, but neither endpoint is in the cover. For this to happen, two nodes that are not in the cover would have to form an exclusive node pair and evaluate a previously unweighted edge between them in some communication round, because the formation of such a partnership is a necessary precursor to evaluating an edge in Algorithm~\ref{alg:dgmm} and such partnerships are exclusive by Lemma~\ref{lem:dgmm-delta} and form a matching by Lemma~\ref{lem:dgmm-edge}. 
+
+Edges are evaluated according to Equation~\ref{egn:gmm}. To recall, this equation is a function which evaluates to the minimum, between nodes $u$ and $v$, of the weight of the node minus the sum of the weights of the weighted edges of the node. The result is then applied as the weight of the edge $(u,v)$. This weight is applied line~\algref{alg:dgmm}{alglin:dgmm-weight-edge-R} or~\algref{alg:dgmm}{alglin:dgmm-weight-edge-W}, so both nodes use the same inputs on the same equation to weight the same edge.
+
+Next, both nodes run a test in line~\algref{alg:dgmm}{alglin:dgmm-join-cover-R} or~\algref{alg:dgmm}{alglin:dgmm-join-cover-W} to determine whether to join the cover. If the sum of the weights of the edges of $u$ are equal to the weight of $u$, $u$ joins the cover.
+
+So in the case that an edge becomes weighted but neither endpoint joins the cover, it must be the case that for both nodes $u$ and $v$, the sum of the edge-weights is not equal to the sum of the weight.
+
+We know that the weight of $e(u,v)$ is equal to the minumum, between $u$ and $v$, of the weight of the node minus the sum of the nodes edges. Without loss of generality, assume that the relevant node is $u$. We will use $w$ to refer to the weight of $u$, and $s$ to refer to the sum of the weights of all edges of $u$ except $e(u,v)$. Assume that the value of $w - s$ is $x$. Therefore, the weight applied to $e(u,v)$ is $x$. Since $u$ is not in the cover, however, we know that: 
+\begin{equation*}
+w-s = x \land w \ne x+s
+\end{equation*}
+Which is a contradiction.
+
+Therefore, if an edge is weighted, at least one endpoint will be in the cover.
 \end{proof}
 
 Therefore, Theorem~\ref{thm:dgmm-term} is correct.
