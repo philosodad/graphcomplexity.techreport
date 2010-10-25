@@ -13,7 +13,7 @@
 \If {state = \cCd}
 \State {State $\gets (\cI \lor \cL)$} \Comment Coin toss selects state
 \ElsIf {state = \cId}
-\State {Randomly select an unweighted edge, $e_{u,v}$}
+\State {Randomly select an unweighted edge, $e_{u,v}$}\label{alglin:dgmm-issue-invite}
 \State {Broadcast $I_u^v$} \Comment $u$ Invites $v$ to weight $e_{u,v}$ 
 \State {state $\leftarrow$ \cWd}
 \ElsIf {state = \cLd}
@@ -28,8 +28,9 @@
 \State {Broadcast $R_u^v$} \Comment $u$ accepts $v's$ invitation
 \State {Update Weight $e_{u,v}$} \Comment by Equation~\ref{eqn:gmm} \label{alglin:dgmm-update-weight-R}
 
-\If {$\sum_{w(e(i,u))} = w(u)$}
-\State {$S_u \gets true$} \Comment $u$ joins the cover \label{alglin:dgmm-join-cover-R}
+\If {$\sum_{w(e(i,u))} = w(u)$}\label{alglin:dgmm-join-cover-R}
+\State {$S_u \gets true$} \Comment $u$ joins the cover
+\State {Set all unweighted edges to 0} 
 \State {state $\gets \cD$}
 \Else 
 \State {state $\gets \cC$}
@@ -41,8 +42,9 @@
 \If {$y = u$} \Comment response is to $v_u$
 \State {Update Weight $e_{u,v}$}\label{alglin:dgmm-update-weight-W}
 
-\If {$\sum_{w(e(i,u))} = w(u)$}
-\State $S_u \leftarrow true$ \Comment $u$ joins the cover\label{alglin:dgmm-join-cover-W}
+\If {$\sum_{w(e(i,u))} = w(u)$}\label{alglin:dgmm-join-cover-W}
+\State $S_u \leftarrow true$ \Comment $u$ joins the cover
+\State {Set all unweighted edges to 0}
 \State {state $\leftarrow$ \cDd}
 \Else 
 \State {state $\leftarrow$ \cCd}

@@ -2,6 +2,9 @@
   Algorithm~\ref{alg:dgmm} (DGMM) will always generate a 2-optimal cover in $O(\Delta)$ communication rounds.
 \label{thm:dgmm-term}
 \end{thm}
+\begin{smy}
+We show first that our algorithm conducts the same steps in the same order as a sequential algorithm that is known to produce a 2-optimal result, next that the algorithm will terminate in $O(\Delta)$ communication rounds.
+\end{smy} 
 
 \begin{note}[Communication Model]
 \label{not:com-model}
@@ -21,16 +24,61 @@ For DGMM, the Graph is represented as a network of compute nodes, with the nodes
 \end{note}
 \begin{proof}[Proof of Theorem~\ref{thm:dgmm-term}]
 \label{prf:correct}
-\begin{smy}
-We show first that our algorithm conducts the same steps in the same order as a sequential algorithm that is known to produce a 2-optimal result, next that the algorithm will terminate in $O(\Delta)$ communication rounds.
-\end{smy} 
 
 \begin{lem}
 \label{lem:dgmm-edge}
-  DGMM examines each edge once in a manner equivalent to GMM.
+  DGMM weights each edge once in a manner equivalent to GMM.
 \end{lem}
 \begin{proof}[Proof of Lemma~\ref{lem:dgmm-edge}]
-
+  Lemma~\ref{lem:dgmm-edge} can be restated in terms of the following propositions.
+  \begin{lprp}
+    \label{prop:dgmm-edge-order}
+    Given a matching, a simultaneous weighting of that matching is equivalent to any sequential weighting.
+  \end{lprp}
+  \begin{lprp}
+    \label{prop:dgmm-edge-match}
+    DGMM produces a matching in each communication round.
+  \end{lprp}
+  \begin{lprp}
+    \label{prop:dgmm-edge-once}
+    DGMM weights every edge exactly once.
+  \end{lprp}
+  If these propositions are true, Lemma~\ref{lem:dgmm-edge} is also true. 
+  
+  \begin{proof}[Proof of Proposition~\ref{prop:dgmm-edge-order}]
+    Equation~\ref{eqn:gmm} for weighting an edge $e(u,v)$ is 
+    \begin{equation*}
+      weight(e(u,v)) = min
+      \begin{dcases}
+        \sum_{i \ne v} weight(e(u,i))\\
+        \sum_{i \ne u} weight(e(v,i))
+      \end{dcases}
+    \end{equation*}
+    By definition of a matching, no two edges in a matching share a vertex. Therefore, if an edge $e(u,v)$ is in the matching, no edge $e(u,i)$ is in the matching. 
+    Take a matching \bMd\ in a Graph $G(V,E)$, composed of edges $\{e_0, e_1, ..., e_n\}$ If we use the sequential algorithm to weight the edges in \bMd\ one after the other, it is obvious that no edge outside of \bMd\ will change. Since only edges outside of \bMd\ are used to assign weights to edges inside \bMd\, it does not matter what order the weights are assigned in, or whether the weight assignment occurs to all edges in \bMd\ simultaneously.
+    
+    Therefore Proposition~\ref{prop:dgmm-edge-order} is true.
+  \end{proof}
+  \begin{proof}[Proof of Proposition~\ref{prop:dgmm-edge-match}]
+    Assume not, that is, assume that there are two edges $e(u,v) and e(i,v)$ that are both updated during the same communication round. For this to happen, some compute node $v$ must form a partnership with two nodes $i$ and $u$. 
+    At the beginning of every communication round, each node makes an equally weighted random decision to either issue an invitation or wait for invitations. We consider these options by cases.
+    Case One: Assume that $v$ issues invitations. If $v$ issues invitations, $v$ will choose a single unweighted edge $(v,u)$ and broadcast an invitation with the id of $u$ to all of it's neighbors (Line~\algref{alg:dgmm}{alglin:dgmm-issue-invite}). $v$ then transitions to the \cWd\ state. In this state, the node gathers all responses issued by it's neighbors, and updates an edge if a response is sent specifically to itself.
+    So if two edges are weighted, $v$ must receive two responses.
+    Responses are issued by nodes in the \cRd\ state. Each node in this state chooses a single invitation from it's received invitations and responds to it. Since $v$ get's two responses, therefore, $v$ must have invited two separate nodes in this round. But $v$ only issued one invitation, so this is a contradiction.
+    Case Two: Assume that $v$ receives invitations. Since $v$ is weighting two edges, $v$ must respond to multiple invitations in this round. However, according to the algorithm, $v$ only sends a single response message, which is a contradiction as well.
+    Therefore, Proposition~\ref{prop:dgmm-edge-match} is true.
+  \end{proof}
+  \begin{proof}[Proof of Proposition~\ref{prop:dgmm-edge-once}]
+    Because a node will only attempt to weight an unweighted edge, we know that no edge will be weighted more than once. If the proposition is false, it must be the case that some edge is not weighted.
+    For an edge to be unweighted, both endpoints of the edge would have to halt (enter the \cDd\ state) before the edge is weighted. Nodes halt under two circumstances:
+    \begin{enumerate}
+    \item The node has joined the cover.
+    \item A nodes neighbors have all joined the cover.
+    \end{enumerate}
+    In the first case, the node will weight all of it's unweighted edges to 0. In the second case, the node weights it's own edges to 0 if the other endpoint is in the cover.
+    Therefore, if the algorithm halts, all edges have been weighted once.
+  \end{proof}
+  Therefore, Lemma~\ref{lem:dgmm-edge}.
 \end{proof}
 
 \begin{lem}
@@ -49,20 +97,20 @@ A node that weighted an edge in each communication round would weight all of it'
 
 \end{proof}
 \begin{lem}
-\label{lem:dgmm-cover}
-If an edge is weighted, at least one endpoint must be in the cover.
+  \label{lem:dgmm-cover}
+  If an edge is weighted, at least one endpoint must be in the cover.
 \end{lem}
-\begin{proof}
+\begin{proof}[Proof of Lemma~\ref{lem:dgmm-cover}]
 
-Suppose that an edge become weighted, but neither endpoint is in the cover. For this to happen, two nodes that are not in the cover would have to form an exclusive node pair and evaluate a previously unweighted edge between them in some communication round, because the formation of such a partnership is a necessary precursor to evaluating an edge in Algorithm~\ref{alg:dgmm} and such partnerships are exclusive by Lemma~\ref{lem:dgmm-delta} and form a matching by Lemma~\ref{lem:dgmm-edge}. 
+  Suppose that an edge become weighted, but neither endpoint is in the cover. For this to happen, two nodes that are not in the cover would have to form an exclusive node pair and evaluate a previously unweighted edge between them in some communication round, because the formation of such a partnership is a necessary precursor to evaluating an edge in Algorithm~\ref{alg:dgmm} and such partnerships are exclusive by Lemma~\ref{lem:dgmm-delta} and form a matching by Lemma~\ref{lem:dgmm-edge}. 
 
-Edges are evaluated according to Equation~\ref{egn:gmm}. To recall, this equation is a function which evaluates to the minimum, between nodes $u$ and $v$, of the weight of the node minus the sum of the weights of the weighted edges of the node. The result is then applied as the weight of the edge $(u,v)$. This weight is applied line~\algref{alg:dgmm}{alglin:dgmm-weight-edge-R} or~\algref{alg:dgmm}{alglin:dgmm-weight-edge-W}, so both nodes use the same inputs on the same equation to weight the same edge.
+  Edges are evaluated according to Equation~\ref{eqn:gmm}. To recall, this equation is a function which evaluates to the minimum, between nodes $u$ and $v$, of the weight of the node minus the sum of the weights of the weighted edges of the node. The result is then applied as the weight of the edge $(u,v)$. This weight is applied line~\algref{alg:dgmm}{alglin:dgmm-update-weight-R} or~\algref{alg:dgmm}{alglin:dgmm-update-weight-W}, so both nodes use the same inputs on the same equation to weight the same edge.
 
-Next, both nodes run a test in line~\algref{alg:dgmm}{alglin:dgmm-join-cover-R} or~\algref{alg:dgmm}{alglin:dgmm-join-cover-W} to determine whether to join the cover. If the sum of the weights of the edges of $u$ are equal to the weight of $u$, $u$ joins the cover.
+  Next, both nodes run a test in line~\algref{alg:dgmm}{alglin:dgmm-join-cover-R} or~\algref{alg:dgmm}{alglin:dgmm-join-cover-W} to determine whether to join the cover. If the sum of the weights of the edges of $u$ are equal to the weight of $u$, $u$ joins the cover.
 
-So in the case that an edge becomes weighted but neither endpoint joins the cover, it must be the case that for both nodes $u$ and $v$, the sum of the edge-weights is not equal to the sum of the weight.
+  So if an edge becomes weighted but neither endpoint joins the cover, it must be the case that for both nodes $u$ and $v$, the sum of the edge-weights is not equal to the sum of the weight.
 
-We know that the weight of $e(u,v)$ is equal to the minumum, between $u$ and $v$, of the weight of the node minus the sum of the nodes edges. Without loss of generality, assume that the relevant node is $u$. We will use $w$ to refer to the weight of $u$, and $s$ to refer to the sum of the weights of all edges of $u$ except $e(u,v)$. Assume that the value of $w - s$ is $x$. Therefore, the weight applied to $e(u,v)$ is $x$. Since $u$ is not in the cover, however, we know that: 
+  We know that the weight of $e(u,v)$ is equal to the minumum, between $u$ and $v$, of the weight of the node minus the sum of the nodes edges. Without loss of generality, assume that the relevant node is $u$. We will use $w$ to refer to the weight of $u$, and $s$ to refer to the sum of the weights of all edges of $u$ except $e(u,v)$. Assume that the value of $w - s$ is $x$. Therefore, the weight applied to $e(u,v)$ is $x$. Since $u$ is not in the cover, however, we know that: 
 \begin{equation*}
 w-s = x \land w \ne x+s
 \end{equation*}
@@ -71,5 +119,5 @@ Which is a contradiction.
 Therefore, if an edge is weighted, at least one endpoint will be in the cover.
 \end{proof}
 
-Therefore, Theorem~\ref{thm:dgmm-term} is correct.
+Therefore, because DGMM weights all edges and assigns nodes to the cover in a manner equivalent to GMM in $O(\Delta)$ communication rounds, Theorem~\ref{thm:dgmm-term} is correct.
 \end{proof}
