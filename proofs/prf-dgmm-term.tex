@@ -60,11 +60,11 @@ For DGMM, the Graph is represented as a network of compute nodes, with the nodes
     Therefore Proposition~\ref{prop:dgmm-edge-order} is true.
   \end{proof}
   \begin{proof}[Proof of Proposition~\ref{prop:dgmm-edge-match}]
-    Assume not, that is, assume that there are two edges $e(u,v) and e(i,v)$ that are both updated during the same communication round. For this to happen, some compute node $v$ must form a partnership with two nodes $i$ and $u$. 
+    Assume not, that is, assume that there are two edges $e(u,v) \text{ and } e(i,v)$ that are both updated during the same communication round. For this to happen, some compute node $v$ must form a partnership with two nodes $i$ and $u$. 
     At the beginning of every communication round, each node makes an equally weighted random decision to either issue an invitation or wait for invitations. We consider these options by cases.
-    Case One: Assume that $v$ issues invitations. If $v$ issues invitations, $v$ will choose a single unweighted edge $(v,u)$ and broadcast an invitation with the id of $u$ to all of it's neighbors (Line~\algref{alg:dgmm}{alglin:dgmm-issue-invite}). $v$ then transitions to the \cWd\ state. In this state, the node gathers all responses issued by it's neighbors, and updates an edge if a response is sent specifically to itself.
+    Case One: Assume that $v$ issues invitations. If $v$ issues invitations, $v$ will choose a single unweighted edge $(v,u)$ and broadcast an invitation with the id of $u$ to all of it's neighbors (Line~\algref{alg:dgmm}{alglin:dgmm-issue-invite}). $v$ then transitions to the \cWd\ state. In this state, the node gathers all responses issued by its neighbors, and updates an edge if a response is sent specifically to itself.
     So if two edges are weighted, $v$ must receive two responses.
-    Responses are issued by nodes in the \cRd\ state. Each node in this state chooses a single invitation from it's received invitations and responds to it. Since $v$ get's two responses, therefore, $v$ must have invited two separate nodes in this round. But $v$ only issued one invitation, so this is a contradiction.
+    Responses are issued by nodes in the \cRd\ state. Each node in this state chooses a single invitation from it's received invitations and responds to it. Since $v$ gets two responses, therefore, $v$ must have invited two separate nodes in this round. But $v$ only issued one invitation, so this is a contradiction.
     Case Two: Assume that $v$ receives invitations. Since $v$ is weighting two edges, $v$ must respond to multiple invitations in this round. However, according to the algorithm, $v$ only sends a single response message, which is a contradiction as well.
     Therefore, Proposition~\ref{prop:dgmm-edge-match} is true.
   \end{proof}
@@ -87,13 +87,13 @@ For DGMM, the Graph is represented as a network of compute nodes, with the nodes
 \end{lem}
 \begin{proof}[Proof of Lemma~\ref{lem:dgmm-delta}]
 
-Following the automata in Figure~\ref{fig:dgmm-auto}, each communication round starts with a choice phase (labeled \cCd), after which the nodes will be divided approximately in half, with half being senders in the next round and half being recievers. A given node $u$, then, will become a reciever (indicated by state \cLd) with .50\% probability. The degree of $u$ can be assumed, without loss of generality, to be the maximum degree in the graph, indicated as $\Delta$. 
+Following the automata in Figure~\ref{fig:dgmm-auto}, each communication round starts with a choice phase (labeled \cCd), after which the nodes will be divided approximately in half, with half being senders in the next round and half being recievers. A given node $u$, then, will become a reciever (indicated by state \cLd) with a probability of $\frac{1}{2}$. The degree of $u$ can be assumed, without loss of generality, to be the maximum degree in the graph, indicated as $\Delta$. 
 
-Roughly half of the neighbors of $u$ will be senders (indicated by state \cId). For each of these, we can assume a degree of $\Delta$ as well, meaning that for each neighbor $v$ of $u$, there is a probability of $1:\Delta$ that $v$ will invite $u$ to weight edge $(u,v)$ in this round. Since $u$ has $\frac{\Delta}{2}$ neighbors that are also senders, $u$ will recieve an invitation with a probability of $1:2$. 
+Roughly half of the neighbors of $u$ will be senders (indicated by state \cId). For each of these, we can assume a degree of $\Delta$ as well, meaning that for each neighbor $v$ of $u$, there is a probability of $\frac{1}{\Delta}$ that $v$ will invite $u$ to weight edge $(u,v)$ in this round. Since $u$ has $\frac{\Delta}{2}$ neighbors that are also senders, $u$ will recieve an invitation with a probability of $\frac{1}{2}$. 
 
 Therefore, in any given round, roughly $\frac{1}{4}$ of the nodes will recieve an invitation from a neighbor to weight an edge. Each node that recieves at least one invitation will reply to exactly one invitation. The inviting node and the invited node together form the endpoints of an edge, which will be weighted in that communication round. So approximately $\frac{1}{2}$ of the nodes will weight one edge in each communication round.
 
-A node that weighted an edge in each communication round would weight all of it's edges in $\Delta$ rounds. By the reasoning above, each node will weight an edge in a round with probability of $1:2$, so we can expect that every node will complete weighting all of its edges after approximately $2\Delta$ communication rounds.
+A node that weighted an edge in each communication round would weight all of it's edges in $\Delta$ rounds. By the reasoning above, each node will weight an edge in a round with probability of $\frac{1}{2}$, so we can expect that every node will complete weighting all of its edges after approximately $2\Delta$ communication rounds.
 
 \end{proof}
 \begin{lem}
@@ -102,7 +102,7 @@ A node that weighted an edge in each communication round would weight all of it'
 \end{lem}
 \begin{proof}[Proof of Lemma~\ref{lem:dgmm-cover}]
 
-  Suppose that an edge become weighted, but neither endpoint is in the cover. For this to happen, two nodes that are not in the cover would have to form an exclusive node pair and evaluate a previously unweighted edge between them in some communication round, because the formation of such a partnership is a necessary precursor to evaluating an edge in Algorithm~\ref{alg:dgmm} and such partnerships are exclusive by Lemma~\ref{lem:dgmm-delta} and form a matching by Lemma~\ref{lem:dgmm-edge}. 
+  Suppose that Lemma~\ref{lem:dgmm-cover} is not true, so an edge is weighted, but neither endpoint is in the cover. For this to happen, two nodes that are not in the cover would have to form an exclusive node pair and evaluate a previously unweighted edge between them in some communication round, because the formation of such a partnership is a necessary precursor to evaluating an edge in Algorithm~\ref{alg:dgmm} and such partnerships are exclusive by Lemma~\ref{lem:dgmm-delta} and form a matching by Lemma~\ref{lem:dgmm-edge}. 
 
   Edges are evaluated according to Equation~\ref{eqn:gmm}. To recall, this equation is a function which evaluates to the minimum, between nodes $u$ and $v$, of the weight of the node minus the sum of the weights of the weighted edges of the node. The result is then applied as the weight of the edge $(u,v)$. This weight is applied line~\algref{alg:dgmm}{alglin:dgmm-update-weight-R} or~\algref{alg:dgmm}{alglin:dgmm-update-weight-W}, so both nodes use the same inputs on the same equation to weight the same edge.
 
