@@ -70,7 +70,7 @@ During the \cUd\ state, vertex pairs formed during the invitation/acceptance pha
 \input{alg/alg-dgmm.tex}
 
 \subsubsection{Performance}
-\input{proofs/prf-dgmm2.tex}
+
 \input{proofs/prf-dgmm-term.tex}
 
 
@@ -84,7 +84,7 @@ When vertices make local decisions to join a cover, it is difficult to judge whe
 
 The redundancy checking algorithm proceeds stepwise, similar to Algorithm~\ref{alg:dgmm}, and many of the same arguments apply. One difference is that redundancy checking is run a single time for each node, nodes check with their neighbors once and then decide to turn off only if they are the largest redundant node in their immediate neighborhood. Because no two neighboring nodes can both be the largest--assuming a tie breaking mechanism such as unique ids--such a decision cannot break the cover. Also, because nodes make the decision simultaneously and globally, the additional number or communication rounds required is constant.
 
-The concept behind Algorithm~\ref{alg:red} is simple; a vertex that does not have any edges covered by a vertex of greater weight removes itself from the cover. This simple idea provides some valuable results extending network lifetime without incurring large communication costs, as we see later in Section~\ref{sec:pcdg-alg}. When examining target coverage in a sensor network, most current algorithms ignore the communication cost of establishing the target cover\cite{1514028}. One reason for this is that the cost is generally considered to be a constant, that is, any algorithm that provides continuous coverage must perform a global reshuffle periodically in order to maximize network lifetime. 
+The concept behind Algorithm~\ref{alg:red} is simple: A vertex is redundant if all of its neighbors are in the cover. This simple idea provides some valuable results extending network lifetime without incurring large communication costs, as we see later in Section~\ref{sec:pcdg-alg}. When examining target coverage in a sensor network, most current algorithms ignore the communication cost of establishing the target cover\cite{1514028}. One reason for this is that the cost is generally considered to be a constant, that is, any algorithm that provides continuous coverage must perform a global reshuffle periodically in order to maximize network lifetime. 
 
 \subsection{Partial Cover Dependency Graph}
 \label{sec:life-depend}
@@ -139,6 +139,49 @@ The PCDG algorithm uses 2-hop information for immediate setup of the graph, as d
 
 \section{Simulation Software}
 \label{sec:simulator}
+
+We developed a discrete-event simulator in Ruby. Ruby was chosen primarily because of its strong system of multiple inheritance and the relative ease of unit testing and debugging. This allowed us to easily construct new families of nodes that used common simulation algorithms with very little repetition. In it's current state, once a new type of node is defined, the network construction and simulation for both MWVC and Network lifetime require only a few lines. The node definitions can generally be written in two methods describing the state machine and communication behavior of the node type.
+
+The source code for each algorithm and the simulation framework are open source and available for download.\footnote{Using the mercurial VCS, command hg clone https://rvertex.graphcomplexity.googlecode.com/hg/ graphcomplexity-rvertex will retrieve a copy of the code repository. This paper uses revision 67446e3ca7 of the code base} 
+
+The goal for this software package was to create a flexible, extensible platform for general simulation of distributed graph algorithms.Our approach for meeting this design goal was to attempt to modularize design as much as possible. In subsection~\ref{sec:sim-objects} we describe the basic object types in the platform. In subsection~\ref{sec:sim-modules} we describe the different modules that control the behavior of the objects. In subsection~\ref{sec:sim-detail} we examine a single simulator object in detainl and in subsection~\ref{sec:sim-new} we describe the steps for creating a new simulator. Finally, in subsection~\ref{sec:sim-future} we look at the roadmap for future development of this framework.
+
+\subsection{Basic Object Types}
+\label{sec:sim-objects}
+
+There are three basic types of objects that make up the platform, Simulators, Graphs, and Nodes. A Graph is essentially a data structure that stores Nodes, and a Simulator controls the behavior of the Nodes in a Graph. 
+
+To design and run experiments, it is important to know how to generate a Graph, how to create and run a Simulator and what information wil be returned by the simulation. 
+
+\subsubsection{Simulators}
+
+Simulators are extremely simple. Figure~\ref{fig:sim-class} is the class diagram for the root object in the simulator hierarchy, {\texttt RandomSimulator}. The root object acts as a specification for simulation. It is the only simulator that can be generated without a preexisting Graph. 
+
+The primary attribute of a Simulator is a Graph ({\texttt \@rg}), and most of the methods in the Simulator object pass commands through the Simulator directly to the Graph. For example, the {\texttt get\_on\_weight} method calls the {\texttt get\_on\_weight} method of its Graph.
+
+Simulation is controlled through the {\texttt sim} and {\texttt long\_sim} methods. The simulation methods are not methods that strictly belong to the class itself, but are handled by mix-in modules. The simulation methods will be described in detail in Section~\ref{sec:sim-modules}. 
+
+Briefly, {\texttt sim} takes as it's input an integer, which represents the maximum number of communication rounds allowed by the simulator, and returns the weight of a vertex cover of a graph, the number of communication rounds executed, and a failure marker (1 for failure, 0 for success). To run, it loops on a termination condition and iterates through each node. {\texttt long\_sim} Is the method used to generate network lifetimes. It contains the logic needed to iteratively run a {\texttt sim} method until the edges of the graph can no longer be covered. 
+
+Simulator classes define the type of Graph being generated, and Graphs define the type of the Nodes to be generated. Since each class of node represents a different algorithm, there is a one-to-one relationship between sub-types of Simulators and variations on Algorithms.The most recent version of the software\footnote{as of this writing, version cb24427164d4} has 29 sub-types of RandomSimulator, ranging in size from three to fifteen lines of code.\footnote{Complete documentation of the entire package can be downloaded from the repository}
+
+\subsubsection{Graphs}
+
+The {\textbf Graph} class of objects represents either the graph or the network, that is, a data structure $G(V,E)$ with nodes or vertexes and edges or links between those nodes. Figure~\ref{fig:netgen-class} shows the class diagram for the Root Object in this hierarchy, {\textt SimpleGraph}. Simple Graph has two attributes, both of them lists, which are defined during object instantiation in most sub-types. 
+
+\subsubsection{Nodes}
+\subsubsection{Further Granularity}
+\subsection{Behavior Modularization}
+\label{sec:sim-modules}
+\subsubsection{Helpers}
+\subsubsection{Actions}
+\subsection{A Detailed Look at a Simulator}
+\label{sec:sim-detail}
+\subsection{Creating a New Simulator}
+\label{sec:sim-new}
+\subsection{Future Development}
+\label{sec:sim-future}
+
 \section{Experiments}
 \label{sec:experiments}
 Experiments were conducted to test algorithm performance and examine the relationship between maximizing network lifetime and minimizing vertex cover.
@@ -162,10 +205,6 @@ DEEPS requires global reshuffles to maintain coverage, and those shuffles are pr
 \subsection{Experimental Design}
 \label{sub:exp-design}
 Random connected graphs were constructed, with the number of nodes and edges as the inputs. Nodes received a random weight between 400 and 1000. Graph construction proceeded by a modification of Erlang's method: all possible edges were generated and then random edges were chosen until the desired number of edges had been added to the graph. In order to ensure connectivity, Spanning Trees were constructed for each graph and connected together until each graph was a connected graph. 
-
-We developed a discrete-event simulator in Ruby. Ruby was chosen primarily because of its strong system of multiple inheritance and the relative ease of unit testing and debugging. This allowed us to easily construct new families of nodes that used common simulation algorithms with very little repetition. In it's current state, once a new type of node is defined, the network construction and simulation for both MWVC and Network lifetime require only a few lines. The node definitions can generally be written in two methods describing the state machine and communication behavior of the node type.
-
-The source code for each algorithm and the simulation framework are open source and available for download.\footnote{Using the mercurial VCS, command hg clone https://rvertex.graphcomplexity.googlecode.com/hg/ graphcomplexity-rvertex will retrieve a copy of the code repository. This paper uses revision 67446e3ca7 of the code base} 
 
 For the MWVC problem, graphs were constructed with 120, 240, 480, and 960 vertices with average degrees of 3, 6, 12, 24, 48, and 96. 50 random graphs were generated at each size, and the Koufogiannakis/Young distributed algorithm\cite{1582746}, our distributed modification of the Gonzalez Generalized Maximal Matching Algorithm\cite{Gonzalez1995129}, and versions of each with the redundancy checking algorithm were run on each generated graph, with results being averaged.
 
