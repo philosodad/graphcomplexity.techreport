@@ -46,8 +46,15 @@ The network lifetime problem is introduced in detail by Cardei et. al in \cite{1
 \subsection{The Koufaganis/Young Algorithm}
 \label{sec:k-y-alg}
 
+The Koufaganis/Young Algorithm (K/Y) described in this paper is the $O(\log n)$ 2-optimal distributed algorithm for the Minimum Weighted Vertex Cover published by Koufaganis and Young in 2009\cite{1582746}. The algorithm improves on the previous best known distributed algorithm for MWVC, which runs in $O(\log n + \log W)$, where  $W$ is the average vertex weight\cite{1435381}.
+
+The K/Y algorithm uses a special variable, maintained by each vertex $v$, referred to as $x_v$ and initialized to 0. Each vertex decides whether or not to join the cover by calling a subroutine, {\texttt step}, which takes as inputs the current value of $x_v \text{ and } x_w$ and the weights $c_v \text{ and } c_w$. 
+
+
+
 \subsection{The DEEPS Algorithm}
 \label{sec:deeps}
+
 
 \subsection{Dependency Graphs}
 \label{sec:dep-graphs}
@@ -75,7 +82,7 @@ During the \cUd\ state, vertex pairs formed during the invitation/acceptance pha
 
 
 \subsection{Redundancy Checking}
-
+\label{sec:redundant}
 When vertices make local decisions to join a cover, it is difficult to judge whether any neighbor will also decide to join the cover. In some cases, this leads to vertices joining the cover which can be subsequently removed while still retaining full coverage. Removing these nodes will certainly reduce the total weight of the cover. We therefore implement a {\em redundancy checking} algorithm. Figure~\ref{fig:red} shows the progression of Algorithm~\ref{alg:red}.
 
 \input{figs/fig-red.tex} 
@@ -140,11 +147,11 @@ The PCDG algorithm uses 2-hop information for immediate setup of the graph, as d
 \section{Simulation Software}
 \label{sec:simulator}
 
-We developed a discrete-event simulator in Ruby. Ruby was chosen primarily because of its strong system of multiple inheritance and the relative ease of unit testing and debugging. This allowed us to easily construct new families of nodes that used common simulation algorithms with very little repetition. In it's current state, once a new type of node is defined, the network construction and simulation for both MWVC and Network lifetime require only a few lines. The node definitions can generally be written in two methods describing the state machine and communication behavior of the node type.
+We developed a discrete-event simulator in the Ruby programming language. Ruby was chosen primarily for its ''mix-in'' feature, weak typing, and simple unit-testing system. This allowed us to easily construct new families of nodes that used common simulation algorithms with very little code repetition.
 
 The source code for each algorithm and the simulation framework are open source and available for download.\footnote{Using the mercurial VCS, command hg clone https://rvertex.graphcomplexity.googlecode.com/hg/ graphcomplexity-rvertex will retrieve a copy of the code repository. This paper uses revision 67446e3ca7 of the code base} 
 
-The goal for this software package was to create a flexible, extensible platform for general simulation of distributed graph algorithms.Our approach for meeting this design goal was to attempt to modularize design as much as possible. In subsection~\ref{sec:sim-objects} we describe the basic object types in the platform. In subsection~\ref{sec:sim-modules} we describe the different modules that control the behavior of the objects. In subsection~\ref{sec:sim-detail} we examine a single simulator object in detainl and in subsection~\ref{sec:sim-new} we describe the steps for creating a new simulator. Finally, in subsection~\ref{sec:sim-future} we look at the roadmap for future development of this framework.
+The goal for this software package was to create a flexible, extensible platform for general simulation of distributed graph algorithms.Our approach for meeting this design goal was to attempt to modularize design as much as possible. In subsection~\ref{sec:sim-objects} we describe the basic object types in the platform. In subsection~\ref{sec:sim-modules} we describe the different modules that control the behavior of the objects. In subsection~\ref{sec:sim-detail} we examine a single simulator object in detail and in subsection~\ref{sec:sim-new} we describe the steps for creating a new simulator. Finally, in subsection~\ref{sec:sim-future} we look at the roadmap for future development of this framework.
 
 \subsection{Basic Object Types}
 \label{sec:sim-objects}
@@ -163,18 +170,49 @@ Simulation is controlled through the {\texttt sim} and {\texttt long\_sim} metho
 
 Briefly, {\texttt sim} takes as it's input an integer, which represents the maximum number of communication rounds allowed by the simulator, and returns the weight of a vertex cover of a graph, the number of communication rounds executed, and a failure marker (1 for failure, 0 for success). To run, it loops on a termination condition and iterates through each node. {\texttt long\_sim} Is the method used to generate network lifetimes. It contains the logic needed to iteratively run a {\texttt sim} method until the edges of the graph can no longer be covered. 
 
-Simulator classes define the type of Graph being generated, and Graphs define the type of the Nodes to be generated. Since each class of node represents a different algorithm, there is a one-to-one relationship between sub-types of Simulators and variations on Algorithms.The most recent version of the software\footnote{as of this writing, version cb24427164d4} has 29 sub-types of RandomSimulator, ranging in size from three to fifteen lines of code.\footnote{Complete documentation of the entire package can be downloaded from the repository}
+Simulator classes define the type of Graph being generated, and Graphs define the type of the Nodes to be generated. Since each class of node represents a different algorithm, there is a one-to-one relationship between sub-types of Simulators and variations on Algorithms.The most recent version of the software\footnote{as of this writing, version cb24427164d4} has 29 subtypes of RandomSimulator, ranging in size from three to fifteen lines of code.\footnote{Complete documentation of the entire package can be downloaded from the repository}
 
 \subsubsection{Graphs}
 
-The {\textbf Graph} class of objects represents either the graph or the network, that is, a data structure $G(V,E)$ with nodes or vertexes and edges or links between those nodes. Figure~\ref{fig:netgen-class} shows the class diagram for the Root Object in this hierarchy, {\textt SimpleGraph}. Simple Graph has two attributes, both of them lists, which are defined during object instantiation in most sub-types. 
+The {\textbf Graph} group of objects represents either the graph or the network, that is, a data structure $G(V,E)$ with nodes (or vertexes) and edges (or links) between those nodes. Figure~\ref{fig:netgen-class} shows the class diagram for the Root Object in this hierarchy, {\texttt SimpleGraph}. Simple Graph has two attributes--{\texttt \@edges} and {\texttt @nodes}--both of them lists, which are defined during object instantiation in most subtypes. 
+
 
 \subsubsection{Nodes}
+\label{sec:sim-objects-nodes}
+The {\textbf Node} group of objects inherit the class {\texttt BasicNode}, shown in Fig~\ref{fig:node-class}. Node objects simulate the compute nodes in a distributed computer, using a message passing model. The attributes of a {\texttt BasicNode} include, most importantly, an {\textbf Array} of neighbors, a {\textbf Set} of edges, and the instance variables {\@next and \@now}.
+
+Node objects are expected to be written as state machines, which is the purpose of the \@next and \@now variables. When a node is first created, it is in a state. As simulators iterated through the Node objects, they generally call the method {\texttt do\_next} for each node, and then {\texttt send\_status} for each Node. A Node may or may not change it's state, and broadcast it's new state to it's neighbors. The key design point is to update the ``next'' variable, rather than the ``now'' variable. In the next iteration, the ``next'' variable becomes the ``now'' variable. This method allows the simulation to act as if nodes are acting concurrently.
+
 \subsubsection{Further Granularity}
+
+The DGMM algorithm works by setting a weight to edges. In the {\texttt BasicNode} class, an edge is represented as a pair of ids. The class {\texttt WeightedEdge} (Figure~\ref{fig:weighted-edge-class} adds a {\texttt weight} attribute to an edge. 
+
+Dependency Graph Algorithms require each node to create a Dependency Graph, complete with Dependency Nodes and Edges. The root class for the {\textbf Partial Cover Dependency Node} heirarchy is shown in Figure~\ref{fig:pcd-node-class}. This is the first example that overloads the comparison operator ({\texttt <=>}). 
+
+The behavior of classes at this level of the simulation must be handled opaquely by the Nodes. A Simulator or Graph class object should be able to operate by calling {\em only} the {\texttt do\_next} and {\texttt send\_status} methods.
+
 \subsection{Behavior Modularization}
 \label{sec:sim-modules}
+Many of the methods that actually control the behavior of Nodes, Graphs, and Simulators are contained in {\em modules}. A Ruby module is a ``named group of methods, constants, and class variables.''\cite{1408408}. In our Simulator, modules are used to encapsulate algorithms that may be used by several classes, such as the Redundancy algorithm described in Section~\ref{sec:redundant}, or the construction rules for Dependency Graphs. These modules will be described in Section~\ref{sec:sim-modules-helpers}.
+
+Modules are also used to overload certain methods for Nodes. In the Ruby programming language, the last definition for a method or attribute is the one that is used for a class. So given a class that shares several methods but requires overloading for some particular methods, it is easy to create a module that contains those method definitions. The advantage of using modules in this case is that one class may share various subsets of methods with other classes in a way that is difficult to describe using single inheritance. Using modules, the various method definitions can be ``mixed-in'' to the class definition to create the desired class definition. Modules that are used in this way are described in Section~\ref{sec:sim-modules-actions}.
+
 \subsubsection{Helpers}
+\label{sec:sim-modules-helpers}
+There are four groups of Helper Modules in the current version of the software, Simulator helpers, Graph helpers, Node Helpers, and Dependency Graph Helpers. 
+
+The Simulation helper modules define the {\texttt sim} and {\texttt long\_sim} methods. Every class in the Simulator hierarchy uses the same definition for {\texttt sim}, which is included in the Root Class. There are two different behaviors for the {\texttt long\_sim} method. 
+
+As stated in Section~\ref{sec:sim-objects-nodes}, every Node object must have a {\texttt do\_next} and {\texttt send\_status} method for the simulator. The simulator method {\texttt sim} calls these functions in turn for each node, first iterating through the Nodes in its Graph and calling {\texttt do\_next}, then calling {\texttt send\_status}. This continues on a loop until every Node enters the \cDd\ state or a preset number of loops have executed. 
+
+If the loop exceeds the termination point, the failure value is changed from 1 to 0 and the return value for number of rounds is set to 0. The purpose of this is to only return results which pass. The number of rounds run (that is, the number of loops executed) is an important metric, it can be used to determine the number of communication rounds executed. Obviously, failed runs could skew experiments which average results over a large number of runs.
+
+The method {\texttt get\_the\_metric} is called to return the total weight of the cover by calling the {\texttt get\_on\_weight} method of the Graph. This method could be suitably overridden to allow the {\texttt sim} method to return pertinent values for any algorithm implemented through the state machine method.
+
+The two versions of {\texttt long\_sim} are packaged in the modules {\textbf Running\_Sim} and {\textbf Stepping\_Sim}. 
 \subsubsection{Actions}
+\label{sec:sim-modules-actions}
+
 \subsection{A Detailed Look at a Simulator}
 \label{sec:sim-detail}
 \subsection{Creating a New Simulator}
@@ -239,3 +277,4 @@ When communication costs are accounted for, the performance of DEEPS and PCDG im
 \input{plts/plt-pcdg-cost.tex}
 \bibliography{vertex_bib}
 \end{document}
+% LocalWords:  Koufaganis
