@@ -12,7 +12,9 @@
 \usepackage{graphicx}
 \usepackage{subfig}
 \DeclareGraphicsRule{*}{mps}{*}{}
+\usepackage{listings}
 
+%specific to this document only
 \usepackage{pgfplots}
 \usepackage{pgfplotstable}
 \pgfplotstableread{plts/experiment8b1_av.tab}\averageone
@@ -60,6 +62,9 @@
   every mark/.append style={fill=orange}\\%
   every mark/.append style={fill=pink}\\%
 }
+
+%%%%%%%%%%%%%
+
 \usepackage{pgf}
 \usepackage{tikz}
 \usetikzlibrary{decorations.pathmorphing} % LATEX and plain TEX when using Tik Z
@@ -103,6 +108,45 @@
 \newtheorem{smy}{Summary}
 \newtheorem{note}{Note}[thm]
 
+%algorithms commands
+\algblockdefx[Case]{Case}{EndCase} %
+[1] [{\em var}] {{\bfseries case} {\em #1\ } } %
+{{\bfseries end case}}%
+\algcblockdefx[Case]{Case}{When}{EndCase}
+[1] [{\em true}] {{\bfseries when} {\em #1\ }}
+{{\bfseries end case}} %
+
+\algblockdefx[TimesDo] {DoTimes}{EndTimes}
+[1] [0] {#1 times {\bfseries do}}
+{{\bfseries end do}}
+
+%subalgorithms environment
+\makeatletter
+\newcounter{parentalgorithm}
+\newenvironment{subalgorithms}{%
+%  \refstepcounter{algorithm}%
+  \floatname{algorithm}{Procedure}
+  \protected@edef\theparentalgorithm{\thealgorithm}%
+  \setcounter{parentalgorithm}{\value{algorithm}}%
+  \setcounter{algorithm}{0}%
+  \def\thealgorithm{\theparentalgorithm-\alph{algorithm}}%
+  \ignorespaces
+}{%
+  \setcounter{algorithm}{\value{parentalgorithm}}%
+  \ignorespacesafterend
+}
+\makeatother
+
+%code environments
+\usepackage{float}
+ 
+\floatstyle{ruled}
+\newfloat{codeblock}{thp}{lop}
+\floatname{codeblock}{Example}
+
+\lstnewenvironment{rubyblock} 
+{\lstset{language=Ruby, basicstyle=\small, xleftmargin=10pt, numbers=left, numberstyle=\tiny, stepnumber=2, numbersep=5pt}}
+{}
 % text macros
 \def\cI{{\mathcal I}} \def\cR{{\mathcal R}} \def\cE{{\mathcal E}}
 \def\cC{{\mathcal C}} \def\cF{{\mathcal F}} \def\cU{{\mathcal U}}

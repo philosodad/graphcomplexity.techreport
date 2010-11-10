@@ -91,9 +91,9 @@ Following the automata in Figure~\ref{fig:dgmm-auto}, each communication round s
 
 Roughly half of the neighbors of $u$ will be senders (indicated by state \cId). For each of these, we can assume a degree of $\Delta$ as well, meaning that for each neighbor $v$ of $u$, there is a probability of $\frac{1}{\Delta}$ that $v$ will invite $u$ to weight edge $(u,v)$ in this round. Since $u$ has $\frac{\Delta}{2}$ neighbors that are also senders, $u$ will recieve an invitation with a probability of $\frac{1}{2}$. 
 
-Therefore, in any given round, roughly $\frac{1}{4}$ of the nodes will recieve an invitation from a neighbor to weight an edge. Each node that recieves at least one invitation will reply to exactly one invitation. The inviting node and the invited node together form the endpoints of an edge, which will be weighted in that communication round. So approximately $\frac{1}{2}$ of the nodes will weight one edge in each communication round.
+Therefore, in any given round, roughly $\frac{1}{4}$ of the total number of nodes will recieve an invitation from a neighbor to weight an edge. Each node that recieves at least one invitation will reply to exactly one invitation. The inviting node and the invited node together form the endpoints of an edge, which will be weighted in that communication round. So approximately $\frac{1}{2}$ of the total number of nodes will weight one edge in each communication round.
 
-A node that weighted an edge in each communication round would weight all of it's edges in $\Delta$ rounds. By the reasoning above, each node will weight an edge in a round with probability of $\frac{1}{2}$, so we can expect that every node will complete weighting all of its edges after approximately $2\Delta$ communication rounds.
+A node that weighted an edge in each communication round would weight all of it's edges in $\Delta$ rounds. By the reasoning above, each node will weight an edge in a round with probability of $\frac{1}{2}$, so we can expect that every node in the graph will complete weighting all of its edges after approximately $2\Delta$ communication rounds.
 
 \end{proof}
 \begin{lem}

@@ -1,0 +1,446 @@
+\begin{Verbatim}[commandchars=\\\{\},numbers=left,firstnumber=1,stepnumber=1,xleftmargin=7mm, fontsize=\small]
+\PY{n+nb}{require} \PY{l+s+s1}{'rubygems'}
+\PY{n+nb}{require} \PY{l+s+s1}{'ldgraph'}
+\PY{n+nb}{require} \PY{l+s+s1}{'dep\PYZus{}graph\PYZus{}pcd'}
+\PY{n+nb}{require} \PY{l+s+s1}{'dep\PYZus{}graph\PYZus{}fcd'}
+\PY{n+nb}{require} \PY{l+s+s1}{'inline'}
+
+\PY{k}{module} \PY{n+nn}{PCD}
+  \PY{k+kp}{attr\PYZus{}reader} \PY{l+s+ss}{:first\PYZus{}cover}
+  \PY{k}{def} \PY{n+nf}{build\PYZus{}first\PYZus{}cover}
+    \PY{k}{if} \PY{n+nv+vi}{@neighbors}\PY{o}{.}\PY{n}{empty?} \PY{k}{then} \PY{k}{return} \PY{l+s+ss}{:empty} \PY{k}{end}
+    \PY{n}{nset} \PY{o}{=} \PY{n+no}{Set}\PY{o}{.}\PY{n}{new}\PY{p}{(}\PY{n+nv+vi}{@neighbors}\PY{p}{)}
+    \PY{n}{nnset} \PY{o}{=} \PY{n+no}{Set}\PY{o}{.}\PY{n}{new}\PY{p}{(}\PY{n+nv+vi}{@neighbors}\PY{o}{.}\PY{n}{collect}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{n}{k}\PY{o}{.}\PY{n}{neighbors}\PY{p}{\PYZcb{}}\PY{o}{.}\PY{n}{flatten}\PY{p}{)}\PY{o}{-}\PY{n}{nset}
+    \PY{n}{a} \PY{o}{=} \PY{n+no}{PCD\PYZus{}Graph\PYZus{}Node}\PY{o}{.}\PY{n}{new}\PY{p}{(}\PY{n}{nset}\PY{o}{.}\PY{n}{to\PYZus{}a}\PY{p}{)}
+    \PY{n}{b} \PY{o}{=} \PY{n+no}{PCD\PYZus{}Graph\PYZus{}Node}\PY{o}{.}\PY{n}{new}\PY{p}{(}\PY{n}{nnset}\PY{o}{.}\PY{n}{to\PYZus{}a}\PY{p}{)}
+    \PY{n+nv+vi}{@first\PYZus{}cover} \PY{o}{=} \PY{o}{[}\PY{n}{a}\PY{p}{,}\PY{n}{b}\PY{o}{]}\PY{o}{.}\PY{n}{min}
+    \PY{n+nv+vi}{@covers}\PY{o}{.}\PY{n}{add\PYZus{}node}\PY{p}{(}\PY{n+nv+vi}{@first\PYZus{}cover}\PY{p}{)}
+  \PY{k}{end}
+  \PY{k}{def} \PY{n+nf}{get\PYZus{}covers}
+    \PY{n+nv+vi}{@neighbors}\PY{o}{.}\PY{n}{each}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|}  \PY{n+nv+vi}{@covers}\PY{o}{.}\PY{n}{add\PYZus{}node}\PY{p}{(}\PY{n}{k}\PY{o}{.}\PY{n}{first\PYZus{}cover}\PY{o}{.}\PY{n}{dup}\PY{p}{)}\PY{p}{\PYZcb{}}
+  \PY{k}{end}
+\PY{k}{end}
+
+\PY{k}{module} \PY{n+nn}{PCDAll}
+  \PY{k+kp}{attr\PYZus{}reader} \PY{l+s+ss}{:local\PYZus{}covers}
+  \PY{k}{def} \PY{n+nf}{build\PYZus{}local\PYZus{}cover}
+    \PY{k}{if} \PY{n+nv+vi}{@neighbors}\PY{o}{.}\PY{n}{empty?} \PY{k}{then} \PY{k}{return} \PY{l+s+ss}{:empty} \PY{k}{end}
+    \PY{n}{node} \PY{o}{=} \PY{n+no}{Object}\PY{o}{.}\PY{n}{const\PYZus{}get}\PY{p}{(}\PY{n}{pcdnode\PYZus{}type}\PY{p}{)}
+    \PY{n}{nset} \PY{o}{=} \PY{n+no}{Set}\PY{o}{.}\PY{n}{new}\PY{p}{(}\PY{n+nv+vi}{@neighbors}\PY{p}{)}
+    \PY{n}{nnset} \PY{o}{=} \PY{n+no}{Set}\PY{o}{.}\PY{n}{new}\PY{p}{(}\PY{n+nv+vi}{@neighbors}\PY{o}{.}\PY{n}{collect}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{n}{k}\PY{o}{.}\PY{n}{neighbors}\PY{p}{\PYZcb{}}\PY{o}{.}\PY{n}{flatten}\PY{p}{)}\PY{o}{-}\PY{n}{nset}
+    \PY{n}{a} \PY{o}{=} \PY{n}{node}\PY{o}{.}\PY{n}{new}\PY{p}{(}\PY{n}{nset}\PY{o}{.}\PY{n}{to\PYZus{}a}\PY{p}{)}
+    \PY{n}{b} \PY{o}{=} \PY{n}{node}\PY{o}{.}\PY{n}{new}\PY{p}{(}\PY{n}{nnset}\PY{o}{.}\PY{n}{to\PYZus{}a}\PY{p}{)}
+    \PY{n+nv+vi}{@local\PYZus{}covers} \PY{o}{=} \PY{o}{[}\PY{n}{a}\PY{p}{,}\PY{n}{b}\PY{o}{]}
+    \PY{n+nv+vi}{@local\PYZus{}covers}\PY{o}{.}\PY{n}{each}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{n+nv+vi}{@covers}\PY{o}{.}\PY{n}{add\PYZus{}node}\PY{p}{(}\PY{n}{k}\PY{p}{)}\PY{p}{\PYZcb{}}
+  \PY{k}{end}
+  \PY{k}{def} \PY{n+nf}{get\PYZus{}covers}
+    \PY{n+nv+vi}{@neighbors}\PY{o}{.}\PY{n}{each}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{n}{k}\PY{o}{.}\PY{n}{local\PYZus{}covers}\PY{o}{.}\PY{n}{each}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{j}\PY{o}{|} \PY{n+nv+vi}{@covers}\PY{o}{.}\PY{n}{add\PYZus{}node}\PY{p}{(}\PY{n}{j}\PY{p}{)}\PY{p}{\PYZcb{}}\PY{p}{\PYZcb{}}
+  \PY{k}{end}
+
+  \PY{k}{def} \PY{n+nf}{pcdnode\PYZus{}type}
+    \PY{k}{return} \PY{l+s+s1}{'PCD\PYZus{}Graph\PYZus{}Node'}
+  \PY{k}{end}
+\PY{k}{end}
+
+\PY{k}{module} \PY{n+nn}{PCD\PYZus{}All\PYZus{}Sum}
+  \PY{k}{def} \PY{n+nf}{pcdnode\PYZus{}type}
+    \PY{k}{return} \PY{l+s+s1}{'PCD\PYZus{}Graph\PYZus{}Node\PYZus{}Sum'}
+  \PY{k}{end}
+\PY{k}{end}
+
+\PY{k}{module} \PY{n+nn}{PCDBipartite}
+  \PY{k}{def} \PY{n+nf}{pcdnode\PYZus{}type}
+    \PY{k}{return} \PY{l+s+s1}{'PCD\PYZus{}Bipartite\PYZus{}Graph\PYZus{}Node'}
+  \PY{k}{end}
+\PY{k}{end}
+
+\PY{k}{module} \PY{n+nn}{VCLocal}
+  \PY{k+kp}{attr\PYZus{}reader} \PY{l+s+ss}{:matrix}
+  \PY{k}{def} \PY{n+nf}{build\PYZus{}covers}
+    \PY{n}{alledges} \PY{o}{=} \PY{n+no}{Set}\PY{o}{[}\PY{o}{]}
+    \PY{n+nv+vi}{@edges}\PY{o}{.}\PY{n}{each}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{n}{alledges}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n}{k}\PY{p}{)}\PY{p}{\PYZcb{}}
+    \PY{n}{nset} \PY{o}{=} \PY{n+no}{Set}\PY{o}{.}\PY{n}{new}\PY{p}{(}\PY{n+nv+vi}{@neighbors}\PY{o}{.}\PY{n}{collect}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{n}{k}\PY{o}{.}\PY{n}{id}\PY{p}{\PYZcb{}}\PY{p}{)}
+    \PY{n}{nset}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n+nv+vi}{@id}\PY{p}{)}
+    \PY{n+nv+vi}{@neighbors}\PY{o}{.}\PY{n}{each} \PY{k}{do} \PY{o}{|}\PY{n}{k}\PY{o}{|} 
+      \PY{n}{k}\PY{o}{.}\PY{n}{edges}\PY{o}{.}\PY{n}{each} \PY{k}{do} \PY{o}{|}\PY{n}{j}\PY{o}{|} 
+        \PY{n}{alledges}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n}{j}\PY{p}{)} \PY{k}{if} \PY{n}{j}\PY{o}{.}\PY{n}{proper\PYZus{}subset?}\PY{p}{(}\PY{n}{nset}\PY{p}{)}
+      \PY{k}{end}
+    \PY{k}{end}
+    \PY{n}{nodes} \PY{o}{=} \PY{n+nv+vi}{@neighbors}\PY{o}{.}\PY{n}{to\PYZus{}set}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n+nb}{self}\PY{p}{)}
+    \PY{n}{nodes} \PY{o}{=} \PY{n}{nodes}\PY{o}{.}\PY{n}{to\PYZus{}a}
+    \PY{n+nv+vi}{@n} \PY{o}{=} \PY{n}{nodes}\PY{o}{.}\PY{n}{collect}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{n}{k}\PY{o}{.}\PY{n}{id}\PY{p}{\PYZcb{}}
+    \PY{n}{alledges} \PY{o}{=} \PY{n}{alledges}\PY{o}{.}\PY{n}{to\PYZus{}a}    
+    
+    \PY{k}{def} \PY{n+nf}{test\PYZus{}cover}\PY{p}{(}\PY{n}{edges}\PY{p}{,} \PY{n}{cover}\PY{p}{)}
+      \PY{n}{edges}\PY{o}{.}\PY{n}{each}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{k}{return} \PY{k+kp}{false} \PY{k}{if} \PY{n}{cover}\PY{o}{-}\PY{n}{k} \PY{o}{==} \PY{n}{cover}\PY{p}{\PYZcb{}} 
+    \PY{k}{end}
+    \PY{n+nv+vi}{@c} \PY{o}{=} \PY{n}{build\PYZus{}all\PYZus{}subsets}\PY{o}{.}\PY{n}{select}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{n}{test\PYZus{}cover}\PY{p}{(}\PY{n}{alledges}\PY{p}{,} \PY{n}{k}\PY{p}{)}\PY{p}{\PYZcb{}}\PY{o}{.}\PY{n}{to\PYZus{}set}
+    \PY{k}{return} \PY{n+no}{LdGraph}\PY{o}{.}\PY{n}{new}\PY{p}{(}\PY{n+nv+vi}{@c}\PY{p}{,} \PY{n}{nodes}\PY{p}{)}
+  \PY{k}{end}
+
+  \PY{k}{def} \PY{n+nf}{build\PYZus{}all\PYZus{}subsets}
+    \PY{n}{n} \PY{o}{=} \PY{n+nv+vi}{@n}
+    \PY{n}{subsets} \PY{o}{=} \PY{o}{[}\PY{n}{n}\PY{o}{]}
+    \PY{n}{m} \PY{o}{=} \PY{n}{n} \PY{o}{-} \PY{o}{[}\PY{n+nv+vi}{@id}\PY{o}{]}
+    \PY{n}{x} \PY{o}{=} \PY{n}{m}\PY{o}{.}\PY{n}{length}
+    \PY{n}{subsets}\PY{o}{.}\PY{n}{push}\PY{p}{(}\PY{n}{m}\PY{p}{)}
+    \PY{p}{(}\PY{l+m+mi}{1}\PY{o}{.}\PY{n}{.}\PY{n}{x}\PY{p}{)}\PY{o}{.}\PY{n}{each} \PY{k}{do} \PY{o}{|}\PY{n}{k}\PY{o}{|}
+      \PY{n}{subsets} \PY{o}{=} \PY{n}{subsets}\PY{o}{+}\PY{p}{(}\PY{n}{m}\PY{o}{.}\PY{n}{combination}\PY{p}{(}\PY{n}{k}\PY{p}{)}\PY{o}{.}\PY{n}{to\PYZus{}a}\PY{p}{)}
+    \PY{k}{end}
+    \PY{n}{subsets}\PY{o}{.}\PY{n}{each\PYZus{}index}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{k}{if} \PY{n}{k}\PY{o}{>}\PY{l+m+mi}{1} \PY{k}{then} \PY{n}{subsets}\PY{o}{[}\PY{n}{k}\PY{o}{]}\PY{o}{.}\PY{n}{push}\PY{p}{(}\PY{n+nv+vi}{@id}\PY{p}{)} \PY{k}{end}\PY{p}{\PYZcb{}}
+    \PY{n}{subsets}\PY{o}{.}\PY{n}{push}\PY{p}{(}\PY{o}{[}\PY{n+nv+vi}{@id}\PY{o}{]}\PY{p}{)}
+    \PY{n}{subsets}\PY{o}{.}\PY{n}{each\PYZus{}index}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{n}{subsets}\PY{o}{[}\PY{n}{k}\PY{o}{]} \PY{o}{=} \PY{n}{subsets}\PY{o}{[}\PY{n}{k}\PY{o}{]}\PY{o}{.}\PY{n}{to\PYZus{}set}\PY{p}{\PYZcb{}}
+    \PY{n}{subsets}\PY{o}{.}\PY{n}{to\PYZus{}set}
+    \PY{k}{return} \PY{n}{subsets}
+  \PY{k}{end}
+
+\PY{k}{end}
+
+\PY{k}{module} \PY{n+nn}{VCLocalShort}
+  \PY{k+kp}{attr\PYZus{}reader} \PY{l+s+ss}{:matrix}
+  \PY{k}{def} \PY{n+nf}{build\PYZus{}covers}
+    \PY{n}{alledges} \PY{o}{=} \PY{n+no}{Set}\PY{o}{[}\PY{o}{]}
+    \PY{n+nv+vi}{@edges}\PY{o}{.}\PY{n}{each}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{n}{alledges}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n}{k}\PY{p}{)}\PY{p}{\PYZcb{}}
+    \PY{n}{nset} \PY{o}{=} \PY{n+no}{Set}\PY{o}{.}\PY{n}{new}\PY{p}{(}\PY{n+nv+vi}{@neighbors}\PY{o}{.}\PY{n}{collect}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{n}{k}\PY{o}{.}\PY{n}{id}\PY{p}{\PYZcb{}}\PY{p}{)}
+    \PY{n}{nset}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n+nv+vi}{@id}\PY{p}{)}
+    \PY{n+nv+vi}{@neighbors}\PY{o}{.}\PY{n}{each} \PY{k}{do} \PY{o}{|}\PY{n}{k}\PY{o}{|} 
+      \PY{n}{k}\PY{o}{.}\PY{n}{edges}\PY{o}{.}\PY{n}{each} \PY{k}{do} \PY{o}{|}\PY{n}{j}\PY{o}{|} 
+        \PY{n}{alledges}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n}{j}\PY{p}{)} \PY{k}{if} \PY{n}{j}\PY{o}{.}\PY{n}{proper\PYZus{}subset?}\PY{p}{(}\PY{n}{nset}\PY{p}{)}
+      \PY{k}{end}
+    \PY{k}{end}
+    \PY{n}{nodes} \PY{o}{=} \PY{n+nv+vi}{@neighbors}\PY{o}{.}\PY{n}{to\PYZus{}set}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n+nb}{self}\PY{p}{)}
+    \PY{n}{nodes} \PY{o}{=} \PY{n}{nodes}\PY{o}{.}\PY{n}{to\PYZus{}a}
+    \PY{n+nv+vi}{@n} \PY{o}{=} \PY{n}{nodes}\PY{o}{.}\PY{n}{collect}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{n}{k}\PY{o}{.}\PY{n}{id}\PY{p}{\PYZcb{}}
+    \PY{n}{alledges} \PY{o}{=} \PY{n}{alledges}\PY{o}{.}\PY{n}{to\PYZus{}a}    
+    
+    \PY{k}{def} \PY{n+nf}{test\PYZus{}cover}\PY{p}{(}\PY{n}{edges}\PY{p}{,} \PY{n}{cover}\PY{p}{)}
+      \PY{n}{edges}\PY{o}{.}\PY{n}{each}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{k}{return} \PY{k+kp}{false} \PY{k}{if} \PY{n}{cover}\PY{o}{-}\PY{n}{k} \PY{o}{==} \PY{n}{cover}\PY{p}{\PYZcb{}} 
+    \PY{k}{end}
+    \PY{n+nv+vi}{@c} \PY{o}{=} \PY{n}{build\PYZus{}all\PYZus{}subsets}\PY{o}{.}\PY{n}{select}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{n}{test\PYZus{}cover}\PY{p}{(}\PY{n}{alledges}\PY{p}{,} \PY{n}{k}\PY{p}{)}\PY{p}{\PYZcb{}}\PY{o}{.}\PY{n}{to\PYZus{}set}
+\PY{c+c1}{#    puts 'about to make a new shortlifeldgraph'}
+    \PY{k}{return} \PY{n+no}{ShortLifeLdGraph}\PY{o}{.}\PY{n}{new}\PY{p}{(}\PY{n+nv+vi}{@c}\PY{p}{,} \PY{n}{nodes}\PY{p}{)}
+  \PY{k}{end}  
+\PY{k}{end}
+
+\PY{k}{module} \PY{n+nn}{VCLocal\PYZus{}Obs}
+  \PY{k+kp}{attr\PYZus{}reader} \PY{l+s+ss}{:matrix}
+  \PY{k}{def} \PY{n+nf}{build\PYZus{}covers}
+    \PY{n}{alledges} \PY{o}{=} \PY{n+no}{Set}\PY{o}{[}\PY{o}{]}
+    \PY{n+nv+vi}{@edges}\PY{o}{.}\PY{n}{each}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{n}{alledges}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n}{k}\PY{p}{)}\PY{p}{\PYZcb{}}
+    \PY{n}{nset} \PY{o}{=} \PY{n+no}{Set}\PY{o}{.}\PY{n}{new}\PY{p}{(}\PY{n+nv+vi}{@neighbors}\PY{o}{.}\PY{n}{collect}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{n}{k}\PY{o}{.}\PY{n}{id}\PY{p}{\PYZcb{}}\PY{p}{)}
+    \PY{n}{nset}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n+nv+vi}{@id}\PY{p}{)}
+    \PY{n+nv+vi}{@neighbors}\PY{o}{.}\PY{n}{each} \PY{k}{do} \PY{o}{|}\PY{n}{k}\PY{o}{|} 
+      \PY{n}{k}\PY{o}{.}\PY{n}{edges}\PY{o}{.}\PY{n}{each} \PY{k}{do} \PY{o}{|}\PY{n}{j}\PY{o}{|} 
+        \PY{n}{alledges}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n}{j}\PY{p}{)} \PY{k}{if} \PY{n}{j}\PY{o}{.}\PY{n}{proper\PYZus{}subset?}\PY{p}{(}\PY{n}{nset}\PY{p}{)}
+      \PY{k}{end}
+    \PY{k}{end}
+    \PY{n}{nodes} \PY{o}{=} \PY{n+nv+vi}{@neighbors}\PY{o}{.}\PY{n}{to\PYZus{}set}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n+nb}{self}\PY{p}{)}
+    \PY{n}{nodes} \PY{o}{=} \PY{n}{nodes}\PY{o}{.}\PY{n}{to\PYZus{}a}
+    \PY{n+nv+vi}{@n} \PY{o}{=} \PY{n}{nodes}\PY{o}{.}\PY{n}{collect}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{n}{k}\PY{o}{.}\PY{n}{id}\PY{p}{\PYZcb{}}
+    \PY{n}{alledges} \PY{o}{=} \PY{n}{alledges}\PY{o}{.}\PY{n}{to\PYZus{}a}    
+    \PY{k}{def} \PY{n+nf}{build\PYZus{}all\PYZus{}subsets}
+      \PY{n}{n} \PY{o}{=} \PY{n+nv+vi}{@n}
+      \PY{n}{subsets} \PY{o}{=} \PY{o}{[}\PY{n}{n}\PY{o}{]}
+      \PY{n}{m} \PY{o}{=} \PY{n}{n} \PY{o}{-} \PY{o}{[}\PY{n+nv+vi}{@id}\PY{o}{]}
+      \PY{n}{x} \PY{o}{=} \PY{n}{m}\PY{o}{.}\PY{n}{length}
+      \PY{n}{subsets}\PY{o}{.}\PY{n}{push}\PY{p}{(}\PY{n}{m}\PY{p}{)}
+      \PY{k}{while} \PY{n}{x} \PY{o}{>} \PY{l+m+mi}{1}
+        \PY{n}{thesesets} \PY{o}{=} \PY{n}{subsets}\PY{o}{.}\PY{n}{select}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{n}{k}\PY{o}{.}\PY{n}{length} \PY{o}{==} \PY{n}{x}\PY{p}{\PYZcb{}}
+        \PY{n}{thesesets}\PY{o}{.}\PY{n}{each} \PY{k}{do} \PY{o}{|}\PY{n}{k}\PY{o}{|}
+          \PY{n}{k}\PY{o}{.}\PY{n}{each\PYZus{}index} \PY{k}{do} \PY{o}{|}\PY{n}{j}\PY{o}{|}
+            \PY{n}{r} \PY{o}{=} \PY{n}{k}\PY{o}{.}\PY{n}{dup}
+            \PY{n}{r}\PY{o}{.}\PY{n}{slice!}\PY{p}{(}\PY{n}{j}\PY{p}{)}
+            \PY{n}{subsets}\PY{o}{.}\PY{n}{push}\PY{p}{(}\PY{n}{r}\PY{p}{)}
+          \PY{k}{end}
+        \PY{k}{end}
+        \PY{n}{subsets}\PY{o}{.}\PY{n}{uniq!}
+        \PY{n}{x} \PY{o}{-=}\PY{l+m+mi}{1}
+      \PY{k}{end}
+      \PY{n}{subsets}\PY{o}{.}\PY{n}{each\PYZus{}index}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{k}{if} \PY{n}{k}\PY{o}{>}\PY{l+m+mi}{1} \PY{k}{then} \PY{n}{subsets}\PY{o}{[}\PY{n}{k}\PY{o}{]}\PY{o}{.}\PY{n}{push}\PY{p}{(}\PY{n+nv+vi}{@id}\PY{p}{)} \PY{k}{end}\PY{p}{\PYZcb{}}
+      \PY{n}{subsets}\PY{o}{.}\PY{n}{push}\PY{p}{(}\PY{o}{[}\PY{n+nv+vi}{@id}\PY{o}{]}\PY{p}{)}
+      \PY{n}{subsets}\PY{o}{.}\PY{n}{each\PYZus{}index}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{n}{subsets}\PY{o}{[}\PY{n}{k}\PY{o}{]} \PY{o}{=} \PY{n}{subsets}\PY{o}{[}\PY{n}{k}\PY{o}{]}\PY{o}{.}\PY{n}{to\PYZus{}set}\PY{p}{\PYZcb{}}
+      \PY{n}{subsets}\PY{o}{.}\PY{n}{to\PYZus{}set}
+      \PY{k}{return} \PY{n}{subsets}
+    \PY{k}{end}
+    
+    \PY{k}{def} \PY{n+nf}{test\PYZus{}cover}\PY{p}{(}\PY{n}{edges}\PY{p}{,} \PY{n}{cover}\PY{p}{)}
+      \PY{n}{edges}\PY{o}{.}\PY{n}{each}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{k}{return} \PY{k+kp}{false} \PY{k}{if} \PY{n}{cover}\PY{o}{-}\PY{n}{k} \PY{o}{==} \PY{n}{cover}\PY{p}{\PYZcb{}} 
+    \PY{k}{end}
+    \PY{n+nv+vi}{@c} \PY{o}{=} \PY{n}{build\PYZus{}all\PYZus{}subsets}\PY{o}{.}\PY{n}{select}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{n}{test\PYZus{}cover}\PY{p}{(}\PY{n}{alledges}\PY{p}{,} \PY{n}{k}\PY{p}{)}\PY{p}{\PYZcb{}}\PY{o}{.}\PY{n}{to\PYZus{}set}
+    \PY{k}{return} \PY{n+no}{LdGraph}\PY{o}{.}\PY{n}{new}\PY{p}{(}\PY{n+nv+vi}{@c}\PY{p}{,} \PY{n}{nodes}\PY{p}{)}
+  \PY{k}{end}  
+\PY{k}{end}
+
+\PY{k}{module} \PY{n+nn}{TotalWeightVC}
+  \PY{k+kp}{attr\PYZus{}reader} \PY{l+s+ss}{:matrix}
+  \PY{k}{def} \PY{n+nf}{build\PYZus{}covers}
+    \PY{n}{alledges} \PY{o}{=} \PY{n+no}{Set}\PY{o}{[}\PY{o}{]}
+    \PY{n+nv+vi}{@edges}\PY{o}{.}\PY{n}{each}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{n}{alledges}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n}{k}\PY{p}{)}\PY{p}{\PYZcb{}}
+    \PY{n}{nset} \PY{o}{=} \PY{n+no}{Set}\PY{o}{.}\PY{n}{new}\PY{p}{(}\PY{n+nv+vi}{@neighbors}\PY{o}{.}\PY{n}{collect}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{n}{k}\PY{o}{.}\PY{n}{id}\PY{p}{\PYZcb{}}\PY{p}{)}
+    \PY{n}{nset}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n+nv+vi}{@id}\PY{p}{)}
+    \PY{n+nv+vi}{@neighbors}\PY{o}{.}\PY{n}{each} \PY{k}{do} \PY{o}{|}\PY{n}{k}\PY{o}{|} 
+      \PY{n}{k}\PY{o}{.}\PY{n}{edges}\PY{o}{.}\PY{n}{each} \PY{k}{do} \PY{o}{|}\PY{n}{j}\PY{o}{|} 
+        \PY{n}{alledges}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n}{j}\PY{p}{)} \PY{k}{if} \PY{n}{j}\PY{o}{.}\PY{n}{proper\PYZus{}subset?}\PY{p}{(}\PY{n}{nset}\PY{p}{)}
+      \PY{k}{end}
+    \PY{k}{end}
+    \PY{n}{nodes} \PY{o}{=} \PY{n+nv+vi}{@neighbors}\PY{o}{.}\PY{n}{to\PYZus{}set}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n+nb}{self}\PY{p}{)}
+    \PY{n}{nodes} \PY{o}{=} \PY{n}{nodes}\PY{o}{.}\PY{n}{to\PYZus{}a}
+    \PY{n+nv+vi}{@n} \PY{o}{=} \PY{n}{nodes}\PY{o}{.}\PY{n}{collect}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{n}{k}\PY{o}{.}\PY{n}{id}\PY{p}{\PYZcb{}}
+    \PY{n}{alledges} \PY{o}{=} \PY{n}{alledges}\PY{o}{.}\PY{n}{to\PYZus{}a}    
+    \PY{k}{def} \PY{n+nf}{build\PYZus{}all\PYZus{}subsets}
+      \PY{n}{n} \PY{o}{=} \PY{n+nv+vi}{@n}
+      \PY{n}{subsets} \PY{o}{=} \PY{o}{[}\PY{n}{n}\PY{o}{]}
+      \PY{n}{m} \PY{o}{=} \PY{n}{n} \PY{o}{-} \PY{o}{[}\PY{n+nv+vi}{@id}\PY{o}{]}
+      \PY{n}{x} \PY{o}{=} \PY{n}{m}\PY{o}{.}\PY{n}{length}
+      \PY{n}{subsets}\PY{o}{.}\PY{n}{push}\PY{p}{(}\PY{n}{m}\PY{p}{)}
+      \PY{k}{while} \PY{n}{x} \PY{o}{>} \PY{l+m+mi}{1}
+        \PY{n}{thesesets} \PY{o}{=} \PY{n}{subsets}\PY{o}{.}\PY{n}{select}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{n}{k}\PY{o}{.}\PY{n}{length} \PY{o}{==} \PY{n}{x}\PY{p}{\PYZcb{}}
+        \PY{n}{thesesets}\PY{o}{.}\PY{n}{each} \PY{k}{do} \PY{o}{|}\PY{n}{k}\PY{o}{|}
+          \PY{n}{k}\PY{o}{.}\PY{n}{each\PYZus{}index} \PY{k}{do} \PY{o}{|}\PY{n}{j}\PY{o}{|}
+            \PY{n}{r} \PY{o}{=} \PY{n}{k}\PY{o}{.}\PY{n}{dup}
+            \PY{n}{r}\PY{o}{.}\PY{n}{slice!}\PY{p}{(}\PY{n}{j}\PY{p}{)}
+            \PY{n}{subsets}\PY{o}{.}\PY{n}{push}\PY{p}{(}\PY{n}{r}\PY{p}{)}
+          \PY{k}{end}
+        \PY{k}{end}
+        \PY{n}{subsets}\PY{o}{.}\PY{n}{uniq!}
+        \PY{n}{x} \PY{o}{-=}\PY{l+m+mi}{1}
+      \PY{k}{end}
+      \PY{n}{subsets}\PY{o}{.}\PY{n}{each\PYZus{}index}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{k}{if} \PY{n}{k}\PY{o}{>}\PY{l+m+mi}{1} \PY{k}{then} \PY{n}{subsets}\PY{o}{[}\PY{n}{k}\PY{o}{]}\PY{o}{.}\PY{n}{push}\PY{p}{(}\PY{n+nv+vi}{@id}\PY{p}{)} \PY{k}{end}\PY{p}{\PYZcb{}}
+      \PY{n}{subsets}\PY{o}{.}\PY{n}{push}\PY{p}{(}\PY{o}{[}\PY{n+nv+vi}{@id}\PY{o}{]}\PY{p}{)}
+      \PY{n}{subsets}\PY{o}{.}\PY{n}{each\PYZus{}index}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{n}{subsets}\PY{o}{[}\PY{n}{k}\PY{o}{]} \PY{o}{=} \PY{n}{subsets}\PY{o}{[}\PY{n}{k}\PY{o}{]}\PY{o}{.}\PY{n}{to\PYZus{}set}\PY{p}{\PYZcb{}}
+      \PY{n}{subsets}\PY{o}{.}\PY{n}{to\PYZus{}set}
+      \PY{k}{return} \PY{n}{subsets}
+    \PY{k}{end}
+
+    \PY{k}{def} \PY{n+nf}{test\PYZus{}cover}\PY{p}{(}\PY{n}{edges}\PY{p}{,} \PY{n}{cover}\PY{p}{)}
+      \PY{n}{edges}\PY{o}{.}\PY{n}{each}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{k}{return} \PY{k+kp}{false} \PY{k}{if} \PY{n}{cover}\PY{o}{-}\PY{n}{k} \PY{o}{==} \PY{n}{cover}\PY{p}{\PYZcb{}} 
+    \PY{k}{end}
+    \PY{n+nv+vi}{@c} \PY{o}{=} \PY{n}{build\PYZus{}all\PYZus{}subsets}\PY{o}{.}\PY{n}{select}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{n}{test\PYZus{}cover}\PY{p}{(}\PY{n}{alledges}\PY{p}{,} \PY{n}{k}\PY{p}{)}\PY{p}{\PYZcb{}}\PY{o}{.}\PY{n}{to\PYZus{}set}
+    \PY{k}{return} \PY{n+no}{TotalWeightLdGraph}\PY{o}{.}\PY{n}{new}\PY{p}{(}\PY{n+nv+vi}{@c}\PY{p}{,} \PY{n}{nodes}\PY{p}{)}
+  \PY{k}{end}  
+\PY{k}{end}
+
+\PY{k}{module} \PY{n+nn}{DegreeWeightVC}
+  \PY{k+kp}{attr\PYZus{}reader} \PY{l+s+ss}{:matrix}
+  \PY{k}{def} \PY{n+nf}{build\PYZus{}covers}
+    \PY{n}{alledges} \PY{o}{=} \PY{n+no}{Set}\PY{o}{[}\PY{o}{]}
+    \PY{n+nv+vi}{@edges}\PY{o}{.}\PY{n}{each}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{n}{alledges}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n}{k}\PY{p}{)}\PY{p}{\PYZcb{}}
+    \PY{n}{nset} \PY{o}{=} \PY{n+no}{Set}\PY{o}{.}\PY{n}{new}\PY{p}{(}\PY{n+nv+vi}{@neighbors}\PY{o}{.}\PY{n}{collect}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{n}{k}\PY{o}{.}\PY{n}{id}\PY{p}{\PYZcb{}}\PY{p}{)}
+    \PY{n}{nset}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n+nv+vi}{@id}\PY{p}{)}
+    \PY{n+nv+vi}{@neighbors}\PY{o}{.}\PY{n}{each} \PY{k}{do} \PY{o}{|}\PY{n}{k}\PY{o}{|} 
+      \PY{n}{k}\PY{o}{.}\PY{n}{edges}\PY{o}{.}\PY{n}{each} \PY{k}{do} \PY{o}{|}\PY{n}{j}\PY{o}{|} 
+        \PY{n}{alledges}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n}{j}\PY{p}{)} \PY{k}{if} \PY{n}{j}\PY{o}{.}\PY{n}{proper\PYZus{}subset?}\PY{p}{(}\PY{n}{nset}\PY{p}{)}
+      \PY{k}{end}
+    \PY{k}{end}
+    \PY{n}{nodes} \PY{o}{=} \PY{n+nv+vi}{@neighbors}\PY{o}{.}\PY{n}{to\PYZus{}set}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n+nb}{self}\PY{p}{)}
+    \PY{n}{nodes} \PY{o}{=} \PY{n}{nodes}\PY{o}{.}\PY{n}{to\PYZus{}a}
+    \PY{n+nv+vi}{@n} \PY{o}{=} \PY{n}{nodes}\PY{o}{.}\PY{n}{collect}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{n}{k}\PY{o}{.}\PY{n}{id}\PY{p}{\PYZcb{}}
+    \PY{n}{alledges} \PY{o}{=} \PY{n}{alledges}\PY{o}{.}\PY{n}{to\PYZus{}a}    
+    \PY{k}{def} \PY{n+nf}{build\PYZus{}all\PYZus{}subsets}
+      \PY{n}{n} \PY{o}{=} \PY{n+nv+vi}{@n}
+      \PY{n}{subsets} \PY{o}{=} \PY{o}{[}\PY{n}{n}\PY{o}{]}
+      \PY{n}{m} \PY{o}{=} \PY{n}{n} \PY{o}{-} \PY{o}{[}\PY{n+nv+vi}{@id}\PY{o}{]}
+      \PY{n}{x} \PY{o}{=} \PY{n}{m}\PY{o}{.}\PY{n}{length}
+      \PY{n}{subsets}\PY{o}{.}\PY{n}{push}\PY{p}{(}\PY{n}{m}\PY{p}{)}
+      \PY{k}{while} \PY{n}{x} \PY{o}{>} \PY{l+m+mi}{1}
+        \PY{n}{thesesets} \PY{o}{=} \PY{n}{subsets}\PY{o}{.}\PY{n}{select}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{n}{k}\PY{o}{.}\PY{n}{length} \PY{o}{==} \PY{n}{x}\PY{p}{\PYZcb{}}
+        \PY{n}{thesesets}\PY{o}{.}\PY{n}{each} \PY{k}{do} \PY{o}{|}\PY{n}{k}\PY{o}{|}
+          \PY{n}{k}\PY{o}{.}\PY{n}{each\PYZus{}index} \PY{k}{do} \PY{o}{|}\PY{n}{j}\PY{o}{|}
+            \PY{n}{r} \PY{o}{=} \PY{n}{k}\PY{o}{.}\PY{n}{dup}
+            \PY{n}{r}\PY{o}{.}\PY{n}{slice!}\PY{p}{(}\PY{n}{j}\PY{p}{)}
+            \PY{n}{subsets}\PY{o}{.}\PY{n}{push}\PY{p}{(}\PY{n}{r}\PY{p}{)}
+          \PY{k}{end}
+        \PY{k}{end}
+        \PY{n}{subsets}\PY{o}{.}\PY{n}{uniq!}
+        \PY{n}{x} \PY{o}{-=}\PY{l+m+mi}{1}
+      \PY{k}{end}
+      \PY{n}{subsets}\PY{o}{.}\PY{n}{each\PYZus{}index}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{k}{if} \PY{n}{k}\PY{o}{>}\PY{l+m+mi}{1} \PY{k}{then} \PY{n}{subsets}\PY{o}{[}\PY{n}{k}\PY{o}{]}\PY{o}{.}\PY{n}{push}\PY{p}{(}\PY{n+nv+vi}{@id}\PY{p}{)} \PY{k}{end}\PY{p}{\PYZcb{}}
+      \PY{n}{subsets}\PY{o}{.}\PY{n}{push}\PY{p}{(}\PY{o}{[}\PY{n+nv+vi}{@id}\PY{o}{]}\PY{p}{)}
+      \PY{n}{subsets}\PY{o}{.}\PY{n}{each\PYZus{}index}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{n}{subsets}\PY{o}{[}\PY{n}{k}\PY{o}{]} \PY{o}{=} \PY{n}{subsets}\PY{o}{[}\PY{n}{k}\PY{o}{]}\PY{o}{.}\PY{n}{to\PYZus{}set}\PY{p}{\PYZcb{}}
+      \PY{n}{subsets}\PY{o}{.}\PY{n}{to\PYZus{}set}
+      \PY{k}{return} \PY{n}{subsets}
+    \PY{k}{end}
+
+    \PY{k}{def} \PY{n+nf}{test\PYZus{}cover}\PY{p}{(}\PY{n}{edges}\PY{p}{,} \PY{n}{cover}\PY{p}{)}
+      \PY{n}{edges}\PY{o}{.}\PY{n}{each}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{k}{return} \PY{k+kp}{false} \PY{k}{if} \PY{n}{cover}\PY{o}{-}\PY{n}{k} \PY{o}{==} \PY{n}{cover}\PY{p}{\PYZcb{}} 
+    \PY{k}{end}
+    \PY{n+nv+vi}{@c} \PY{o}{=} \PY{n}{build\PYZus{}all\PYZus{}subsets}\PY{o}{.}\PY{n}{select}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{n}{test\PYZus{}cover}\PY{p}{(}\PY{n}{alledges}\PY{p}{,} \PY{n}{k}\PY{p}{)}\PY{p}{\PYZcb{}}\PY{o}{.}\PY{n}{to\PYZus{}set}
+    \PY{k}{return} \PY{n+no}{DegreeWeightLdGraph}\PY{o}{.}\PY{n}{new}\PY{p}{(}\PY{n+nv+vi}{@c}\PY{p}{,} \PY{n}{nodes}\PY{p}{)}
+  \PY{k}{end}  
+\PY{k}{end}
+
+
+\PY{k}{module} \PY{n+nn}{VertexCover}
+  \PY{k+kp}{attr\PYZus{}reader} \PY{l+s+ss}{:matrix}
+  \PY{k}{def} \PY{n+nf}{build\PYZus{}covers}
+    \PY{n}{alledges} \PY{o}{=} \PY{n+no}{Set}\PY{o}{[}\PY{o}{]}
+    \PY{n+nv+vi}{@edges}\PY{o}{.}\PY{n}{each}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{n}{alledges}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n}{k}\PY{p}{)}\PY{p}{\PYZcb{}}
+    \PY{n+nv+vi}{@neighbors}\PY{o}{.}\PY{n}{each}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{n}{k}\PY{o}{.}\PY{n}{edges}\PY{o}{.}\PY{n}{each}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{j}\PY{o}{|} \PY{n}{alledges}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n}{j}\PY{p}{)}\PY{p}{\PYZcb{}}\PY{p}{\PYZcb{}}
+    \PY{n}{nodes} \PY{o}{=} \PY{n+nv+vi}{@neighbors}\PY{o}{.}\PY{n}{to\PYZus{}set}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n+nb}{self}\PY{p}{)}
+    \PY{n+nv+vi}{@neighbors}\PY{o}{.}\PY{n}{each}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{n}{k}\PY{o}{.}\PY{n}{neighbors}\PY{o}{.}\PY{n}{each}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{j}\PY{o}{|} \PY{n}{nodes}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n}{j}\PY{p}{)}\PY{p}{\PYZcb{}}\PY{p}{\PYZcb{}}
+    \PY{n}{nodes} \PY{o}{=} \PY{n}{nodes}\PY{o}{.}\PY{n}{to\PYZus{}a}
+    \PY{n}{nodes} \PY{o}{=} \PY{n}{nodes}\PY{o}{.}\PY{n}{sort\PYZus{}by}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{n}{k}\PY{o}{.}\PY{n}{id}\PY{p}{\PYZcb{}}
+    \PY{n}{alledges} \PY{o}{=} \PY{n}{alledges}\PY{o}{.}\PY{n}{to\PYZus{}a}
+    \PY{n+nv+vi}{@matrix} \PY{o}{=} \PY{o}{[}\PY{o}{]}
+    \PY{n}{alledges}\PY{o}{.}\PY{n}{each}\PY{p}{\PYZob{}}\PY{n+nv+vi}{@matrix}\PY{o}{.}\PY{n}{push}\PY{p}{(}\PY{o}{[}\PY{o}{]}\PY{p}{)}\PY{p}{\PYZcb{}}
+    \PY{n}{alledges}\PY{o}{.}\PY{n}{each\PYZus{}index} \PY{k}{do} \PY{o}{|}\PY{n}{k}\PY{o}{|}
+      \PY{n}{nodes}\PY{o}{.}\PY{n}{each} \PY{k}{do} \PY{o}{|}\PY{n}{j}\PY{o}{|}
+        \PY{k}{if} \PY{n}{alledges}\PY{o}{[}\PY{n}{k}\PY{o}{]}\PY{o}{.}\PY{n}{include?}\PY{p}{(}\PY{n}{j}\PY{o}{.}\PY{n}{id}\PY{p}{)} \PY{k}{then}
+          \PY{n+nv+vi}{@matrix}\PY{o}{[}\PY{n}{k}\PY{o}{]}\PY{o}{.}\PY{n}{push}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)}
+        \PY{k}{else}
+          \PY{n+nv+vi}{@matrix}\PY{o}{[}\PY{n}{k}\PY{o}{]}\PY{o}{.}\PY{n}{push}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{)}
+        \PY{k}{end}
+      \PY{k}{end}
+    \PY{k}{end}
+    
+    \PY{k}{def} \PY{n+nf}{rec\PYZus{}build\PYZus{}covers}\PY{p}{(}\PY{n}{x}\PY{p}{,}\PY{n}{y}\PY{p}{,}\PY{n}{c}\PY{p}{,}\PY{n}{covers}\PY{p}{,} \PY{n}{nodes}\PY{p}{)} 
+      \PY{n}{cover} \PY{o}{=} \PY{n}{c}\PY{o}{.}\PY{n}{dup}
+      \PY{k}{if} \PY{n}{x} \PY{o}{==} \PY{n+nv+vi}{@matrix}\PY{o}{.}\PY{n}{length}
+        \PY{n}{covers}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n}{cover}\PY{p}{)}
+\PY{c+c1}{#        puts "adding a cover"}
+        \PY{k}{return} \PY{n}{covers}
+      \PY{k}{elsif} \PY{n}{y} \PY{o}{==} \PY{n+nv+vi}{@matrix}\PY{o}{[}\PY{n}{x}\PY{o}{]}\PY{o}{.}\PY{n}{length}
+\PY{c+c1}{#        puts "no more nodes to add in this row"}
+        \PY{k}{return} \PY{n}{covers}
+      \PY{k}{elsif} \PY{n+nv+vi}{@matrix}\PY{o}{[}\PY{n}{x}\PY{o}{]}\PY{o}{[}\PY{n}{y}\PY{o}{]} \PY{o}{==} \PY{l+m+mi}{0}
+        \PY{n}{rec\PYZus{}build\PYZus{}covers}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{y}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{cover}\PY{p}{,} \PY{n}{covers}\PY{p}{,} \PY{n}{nodes}\PY{p}{)}
+      \PY{k}{elsif} \PY{n+nv+vi}{@matrix}\PY{o}{[}\PY{n}{x}\PY{o}{]}\PY{o}{[}\PY{n}{y}\PY{o}{]} \PY{o}{==} \PY{l+m+mi}{1}
+        \PY{n}{cover}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n}{nodes}\PY{o}{[}\PY{n}{y}\PY{o}{]}\PY{o}{.}\PY{n}{id}\PY{p}{)}
+\PY{c+c1}{#        puts "increase x"}
+        \PY{n}{rec\PYZus{}build\PYZus{}covers}\PY{p}{(}\PY{n}{x}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{n}{cover}\PY{p}{,} \PY{n}{covers}\PY{p}{,} \PY{n}{nodes}\PY{p}{)}
+\PY{c+c1}{#        puts "now increase y"}
+        \PY{n}{rec\PYZus{}build\PYZus{}covers}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{y}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{c}\PY{p}{,} \PY{n}{covers}\PY{p}{,} \PY{n}{nodes}\PY{p}{)}
+      \PY{k}{end}
+    \PY{k}{end}
+    \PY{k}{return} \PY{n+no}{LdGraph}\PY{o}{.}\PY{n}{new}\PY{p}{(}\PY{n}{rec\PYZus{}build\PYZus{}covers}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,} \PY{n+no}{Set}\PY{o}{[}\PY{o}{]}\PY{p}{,} \PY{n+no}{Set}\PY{o}{[}\PY{o}{]}\PY{p}{,} \PY{n}{nodes}\PY{p}{)}\PY{p}{,} \PY{n}{nodes}\PY{p}{)}
+  \PY{k}{end}  
+\PY{k}{end}
+
+\PY{k}{module} \PY{n+nn}{SimpleVC}
+  \PY{k}{def} \PY{n+nf}{build\PYZus{}covers}
+    \PY{n}{covers} \PY{o}{=} \PY{n+no}{Set}\PY{o}{[}\PY{o}{]}
+    \PY{n}{covers}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n+no}{Set}\PY{o}{[}\PY{n+nv+vi}{@id}\PY{o}{]}\PY{p}{)}
+    \PY{n}{covers}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n+no}{Set}\PY{o}{.}\PY{n}{new}\PY{p}{(}\PY{n+nv+vi}{@neighbors}\PY{o}{.}\PY{n}{collect}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{n}{k}\PY{o}{.}\PY{n}{id}\PY{p}{\PYZcb{}}\PY{p}{)}\PY{p}{)}
+    \PY{k}{return} \PY{n+no}{SimpleLdGraph}\PY{o}{.}\PY{n}{new}\PY{p}{(}\PY{n}{covers}\PY{p}{,} \PY{n+nv+vi}{@neighbors} \PY{o}{+} \PY{o}{[}\PY{n+nb}{self}\PY{o}{]}\PY{p}{)}
+  \PY{k}{end}
+\PY{k}{end}
+
+\PY{k}{module} \PY{n+nn}{Combinator}
+  \PY{k}{def} \PY{n+nf}{construct\PYZus{}covers} \PY{n}{n}\PY{p}{,} \PY{n}{e}
+    \PY{n}{s} \PY{o}{=} \PY{n}{get\PYZus{}subsets} \PY{n}{n}\PY{o}{.}\PY{n}{collect}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{n}{k}\PY{o}{.}\PY{n}{id}\PY{p}{\PYZcb{}}
+    \PY{n}{s} \PY{o}{=} \PY{n}{test\PYZus{}covers}\PY{p}{(}\PY{n}{s}\PY{p}{,}\PY{n}{e}\PY{p}{)}
+    \PY{k}{return} \PY{n}{covers\PYZus{}to\PYZus{}set} \PY{n}{s}
+  \PY{k}{end}
+
+  \PY{k}{def} \PY{n+nf}{get\PYZus{}subsets} \PY{n}{n}
+    \PY{n}{subsets} \PY{o}{=} \PY{o}{[}\PY{o}{]}
+    \PY{n}{x} \PY{o}{=} \PY{n}{n}\PY{o}{.}\PY{n}{length} \PY{o}{-} \PY{l+m+mi}{1}
+    \PY{p}{(}\PY{l+m+mi}{1}\PY{o}{.}\PY{n}{.}\PY{n}{x}\PY{p}{)}\PY{o}{.}\PY{n}{each} \PY{k}{do} \PY{o}{|}\PY{n}{k}\PY{o}{|}
+      \PY{n}{subsets} \PY{o}{=} \PY{n}{subsets}\PY{o}{+}\PY{p}{(}\PY{n}{n}\PY{o}{.}\PY{n}{combination}\PY{p}{(}\PY{n}{k}\PY{p}{)}\PY{o}{.}\PY{n}{to\PYZus{}a}\PY{p}{)}
+    \PY{k}{end}
+    \PY{k}{return} \PY{n}{subsets}
+  \PY{k}{end}
+
+  \PY{k}{def} \PY{n+nf}{test\PYZus{}covers}\PY{p}{(}\PY{n}{s}\PY{p}{,} \PY{n}{e}\PY{p}{)}
+    \PY{n}{e\PYZus{}array} \PY{o}{=} \PY{o}{[}\PY{o}{]}
+    \PY{n}{e}\PY{o}{.}\PY{n}{each}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{n}{e\PYZus{}array}\PY{o}{.}\PY{n}{push}\PY{p}{(}\PY{n}{k}\PY{o}{.}\PY{n}{to\PYZus{}a}\PY{p}{)}\PY{p}{\PYZcb{}}
+    \PY{n}{c} \PY{o}{=} \PY{o}{[}\PY{o}{]}
+    \PY{n}{s}\PY{o}{.}\PY{n}{each}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{n}{c}\PY{o}{.}\PY{n}{push}\PY{p}{(}\PY{n}{k}\PY{p}{)} \PY{k}{if} \PY{n}{test\PYZus{}cover?}\PY{p}{(}\PY{n}{k}\PY{p}{,}\PY{n}{e\PYZus{}array}\PY{p}{)}\PY{p}{\PYZcb{}}
+    \PY{k}{return} \PY{n}{c}
+  \PY{k}{end}
+
+  \PY{k}{def} \PY{n+nf}{test\PYZus{}cover?} \PY{n}{c}\PY{p}{,} \PY{n}{e}
+    \PY{n}{e}\PY{o}{.}\PY{n}{each}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{k}{return} \PY{k+kp}{false} \PY{k}{if} \PY{p}{(}\PY{n}{c}\PY{o}{&}\PY{n}{k}\PY{p}{)}\PY{o}{.}\PY{n}{empty?}\PY{p}{\PYZcb{}}
+    \PY{k}{return} \PY{k+kp}{true}
+  \PY{k}{end}    
+
+  \PY{k}{def} \PY{n+nf}{covers\PYZus{}to\PYZus{}set} \PY{n}{covers}
+    \PY{n}{l} \PY{o}{=} \PY{n+no}{Set}\PY{o}{[}\PY{o}{]}
+    \PY{n}{covers}\PY{o}{.}\PY{n}{each}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{n}{l}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n+no}{Set}\PY{o}{.}\PY{n}{new}\PY{p}{(}\PY{n}{k}\PY{p}{)}\PY{p}{)}\PY{p}{\PYZcb{}}
+    \PY{k}{return} \PY{n}{l}
+  \PY{k}{end}
+
+\PY{k}{end}
+
+\PY{k}{module} \PY{n+nn}{IS\PYZus{}Combinator}
+  \PY{k+kp}{include} \PY{n+no}{Combinator}
+  \PY{k}{def} \PY{n+nf}{test\PYZus{}cover?} \PY{n}{c}\PY{p}{,}\PY{n}{e}
+    \PY{n}{e}\PY{o}{.}\PY{n}{each}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{k}{return} \PY{k+kp}{false} \PY{k}{if} \PY{p}{(}\PY{n}{k}\PY{o}{-}\PY{n}{c}\PY{p}{)}\PY{o}{.}\PY{n}{empty?}\PY{p}{\PYZcb{}}
+    \PY{k}{return} \PY{k+kp}{true}
+  \PY{k}{end}
+\PY{k}{end}
+
+\PY{k}{module} \PY{n+nn}{CoverComposer}
+  \PY{k}{def} \PY{n+nc}{self}\PY{o}{.}\PY{n+nf}{build\PYZus{}matrix} \PY{n}{nodes}\PY{p}{,} \PY{n}{edges}
+    \PY{n}{m} \PY{o}{=} \PY{o}{[}\PY{o}{]}
+    \PY{n}{edges} \PY{o}{=} \PY{n}{edges}\PY{o}{.}\PY{n}{to\PYZus{}a}
+    \PY{n}{edges}\PY{o}{.}\PY{n}{each}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{n}{m}\PY{o}{.}\PY{n}{push}\PY{p}{(}\PY{o}{[}\PY{o}{]}\PY{p}{)}\PY{p}{\PYZcb{}}
+    \PY{n}{nlist} \PY{o}{=} \PY{n}{nodes}\PY{o}{.}\PY{n}{collect}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{n}{k}\PY{o}{.}\PY{n}{id}\PY{p}{\PYZcb{}}
+    \PY{n}{edges}\PY{o}{.}\PY{n}{each\PYZus{}index} \PY{k}{do} \PY{o}{|}\PY{n}{k}\PY{o}{|}
+      \PY{n}{nlist}\PY{o}{.}\PY{n}{each} \PY{k}{do} \PY{o}{|}\PY{n}{j}\PY{o}{|}
+        \PY{k}{if} \PY{n}{edges}\PY{o}{[}\PY{n}{k}\PY{o}{]}\PY{o}{.}\PY{n}{include?}\PY{p}{(}\PY{n}{j}\PY{p}{)}
+          \PY{n}{m}\PY{o}{[}\PY{n}{k}\PY{o}{]}\PY{o}{.}\PY{n}{push}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)}
+        \PY{k}{else}
+          \PY{n}{m}\PY{o}{[}\PY{n}{k}\PY{o}{]}\PY{o}{.}\PY{n}{push}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{)}
+        \PY{k}{end}
+      \PY{k}{end}
+    \PY{k}{end}
+    \PY{k}{return} \PY{n}{m}\PY{p}{,} \PY{n}{nlist}
+  \PY{k}{end}
+
+  \PY{k}{def} \PY{n+nc}{self}\PY{o}{.}\PY{n+nf}{construct\PYZus{}covers} \PY{n}{nodes}\PY{p}{,} \PY{n}{edges}
+\PY{c+c1}{#    puts "building matrix"}
+    \PY{n}{a}\PY{p}{,}\PY{n}{b} \PY{o}{=} \PY{n}{build\PYZus{}matrix} \PY{n}{nodes}\PY{p}{,} \PY{n}{edges}
+\PY{c+c1}{#    puts "composing covers"}
+    \PY{n}{c} \PY{o}{=} \PY{n}{compose\PYZus{}from} \PY{n}{a}\PY{p}{,}\PY{n}{b}
+\PY{c+c1}{#    puts "creating set with #\PYZob{}c.length\PYZcb{} covers"}
+    \PY{n}{d} \PY{o}{=} \PY{n}{covers\PYZus{}to\PYZus{}set} \PY{n}{c}
+    \PY{k}{return} \PY{n}{d}
+  \PY{k}{end}
+    
+  \PY{k}{def} \PY{n+nf}{decompose\PYZus{}matrix} \PY{n}{matrix}
+  \PY{k}{end}
+  
+  \PY{k}{def} \PY{n+nc}{self}\PY{o}{.}\PY{n+nf}{covers\PYZus{}to\PYZus{}set} \PY{n}{covers}
+    \PY{n}{l} \PY{o}{=} \PY{n+no}{Set}\PY{o}{[}\PY{o}{]}
+    \PY{n}{covers}\PY{o}{.}\PY{n}{each}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{n}{l}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n+no}{Set}\PY{o}{.}\PY{n}{new}\PY{p}{(}\PY{n}{k}\PY{p}{)}\PY{p}{)}\PY{p}{\PYZcb{}}
+    \PY{k}{return} \PY{n}{l}
+  \PY{k}{end}
+
+  \PY{k}{def} \PY{n+nc}{self}\PY{o}{.}\PY{n+nf}{compose\PYZus{}from} \PY{n}{matrix}\PY{p}{,} \PY{n}{key}
+    \PY{n}{covers} \PY{o}{=} \PY{o}{[}\PY{o}{]}
+    \PY{n}{stop} \PY{o}{=} \PY{k+kp}{false}
+    \PY{n}{x} \PY{o}{=} \PY{l+m+mi}{0}
+    \PY{n}{y} \PY{o}{=} \PY{l+m+mi}{0}
+    \PY{n}{memo} \PY{o}{=} \PY{o}{[}\PY{o}{]}
+    \PY{n}{keymemo} \PY{o}{=} \PY{o}{[}\PY{o}{]}
+    \PY{n}{matrix}\PY{o}{.}\PY{n}{length}\PY{o}{.}\PY{n}{times}\PY{p}{\PYZob{}}\PY{o}{|}\PY{n}{k}\PY{o}{|} \PY{n}{memo}\PY{o}{[}\PY{n}{k}\PY{o}{]} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{\PYZcb{}}
+    \PY{k}{until} \PY{n}{stop}
+      \PY{k}{if} \PY{n}{x} \PY{o}{<} \PY{n}{matrix}\PY{o}{.}\PY{n}{length} \PY{o+ow}{and} \PY{n}{y} \PY{o}{<} \PY{n}{matrix}\PY{o}{[}\PY{n}{x}\PY{o}{]}\PY{o}{.}\PY{n}{length}
+        \PY{k}{if} \PY{n}{matrix}\PY{o}{[}\PY{n}{x}\PY{o}{]}\PY{o}{[}\PY{n}{y}\PY{o}{]} \PY{o}{==} \PY{l+m+mi}{0}
+          \PY{n}{y} \PY{o}{+=} \PY{l+m+mi}{1}
+        \PY{k}{elsif} \PY{n}{matrix}\PY{o}{[}\PY{n}{x}\PY{o}{]}\PY{o}{[}\PY{n}{y}\PY{o}{]} \PY{o}{==} \PY{l+m+mi}{1}
+          \PY{n}{memo}\PY{o}{[}\PY{n}{x}\PY{o}{]} \PY{o}{=} \PY{n}{y}
+          \PY{n}{keymemo}\PY{o}{[}\PY{n}{x}\PY{o}{]} \PY{o}{=} \PY{n}{key}\PY{o}{[}\PY{n}{y}\PY{o}{]}
+          \PY{n}{x}\PY{o}{+=}\PY{l+m+mi}{1}
+          \PY{n}{y} \PY{o}{=} \PY{l+m+mi}{0}
+        \PY{k}{end}
+      \PY{k}{elsif} \PY{n}{x} \PY{o}{==} \PY{n}{matrix}\PY{o}{.}\PY{n}{length}
+        \PY{n}{covers}\PY{o}{.}\PY{n}{push}\PY{p}{(}\PY{n}{keymemo}\PY{o}{.}\PY{n}{dup}\PY{p}{)}
+        \PY{n}{x} \PY{o}{-=} \PY{l+m+mi}{1}
+        \PY{n}{y} \PY{o}{=} \PY{n}{memo}\PY{o}{[}\PY{n}{x}\PY{o}{]} \PY{o}{+} \PY{l+m+mi}{1}
+      \PY{k}{elsif} \PY{n}{y} \PY{o}{==} \PY{n}{matrix}\PY{o}{[}\PY{n}{x}\PY{o}{]}\PY{o}{.}\PY{n}{length}
+        \PY{k}{if} \PY{n}{x} \PY{o}{>} \PY{l+m+mi}{0}
+          \PY{n}{memo}\PY{o}{[}\PY{n}{x}\PY{o}{]} \PY{o}{=} \PY{l+m+mi}{0}
+          \PY{n}{x} \PY{o}{-=} \PY{l+m+mi}{1}
+          \PY{n}{y} \PY{o}{=} \PY{n}{memo}\PY{o}{[}\PY{n}{x}\PY{o}{]} \PY{o}{+} \PY{l+m+mi}{1}
+        \PY{k}{else}
+          \PY{n}{stop} \PY{o}{=} \PY{k+kp}{true}
+        \PY{k}{end}
+      \PY{k}{end}
+    \PY{k}{end}
+    \PY{k}{return} \PY{n}{covers}
+  \PY{k}{end}
+
+\PY{k}{end}
+\end{Verbatim}
