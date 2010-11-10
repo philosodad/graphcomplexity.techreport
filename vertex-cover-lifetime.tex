@@ -48,16 +48,46 @@ The network lifetime problem is introduced in detail by Cardei et. al in \cite{1
 
 The Koufaganis/Young Algorithm (K/Y) described in this paper is the $O(\log n)$ 2-optimal distributed algorithm for the Minimum Weighted Vertex Cover published by Koufaganis and Young in 2009\cite{1582746}. The algorithm improves on the previous best known distributed algorithm for MWVC, which runs in $O(\log n + \log W)$, where  $W$ is the average vertex weight\cite{1435381}.
 
-The K/Y algorithm uses a special variable, maintained by each vertex $v$, referred to as $x_v$ and initialized to 0. Each vertex decides whether or not to join the cover by calling a subroutine, {\texttt step}, which takes as inputs the current value of $x_v \text{ and } x_w$ and the weights $c_v \text{ and } c_w$. 
+The K/Y algorithm uses a special variable, maintained by each vertex $v$, referred to as $x_v$ and initialized to 0. Each vertex decides whether or not to join the cover by calling a subroutine, {\ttfamily step}, which takes as inputs the current value of $x_v \text{ and } x_w$ and the weights $c_v \text{ and } c_w$. {\ttfamily step} updates the value of x by Equation~\ref{eqn:step}.
 
+\input{eqns/eqn-step.tex}
+
+If $x \equiv 1 $ for $v \text{ or } w$, that vertex is added to the cover.
+
+In each round, a node decides whether it will choose to be a {\em root} or a {\em leaf} node. If a node chooses to be a leaf node, it chooses among it's neighbors which are roots those which would {\em not} be added to the cover, if the {\ttfamily step} subroutine were run with the current value of x. From these, it chooses a random neighbor for this round, marking the appropriate edge as a {\em star edge}.
+
+Root nodes collect their star edges and then choose to do one of the following: either run {\ttfamily step} for all star edges in some sequence, or run {\ttfamily step} for only the last star edge in the sequence. 
+
+Each communication round is therefore made up of 3 communication steps. Each vertex must communicate to its neighbors whether it is a leaf or a root, then each leaf must communicate to the appropriate neighbor that they share a star edge, then each root must communicate the results of its choices to it's neighbors.
 
 
 \subsection{The DEEPS Algorithm}
 \label{sec:deeps}
 
+The Deterministic Energy-Efficient Protocol for Sensor networks (DEEPS) provides a distributed algorithm for extending the lifetime of wireless sensor networks\cite{1640702}. DEEPS works by maintaining information about the total battery life of all sensors covering a given target. Targets are divided into {\em sinks} and {\em hills}. 
+
+Sinks are defined as follows: if $b_t$ is the cumulative battery life of all sensors covering some target $t$, if for some sensor $s$ which covers $t$, $b_t$ is minimum for all targets covered by $s$, $t$ is a sink. Any target which is not a sink is a hill.
+
+In order to avoid having a target abandoned, one sensor that covers a given target is placed in charge of that target. Sensors that are in charge of targets will not turn off unless another sensor covering that target turns on. 
+
+The DEEPS protocol is a two-hop protocol, as each sensor needs to know not only the battery supplies of its own targets, but also the battery supply of all of its neighbors targets. It performs well against other scheduling protocols. 
 
 \subsection{Dependency Graphs}
 \label{sec:dep-graphs}
+
+ The solution space for both of the problems addressed in this work is exponential to the input. A {\em Dependency Graph} is a strategy based on the insight that, from a strictly local standpoint, the input size of a graph problem remains constant regardless of the problem size. For a distributed system such as a sensor network, the space of all local solutions is only dependent on the size of the local neighborhood, not the size of the graph overall\cite{978-3-540-77220-0_36}. Prasad and Dhawan develop a framework for using Dependency Graphs in \cite{IPDPS.2008.45361}.
+
+The framework applies to problems where local solutions can be combined to form a feasible global solution. The essential steps of the framework are as follows. 
+\begin{enumerate}
+\item Establish that combined local solutions lead to a feasible global solution.
+\item Model the state space of the local solutions. \label{en:frame-model}
+\item Determine a priority heuristic for local solutions.\label{en:frame-priority}
+\item Design a reasonable negotiating strategy between neighbors.
+\end{enumerate} 
+
+The definition of the dependency graph is captured by step~\ref{en:frame-model}. Each local solution is considered a node in the Graph, and edges are defined by dependencies between solutions. Solutions and relationships between solutions might be directed, undirected, weighted, unweighted, and so forth. In step~\ref{en:frame-priority}, these parameters are used to determine what solutions are preferred. 
+
+This framework has been applied to sensor network lifetime, and competes very well against other methods\cite{Dhawan:hipc-09}.
 
 \section{Algorithms}
 \label{sec:algorithms}
@@ -78,6 +108,8 @@ During the \cUd\ state, vertex pairs formed during the invitation/acceptance pha
 
 \subsubsection{Performance}
 
+Our experiments show that DGMM finds covers that are equivalent to those found by other 2-optimal algorithms, in far fewer communication rounds. A formal proof supporting our experimental results follows.
+
 \input{proofs/prf-dgmm-term.tex}
 
 
@@ -95,16 +127,7 @@ The concept behind Algorithm~\ref{alg:red} is simple: A vertex is redundant if a
 
 \subsection{Partial Cover Dependency Graph}
 \label{sec:life-depend}
-Network Lifetime and Minimum Weighted Vertex Cover are both NP-Complete problems. It has also been proved that MWVC cannot be approximated to a constant factor locally within any constant number of communication rounds~\cite{1011811}. This limitation must apply to target coverage as well. We developed our algorithm continuously covering the edges for extending total network lifetime based on the Dependency Graph which provides an algorithmic framework for target coverage and related problems~\cite{IPDPS.2008.45361}. It has been shown to produce good results when applied to the Lifetime Maximization problem for target coverage in sensor networks~\cite{978-3-540-89894-8_26}.
-
-The framework applies to problems where local solutions can be combined to form a feasible global solution. The essential steps of the framework are as follows. 
-\begin{enumerate}
-\item Establish that combined local solutions lead to a feasible global solution.
-\item Model the state space of the local solutions.
-\item Determine a priority heuristic for local solutions.
-\item Design a reasonable negotiating strategy between neighbors.
-\end{enumerate} 
-A detailed description of each of these steps can be found in~\cite{IPDPS.2008.45361}.
+Network Lifetime and Minimum Weighted Vertex Cover are both NP-Complete problems. It has also been proved that MWVC cannot be approximated to a constant factor locally within any constant number of communication rounds~\cite{1011811}. This limitation must apply to target coverage as well. We developed our algorithm continuously covering the edges for extending total network lifetime based on the Dependency Graph which provides an algorithmic framework for target coverage and related problems~\cite{IPDPS.2008.45361}. 
 
 The application of the framework relies on dependencies between local solutions. In the case of the vertex cover problem, there are several approaches that can be taken to determine what a local solution is. The simplest approach is to have each vertex only consider edges incident to itself. Naively, each vertex would have exactly two local solutions, the cover containing itself and the cover containing all of its neighbors. These two covers are node disjoint and lack any dependencies to prioritize meaningfully.   Therefore, one may consider the vertex covers for edges incident to 1-hop neighbors as well. Now a large number of possible covers have to be considered. The number of possible local covers for a vertex of degree $\Delta$ is $\sum_{i=0}^\Delta \binom{\Delta}{i}$. 
 
@@ -142,7 +165,21 @@ After constructing $H$, each cover is assigned a {\em weight} and a {\em degree}
 \label{sec:pcdg-alg}
 
 The PCDG algorithm uses 2-hop information for immediate setup of the graph, as described in the previous section. After initial setup, the algorithm no longer updates any information beyond 1-hop. Figure~\ref{fig:pcdg-auto} shows the automaton for PCDG.
+
 \input{figs/fig-pcdg-alg.tex}
+
+The bulk of the computational work for PCDG is done in the \cAd\ (Analyze) state. We assume that the covers in the Partial Cover Dependency Graph have been sorted according to degree, weight, and some sort of tie breaker. For the Dependency graph used in this paper, the priority order prefers lower weights, then higher degrees, and finally the covers unique id, as set during construction of the covers.
+
+A node in the Analyze state will evaluate its highest priority cover. It can then turn on, turn off, or move onto the next priority cover. Algorithm~\ref{alg:pcdg} shows the general progress of the algorithm, and Algorithm~\ref{alg:pcdg-analyze} shows the specifics of this process.
+
+This version of PCDG does very little analysis: if all neighbors are on, a node will turn off, otherwise, if a node is in it's current cover, the node will turn on. This keeps the communication cost low but sacrifices the quality of the solution. In future work we intend to explore other strategies for traversing the Graph.
+
+In each communication round, each node sends it's current status to it's neighbors. Here another greedy choice is made, as shown in Algorithm~\ref{alg:pcdg-process}. If a neighbor turns on in a round, and that neighbor has the lowest battery of all neighbors which are on, then the node will attempt to find a cover containing itself and the neighbor node. In the next round this will be the highest priority cover. This strategy could also be modified. 
+
+Our one-hop Algorithm performed surprising well against two-hop DEEPS when combined with the Redundancy Checking Algorithm and accounting for communication costs, as shown in Section~\ref{sub:netlife-results}.
+
+
+\input{alg/alg-pcd.tex}
 
 \section{Simulation Software}
 \label{sec:simulator}
@@ -151,7 +188,7 @@ We developed a discrete-event simulator in the Ruby programming language. Ruby w
 
 The source code for each algorithm and the simulation framework are open source and available for download.\footnote{Using the mercurial VCS, command hg clone https://rvertex.graphcomplexity.googlecode.com/hg/ graphcomplexity-rvertex will retrieve a copy of the code repository. This paper uses revision 67446e3ca7 of the code base} 
 
-The goal for this software package was to create a flexible, extensible platform for general simulation of distributed graph algorithms.Our approach for meeting this design goal was to attempt to modularize design as much as possible. In subsection~\ref{sec:sim-objects} we describe the basic object types in the platform. In subsection~\ref{sec:sim-modules} we describe the different modules that control the behavior of the objects. In subsection~\ref{sec:sim-detail} we examine a single simulator object in detail and in subsection~\ref{sec:sim-new} we describe the steps for creating a new simulator. Finally, in subsection~\ref{sec:sim-future} we look at the roadmap for future development of this framework.
+The goal for this software package was to create a flexible, extensible platform for general simulation of distributed graph algorithms.Our approach for meeting this design goal was to attempt to modularize design as much as possible. In subsection~\ref{sec:sim-objects} we describe the basic object types in the platform. In subsection~\ref{sec:sim-modules} we describe the different modules that control the behavior of the objects. In Section~\ref{sec:sim-new} we describe the steps for creating a new simulator. Finally, in subsection~\ref{sec:sim-future} we look at the roadmap for future development of this framework.
 
 \subsection{Basic Object Types}
 \label{sec:sim-objects}
@@ -162,61 +199,181 @@ To design and run experiments, it is important to know how to generate a Graph, 
 
 \subsubsection{Simulators}
 
-Simulators are extremely simple. Figure~\ref{fig:sim-class} is the class diagram for the root object in the simulator hierarchy, {\texttt RandomSimulator}. The root object acts as a specification for simulation. It is the only simulator that can be generated without a preexisting Graph. 
+Simulators are extremely simple. Figure~\ref{fig:sim-class} is the class diagram for the root object in the simulator hierarchy, {\bfseries RandomSimulator}. The root object acts as a specification for simulation. It is the only simulator that can be generated without a preexisting Graph. 
 
-The primary attribute of a Simulator is a Graph ({\texttt \@rg}), and most of the methods in the Simulator object pass commands through the Simulator directly to the Graph. For example, the {\texttt get\_on\_weight} method calls the {\texttt get\_on\_weight} method of its Graph.
+\input{figs/fig-sim-class.tex}
+The primary attribute of a Simulator is a Graph ({\ttfamily rg}), and most of the methods in the Simulator object pass commands through the Simulator directly to the Graph. For example, the {\ttfamily get\_on\_weight} method calls the {\ttfamily get\_on\_weight} method of its Graph.
 
-Simulation is controlled through the {\texttt sim} and {\texttt long\_sim} methods. The simulation methods are not methods that strictly belong to the class itself, but are handled by mix-in modules. The simulation methods will be described in detail in Section~\ref{sec:sim-modules}. 
+Simulation is controlled through the {\ttfamily sim} and {\ttfamily long\_sim} methods. The simulation methods are not methods that strictly belong to the class itself, but are handled by mix-in modules. The simulation methods will be described in detail in Section~\ref{sec:sim-modules}. 
 
-Briefly, {\texttt sim} takes as it's input an integer, which represents the maximum number of communication rounds allowed by the simulator, and returns the weight of a vertex cover of a graph, the number of communication rounds executed, and a failure marker (1 for failure, 0 for success). To run, it loops on a termination condition and iterates through each node. {\texttt long\_sim} Is the method used to generate network lifetimes. It contains the logic needed to iteratively run a {\texttt sim} method until the edges of the graph can no longer be covered. 
+Briefly, {\ttfamily sim} takes as it's input an integer, which represents the maximum number of communication rounds allowed by the simulator, and returns the weight of a vertex cover of a graph, the number of communication rounds executed, and a failure marker (1 for failure, 0 for success). To run, it loops on a termination condition and iterates through each node. {\ttfamily long\_sim} Is the method used to generate network lifetimes. It contains the logic needed to iteratively run a {\ttfamily sim} method until the edges of the graph can no longer be covered. 
 
 Simulator classes define the type of Graph being generated, and Graphs define the type of the Nodes to be generated. Since each class of node represents a different algorithm, there is a one-to-one relationship between sub-types of Simulators and variations on Algorithms.The most recent version of the software\footnote{as of this writing, version cb24427164d4} has 29 subtypes of RandomSimulator, ranging in size from three to fifteen lines of code.\footnote{Complete documentation of the entire package can be downloaded from the repository}
 
 \subsubsection{Graphs}
 
-The {\textbf Graph} group of objects represents either the graph or the network, that is, a data structure $G(V,E)$ with nodes (or vertexes) and edges (or links) between those nodes. Figure~\ref{fig:netgen-class} shows the class diagram for the Root Object in this hierarchy, {\texttt SimpleGraph}. Simple Graph has two attributes--{\texttt \@edges} and {\texttt @nodes}--both of them lists, which are defined during object instantiation in most subtypes. 
+The {\bfseries Graph} group of objects represents either the graph or the network, that is, a data structure $G(V,E)$ with nodes (or vertexes) and edges (or links) between those nodes. Figure~\ref{fig:netgen-class} shows the class diagram for the Root Object in this hierarchy, {\ttfamily SimpleGraph}. Simple Graph has two attributes--{\ttfamily edges} and {\ttfamily nodes}--both of them lists, which are defined during object instantiation in most subtypes. 
 
+\input{figs/fig-netgen-class.tex}
+
+Graphs have two primary roles in the simulation, the initialization of Nodes, and extraction of information from nodes. Figure~\ref{fig:netgen-class} shows the class diagram for the root object in the Graph hierarchy.
+
+The {\ttfamily add\_nodes} method is overloaded in most subclasses to create Nodes with specific behaviors. The edges of the Graph are then used to populate each node with a list of its neighbors using the {\ttfamily set\_neighbors} method. The only other method that initiates any action in the Root class is the {\ttfamily reduce\_by\_min} method, which finds the lowest weight in the graph and reduces the weight of Nodes by that value if those nodes are in the current cover.
+
+The rest of the methods that are universal to all Graph objects are meant to return information from the Graph, either for reporting or control purposes. The {\ttfamily get\_total\_weight} method, as an example, is primarily used to report the result of an experimental run, while the {\ttfamily covered?} method is used primarily to detect errors, conditions where the algorithm terminates without a cover being generated.
+
+These particular methods are specifically tailored to be used to run coverage algorithms. In Section~\ref{sec:sim-modules} we describe a design pattern for Ruby that would allow most of this behavior to be abstracted away to increase the flexibility of the Graph class.
 
 \subsubsection{Nodes}
 \label{sec:sim-objects-nodes}
-The {\textbf Node} group of objects inherit the class {\texttt BasicNode}, shown in Fig~\ref{fig:node-class}. Node objects simulate the compute nodes in a distributed computer, using a message passing model. The attributes of a {\texttt BasicNode} include, most importantly, an {\textbf Array} of neighbors, a {\textbf Set} of edges, and the instance variables {\@next and \@now}.
+The {\bfseries Node} group of objects inherit the class {\ttfamily BasicNode}, shown in Fig~\ref{fig:node-class}. Node objects simulate the compute nodes in a distributed computer, using a message passing model. The attributes of a {\ttfamily BasicNode} include, most importantly, an {\bfseries Array} of neighbors, a {\bfseries Set} of edges, and the instance variables {\ttfamily next} and {\ttfamily now}.
 
-Node objects are expected to be written as state machines, which is the purpose of the \@next and \@now variables. When a node is first created, it is in a state. As simulators iterated through the Node objects, they generally call the method {\texttt do\_next} for each node, and then {\texttt send\_status} for each Node. A Node may or may not change it's state, and broadcast it's new state to it's neighbors. The key design point is to update the ``next'' variable, rather than the ``now'' variable. In the next iteration, the ``next'' variable becomes the ``now'' variable. This method allows the simulation to act as if nodes are acting concurrently.
+\input{figs/fig-node-class.tex}
+
+Node objects are expected to be written as state machines, which is the purpose of the next and now variables. When a node is first created, it is in a state. As simulators iterated through the Node objects, they generally call the method {\ttfamily do\_next} for each node, and then {\ttfamily send\_status} for each Node. A Node may or may not change it's state, and broadcast it's new state to it's neighbors. The key design point is to update the {\ttfamily next} variable, rather than the {\ttfamily now} variable. In the next iteration, the {\ttfamily next} variable becomes the {\ttfamily now} variable. This method allows the simulation to act as if nodes are acting concurrently.
 
 \subsubsection{Further Granularity}
 
-The DGMM algorithm works by setting a weight to edges. In the {\texttt BasicNode} class, an edge is represented as a pair of ids. The class {\texttt WeightedEdge} (Figure~\ref{fig:weighted-edge-class} adds a {\texttt weight} attribute to an edge. 
+The DGMM algorithm works by setting a weight to edges. In the {\ttfamily BasicNode} class, an edge is represented as a pair of ids. The class {\ttfamily WeightedEdge} (Figure~\ref{fig:weighted-edge-class} adds a {\ttfamily weight} attribute to an edge. 
 
-Dependency Graph Algorithms require each node to create a Dependency Graph, complete with Dependency Nodes and Edges. The root class for the {\textbf Partial Cover Dependency Node} heirarchy is shown in Figure~\ref{fig:pcd-node-class}. This is the first example that overloads the comparison operator ({\texttt <=>}). 
+Dependency Graph Algorithms require each node to create a Dependency Graph, complete with Dependency Nodes and Edges. The root class for the {\bfseries Partial Cover Dependency Node} heirarchy is shown in Figure~\ref{fig:pcd-node-class}. This is the first example that overloads the comparison operator ({\ttfamily <=>}). 
 
-The behavior of classes at this level of the simulation must be handled opaquely by the Nodes. A Simulator or Graph class object should be able to operate by calling {\em only} the {\texttt do\_next} and {\texttt send\_status} methods.
+The behavior of classes at this level of the simulation must be handled opaquely by the Nodes. A Simulator or Graph class object should be able to operate by calling {\em only} the {\ttfamily do\_next} and {\ttfamily send\_status} methods. These methods are missing from the definition of PCDRootNode because they are defined in modules, as explained in Section~\ref{sec:sim-modules}.
+
+\input{figs/fig-weighted-edge-class.tex}
+\input{figs/fig-pcd-node-class.tex}
 
 \subsection{Behavior Modularization}
 \label{sec:sim-modules}
-Many of the methods that actually control the behavior of Nodes, Graphs, and Simulators are contained in {\em modules}. A Ruby module is a ``named group of methods, constants, and class variables.''\cite{1408408}. In our Simulator, modules are used to encapsulate algorithms that may be used by several classes, such as the Redundancy algorithm described in Section~\ref{sec:redundant}, or the construction rules for Dependency Graphs. These modules will be described in Section~\ref{sec:sim-modules-helpers}.
 
-Modules are also used to overload certain methods for Nodes. In the Ruby programming language, the last definition for a method or attribute is the one that is used for a class. So given a class that shares several methods but requires overloading for some particular methods, it is easy to create a module that contains those method definitions. The advantage of using modules in this case is that one class may share various subsets of methods with other classes in a way that is difficult to describe using single inheritance. Using modules, the various method definitions can be ``mixed-in'' to the class definition to create the desired class definition. Modules that are used in this way are described in Section~\ref{sec:sim-modules-actions}.
+Many of the methods that actually control the behavior of Nodes, Graphs, and Simulators are contained in {\em modules}. A Ruby module is a ``named group of methods, constants, and class variables.''\cite{1408408}. In our Simulator, modules are used to encapsulate algorithms that may be used by several classes, such as the Redundancy algorithm described in Section~\ref{sec:redundant}, or the construction rules for Dependency Graphs. These modules are considered ''Helper'' modules, described in Section~\ref{sec:sim-modules-helpers}.
+
+Modules are also used to overload certain methods for Nodes. In the Ruby programming language, the last definition for a method or attribute is the one that is used for a class. So given a class that shares several methods with another class, but requires overloading for some particular methods, it is easy to create a module that contains only those method definitions. The advantage of using modules in this case is that one class may share various subsets of methods with other classes in a way that is difficult to describe using single inheritance. Using modules, the various method definitions can be ``mixed-in'' to the class definitions. Modules that are used in this way--Action modules--are described in Section~\ref{sec:sim-modules-actions}.
 
 \subsubsection{Helpers}
 \label{sec:sim-modules-helpers}
-There are four groups of Helper Modules in the current version of the software, Simulator helpers, Graph helpers, Node Helpers, and Dependency Graph Helpers. 
+There are three groups of Helper Modules in the current version of the software, Simulator helpers, Graph helpers, and Node Helpers. Additional Modules are used by the DEEPS algorithm and the PCD algorithm to define aspects of each algorithm. Two examples, the {\bfseries Deeps\_Deciders} module and the {\bfseries PCDALL} module are shown in Figures~\ref{fig:sim-modules-helpers-deepsdeciders} and~\ref{fig:sim-modules-helpers-pcdall}. 
 
-The Simulation helper modules define the {\texttt sim} and {\texttt long\_sim} methods. Every class in the Simulator hierarchy uses the same definition for {\texttt sim}, which is included in the Root Class. There are two different behaviors for the {\texttt long\_sim} method. 
 
-As stated in Section~\ref{sec:sim-objects-nodes}, every Node object must have a {\texttt do\_next} and {\texttt send\_status} method for the simulator. The simulator method {\texttt sim} calls these functions in turn for each node, first iterating through the Nodes in its Graph and calling {\texttt do\_next}, then calling {\texttt send\_status}. This continues on a loop until every Node enters the \cDd\ state or a preset number of loops have executed. 
+\paragraph{Simulation Helpers}
+\label{sec:sim-helpers-simulation}
+
+The Simulation helper modules define the {\ttfamily sim} and {\ttfamily long\_sim} methods. Every class in the Simulator hierarchy uses the same definition for {\ttfamily sim}, which is included in the Root Class. There are two different behaviors for the {\ttfamily long\_sim} method. 
+
+As stated in Section~\ref{sec:sim-objects-nodes}, every Node object must have a {\ttfamily do\_next} and {\ttfamily send\_status} method for the simulator. The simulator method {\ttfamily sim} calls these functions in turn for each node, first iterating through the Nodes in its Graph and calling {\ttfamily do\_next}, then calling {\ttfamily send\_status}. This continues on a loop until every Node enters the \cDd\ state or a preset number of loops have executed. 
 
 If the loop exceeds the termination point, the failure value is changed from 1 to 0 and the return value for number of rounds is set to 0. The purpose of this is to only return results which pass. The number of rounds run (that is, the number of loops executed) is an important metric, it can be used to determine the number of communication rounds executed. Obviously, failed runs could skew experiments which average results over a large number of runs.
 
-The method {\texttt get\_the\_metric} is called to return the total weight of the cover by calling the {\texttt get\_on\_weight} method of the Graph. This method could be suitably overridden to allow the {\texttt sim} method to return pertinent values for any algorithm implemented through the state machine method.
+The method {\ttfamily get\_the\_metric} is called to return the total weight of the cover by calling the {\ttfamily get\_on\_weight} method of the Graph. This method could be suitably overridden to allow the {\ttfamily sim} method to return pertinent values for any algorithm implemented through the state machine method.
 
-The two versions of {\texttt long\_sim} are packaged in the modules {\textbf Running\_Sim} and {\textbf Stepping\_Sim}. 
+The two versions of {\ttfamily long\_sim} are packaged in the modules {\bfseries Running\_Sim} and {\bfseries Stepping\_Sim}. {\ttfamily long\_sim} is used for network lifetime. Each iteration of {\ttfamily long\_sim} calls the {\ttfamily sim} method and then reduces the weight of each Node object in the Graph. In this simulation, the Node weight acts as the battery supply for each Node. The difference between the two modules is the scheme by which each reduces the weight of the Nodes.
+
+The Running\_Sim module operates locally. It finds the minimum battery life in the network and moves the simulation forward that many steps, reducing the weight of only the active nodes by the minimum weight. Nodes that have their weight reduced to zero turn off and alert their neighbors to turn on. Running\_Sim is meant to capture the behavior of a network which initializes once and then depends on local changes with Redundancy checking to extend it's lifetime.
+
+The Stepping\_Sim module defines {\ttfamily long\_sim} for networks which adjust coverage on a schedule. Every Node which is active has it's battery reduced in every round, but a second variable reduces the weight of all nodes, whether or not they are on, based on an assumption about the cost of running the coverage algorithm versus the cost of sensing.
+
+\paragraph{Graph Helpers}
+
+There are two modules that are build to assist Graph Objects, {\bfseries Neighborly} and {\bfseries Connectable}. The Neighborly module defines the {\ttfamily set\_neighbors} method to use the edges of the graph to determine the neighbors of each node. This method works well for Random Graphs, however, it would not work for some of the other classes of Graph that we developed, such as Unit Disk Graphs. 
+
+A Graph that is {\bfseries Connectable} has a {\ttfamily connect!} method. {\ttfamily connect!} creates a list of the minimum spanning trees in the Graph (which we assume may be a forest), and then creates random edges between the trees. In this way we ensure that the Graph is connected.
+
+\paragraph{Node Helpers}
+
+The two modules that assist all {\bfseries Node} objects are {\bfseries Redundant} and {\bfseries RedundantMin}. Redundant defines four methods and adds an instance variable to a class. Figure~\ref{fig:sim-modules-helpers-nodes-redundant} shows the Redundant Module.
+
+\input{figs/fig-sim-modules-helpers-nodes-redundant.tex}
+
+The Redundant Module describes the state transitions from Figure~\ref{fig:red}. The methods {\ttfamily check\_redundant} and {\ttfamily check\_finished} are described in detail in Algorithm~\ref{alg:red}.
+
+The method {\ttfamily most\_valued} allows different valuation schemes (such as minimum weight or maximum weight) to be applied in the {\ttfamily check\_redundant} method, altering the circumstances under which a node turns itself off. This method is overloaded in the RedundantMin module, which contains only that method.
+
+The {\ttfamily <=>} method allows for direct comparison of Objects using the greater than, less than, and equality operators. In the case of Nodes that include Redundant, the valuation maps to {\ttfamily weight}, with ties being broken by {\ttfamily id}. 
+
+\paragraph{Deeps\_Deciders}
+
+The Deeps\_Deciders module contains five methods used by the DEEPS algorithm. These methods are called during by the {\ttfamily do\_next} method. {\ttfamily set\_all\_sinks} adds a sink edge to the list of edges that a node is in charge of, as described in Section~\ref{sec:deeps}. In order to discover sink edges, the algorithm runs the method {\ttfamily find\_poorest\_edge}. Hills are discovered by using the {\ttfamily find\_hills} method, and Nodes determine which hills they should be in charge of using the {\ttfamily set\_all\_hills} method. During the operation of the algorithm, Nodes must decide whether to turn on or off. The rules that DEEPS uses to decide whether a node should turn on or off are encoded in the methods {\ttfamily charges\_covered?} and {\ttfamily sole\_survivor?} methods.
+
+The flexibility of using a module to define these behaviors comes from the other modules in this group {\bfseries Deeps\_Deciders\_Maximize\_Max}, {\bfseries Deeps\_Deciders\_Minimize\_Max}, and {\bfseries Deeps\_Deciders\_Minimize\_Min}. Each of these overloads some functions and includes one of the other Modules. The behavior of a DEEPS Node can therefore be significantly altered by changing a single line of its definition. 
+
+\input{figs/fig-sim-modules-helpers-deepsdeciders.tex}
+\paragraph{PCDAll}
+
+Further flexibility is provided by the PCDAll Module, which defines three methods; {\ttfamily build\_local\_cover}, {\ttfamily get\_covers} and {\ttfamily pcdnode\_type} and one new instance variable, {\ttfamily local\_covers}. 
+
+The method {\ttfamily pcdnode\_type} returns a string that is converted to a constant by the {\ttfamily build\_local\_cover}. This constant can then be used as a class name. This again simplifies building new classes of PCD Graphs, by allowing only this single function to be overloaded in order to use a different type of dependency node. 
+
+\input{figs/fig-sim-modules-helpers-pcdall.tex}
+
+\paragraph{Lifetime Dependency Modules}
+
+Although we do not explore the results in this work, during the course of our research we developed and tested simulators for Lifetime Dependency Graphs as well. Two modules are of interest here, {\bfseries Combinator} and {\bfseries CoverComposer}.
+
+The construction of a Lifetime Dependency Graph is complex. For Nodes of small degree, the number of covers is also small, however, for Nodes of large degree or for Dependency Graphs that cover several hops, the number of covers grows exponentially and can become very large very quickly.
+
+\input{figs/fig-sim-modules-helpers-combinator.tex}
+
+The CoverComposer module uses a dynamic programming approach, by creating a table of nodes and edges and iterating through the table to discover covers. The exact details of the method are not important. 
+
+Both modules use a single point of entry, a method called {\ttfamily construct\_covers}. That method can be called by using the module as a namespace, as in {\ttfamily Combinator.construct\_covers}. This allowed us to run timing tests to see which method was faster and under what circumstances it was faster. Although the results in our case favored--surprisingly--the Combination method in every test, had there been some circumstances that preferred dynamic programming, a simple conditional statement could have altered which version of {\ttfamily construct\_covers} to use. 
+ 
 \subsubsection{Actions}
 \label{sec:sim-modules-actions}
 
-\subsection{A Detailed Look at a Simulator}
-\label{sec:sim-detail}
+Actions are modules that define what happens when the {\ttfamily do\_next}, {\ttfamily send\_status}, and {\ttfamily receive\_status} methods are called for a Node object. For most Node classes, there are  two action modules, one that handles the actions of a node with Redundancy Checking, one that handles the actions without. This design choice is obviously sub-optimal: it would be better to design the {\ttfamily do\_next} method to allow for additional states to be connected to it, reducing code duplication. 
+
+\input{figs/fig-sim-modules-actions-match.tex}
+
+Figure~\ref{fig:sim-modules-actions-match} shows the methods for the {\bfseries Match\_Acts} module. The {\ttfamily do\_next} method is a single Ruby {\bfseries case} statement, similar to a switch in C. The variable {\ttfamily now} is set to the current value of {\ttfamily next}. The switch then follows the automaton in Figure~\ref{fig:dgmm-auto}, performing some computations and then setting the {\ttfamily next} variable to the next state. The simulator will call the {\ttfamily sent\_status} method before returning to the {\ttfamily do\_next} method again, as described in Section~\ref{sec:sim-helpers-simulation}. For some values of {\ttfamily now}, a call to {\ttfamily send\_status} will trigger a call to the {\ttfamily receive\_status} method of all neighbors, as detailed in the broadcast commands in Algorithm~\ref{alg:dgmm}.
+  
+
 \subsection{Creating a New Simulator}
 \label{sec:sim-new}
+
+In this section, we create a new simulator to solve the Maximum Weighted Independent Set problem. It should be noted that as this is an example, we are not concerned about the quality of our algorithm as long as it produces an independent set. We will apply the dependency graph framework in our algorithm.
+
+\paragraph{Problem Definition}
+\input{defs/def-is.tex}
+
+\paragraph{Approach}
+
+We start by formulating an algorithm to solve the problem. In this case, we will use the Dependency Graph framework to solve the problem, passing over the question of whether this problem can be solved locally at all.
+
+The steps for Algorithm~\ref{alg:alg-isdg} are as follows.
+
+\begin{enumerate}
+\item Each node builds all possible independent sets out to it's two hop neighbors.
+\item Each node ranks it's independent sets, first on weight and then by shared nodes with other sets.
+\item Use the sets to determine whether to turn on and off according to these rules:
+\begin{enumerate}
+\item If a node is in the best possible set, it turns on.
+\item If a neighbor turns on, turn off.
+\end{enumerate}
+\item When all algorithms are decided, complete.
+\end{enumerate}
+
+In the end, we should end up with an independent set.
+
+\paragraph{Classes}
+
+To build this simulator we will need a minimum of~\ref{en:classlist-lastline} classes.
+\begin{enumerate}
+\item A Dependency Graph Node.
+\item A Dependency Graph.
+\item A Node.
+\item A Graph.
+\item A Simulator.\label{en:classlist-lastline}
+\end{enumerate}
+
+In this case, we will start in the middle and design the Node first.Looking at Figure~\ref{fig:node-class}, the {\bfseries BasicNode} has most of what we will need. We only need to add an attribute for building the Dependency Graph, and probably a method to do so. Looking through the types that we have, we realize that {\bfseries PCDRoot} (Figure~\ref{fig:pcd-node-class} is actually an appropriate starting point for our new node type. It has an appropriate constructor and appropriate attributes, even though the variable {\em covers} and the method {\em init\_covers} have names that are less generic than we might like. We can write a new Node type that inherits this in just a few lines by overloading {\em get\_dep\_graph\_type}. Example~\ref{exa:isdg-1} shows the new class definition.
+
+\input{exas/exa-isdg-1.tex}
+
+In order to build a dependency graph, we need to be able to create the solutions. We've decided that each node should consider it's two-hop neighborhood. From prior testing, we know that in order to generate sets, the most efficient method is probably going to be to use the {\bfseries Combinator} module, which can take a set of nodes and edges are returns sets of Node ids that represent covers. For this problem, we want to use the module to take a set of nodes and edges and return ids that represent indpendent sets. Looking at the code in Example~\ref{exa:combinator-1}, we can see the flow of control in the Combinator Module. 
+
+The method {\ttfamily construct\_covers} serves as the interface for the other methods. The only method that is specific to returning covers is the method {\ttfamily test\_cover?}, which takes an array of edges and a combination of Node ids and tests whether the combination is a cover. The {\bfseries \&} operator is the set intersection operator, so the line {\ttfamily e.each\{|k| return false if (c&k).empty?\}} translates as ''return false if one of these edges contains an id that is not in 'c'". For independent set, we want a test that returns false if the id combination (c) contains {\em both} of the ids in any edge. To accomplish this, we could use the array difference operator, and return false if the subtraction of c from any edge results in an empty array. The modified module with the new definition of {\ttfamily test\_cover?} is shown in Example~\ref{exa:is-combinator}.  
+
+The new module must be included into the definition of {\bf ISDGRoot} in order to be used.  
 \subsection{Future Development}
 \label{sec:sim-future}
 
@@ -234,7 +391,7 @@ A key issue in developing algorithms in the Dependency Graph framework is the ra
 
 Redundancy removal provides a tool to circumvent this problem. As each sensor reaches the end of its battery life, it can tell its neighbors to turn on. These neighbors can then negotiate with their neighbors, with redundant sensors turning off. The advantage of this approach is two-fold. First, there are no global reshuffle rounds. Communication costs are only incurred when strictly necessary to maintain the network. Second, sensors which are not affected by a particular event--those that are three or more hops away from a dying sensor--do not incur any extra cost as a result of a specific event.
 
-Depending on the deployment details of a given network, communication costs may be much higher than sensing costs, so using redundancy checking as a means of network maintenance may extend network lifetimes. In section~\ref{sec:experiment}, we explore this potential through simulation.
+Depending on the deployment details of a given network, communication costs may be much higher than sensing costs, so using redundancy checking as a means of network maintenance may extend network lifetimes. In Section~\ref{sub:netlife-results}, we explore this potential through simulation.
 
 We chose the DEEPS algorithm developed in \cite{1640702}for target coverage and modified it suitably for vertex cover. This is a state-of-the art two-hop algorithm which has been demonstrated through simulation and real-world experiments to improve network lifetimes. DEEPS insures network coverage by assigning targets to sensor nodes, preferring the strongest member of weakest sets to take charge. 
 
@@ -265,7 +422,7 @@ The quality of solutions produced by K/Y and DGMM are similar. Figure~\ref{plt:m
 \input{plts/plt-mwvc-av.tex}
 
 \subsubsection{Network Lifetime}
-
+\label{sub:netlife-results}
 When communication cost for network maintenance is considered to be negligible (or ignored), DEEPS outperforms PCDG by about 10\% in our simulations. Figure~\ref{plt:deeps-good} shows the performance of both algorithms in a communication cost free setting. DEEPS with reshuffle also outperformed DEEPS with redundancy checking when maintenance costs were considered to be free.
 \input{plts/plt-deep-good.tex}
 
@@ -275,6 +432,6 @@ PCDG using redundancy checking outperforms PCDG with global reshuffle regardless
 When communication costs are accounted for, the performance of DEEPS and PCDG improves when local reorganization using redundancy checking is used in place of global reshuffling. Figures~\ref{plt:deep-cost} and~\ref{plt:pcdg-cost} show how performance is affected by accounting for network maintenance.
 \input{plts/plt-deep-cost.tex}
 \input{plts/plt-pcdg-cost.tex}
-\bibliography{vertex_bib}
+\bibliography{../IPDPS_2010/vertex_bib}
 \end{document}
 % LocalWords:  Koufaganis

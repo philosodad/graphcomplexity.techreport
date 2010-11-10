@@ -1,0 +1,78 @@
+\begin{algorithm}
+\caption{PCDG Algorithm}
+\begin{algorithmic}[1]
+%\Require {$G(V,E)$: a Communicaton Network}
+\ForAll {$v_u \in V$ in parrallel}
+\Repeat
+\Case [state]{}
+\When [\cBd] {}
+\State Build Covers
+\State $state \gets \cE$
+\When [\cEd] {}
+\DoTimes [2]
+\State Broadcast Covers \Comment to Neighbors
+\State Add Covers \Comment from Neighbors
+\EndTimes
+\State $state \gets \cA$
+\When [\cAd]
+\State $state \gets$ {\scshape Analyze} \Comment see Procedure~\ref{alg:pcdg-analyze}
+\When [\cId, \cOd]
+\State $state \gets \cD$
+\EndCase
+\State Broadcast id, status
+\ForAll {Neighbors $n$}
+\State {\scshape Process}(n)  \Comment see Procedure~\ref{alg:pcdg-process}
+\EndFor
+\Until $state \equiv \cD$
+\EndFor
+\end{algorithmic}
+\label{alg:pcdg}
+\end{algorithm}
+
+\begin{subalgorithms}
+\begin{algorithm}
+\caption{{\scshape Analyze}}
+\begin{algorithmic}[1]
+\Procedure {Analyze}{}
+\If {no covers are available}
+\If {$weight > 0$}
+\State Turn On
+\State $state \gets \cI$
+\Else
+\State Turn Off
+\State $state \gets \cO$
+\EndIf
+\ElsIf {All Neighbors are On}
+\State Turn Off
+\State $state \gets \cO$
+\ElsIf {This Node is in the Current Cover}
+\State Turn On
+\State $state \gets \cI$
+\Else
+\State Choose Next Cover
+\State $state \gets \cA$
+\EndIf
+\State return $state$
+\EndProcedure
+\end{algorithmic}
+\label{alg:pcdg-analyze}
+\end{algorithm}
+
+\begin{algorithm}
+\caption{{\scshape Process}}
+\begin{algorithmic}[1]
+\Procedure {Process}{n}
+\If {Self is Not on or off}
+\If {$n$ is on}
+\If {$weight(n) min(on neighbors)$}
+\State Find of cover with n and self
+\EndIf
+\EndIf
+\ElsIf {n is not on}
+\State $state \gets \cA$
+\EndIf 
+\EndProcedure
+\end{algorithmic}
+\label{alg:pcdg-process}
+\end{algorithm}
+\end{subalgorithms}
