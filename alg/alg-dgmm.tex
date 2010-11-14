@@ -24,7 +24,7 @@
 \State {State $\gets \cR$}
 
 \ElsIf {state = \cRd}
-\State {Randomly Select $I_v^u$} \Comment from stored invites
+\State {Randomly Select $I_v^u$} \Comment from stored invites \label{alglin:dgmm-choose-invite}
 \State {Broadcast $R_u^v$} \Comment $u$ accepts $v's$ invitation
 \State {Update Weight $e_{u,v}$} \Comment by Equation~\ref{eqn:gmm} \label{alglin:dgmm-update-weight-R}
 
