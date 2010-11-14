@@ -93,26 +93,7 @@ This framework has been applied to sensor network lifetime, and competes very we
 \label{sec:algorithms}
 
 \subsection{Distributed Generalized Maximal Matching Algorithm}
-\subsubsection{Description}
-Algorithm~\ref{alg:dgmm} is our distributed implementation of the 2-optimal minimum weighted vertex cover algorithm presented by Gonzalez.\cite{Gonzalez1995129} The Gonzalez algorithm proceeds by selecting each edge in turn and choosing one of the endpoints of that edge to add to the cover. The sequential algorithm goes through each edge in turn and assigns the edge a weight according to equation~\ref{eqn:gmm}. If the weight of a vertex is equal to the sum of it's incident edge weights, that vertex is added to the cover. 
-
-\input{eqns/eqn-gmm.tex}
-
-The distributed version of the algorithm chooses some disjoint set of edges and assigns weights as described. The precise method of choosing edges and updating weights is given in Algorithm~\ref{alg:dgmm}. The automaton capturing the state transitions of Algorithm~\ref{alg:dgmm} is given succinctly in Figure~\ref{fig:dgmm-auto}. Each vertex begins in the \cCd\ state, and chooses to either send invitations (\cId), or listen for invitation (\cLd). Vertices in the \cId\ state choose one neighbor to send an invitation to and transition to a waiting state (\cWd), and vertices in the \cLd\ state choose one invitation to accept. The acceptence message is sent during the response state \cRd. All vertices then update their status (\cUd). Vertices that have either chosen to join the cover or which have no undecided neighbors will transition to the done state, (\cDd), and other vertices return to state \cCd.  
-
-\input{figs/fig-dgmm.tex}
-
-During the \cUd\ state, vertex pairs formed during the invitation/acceptance phases are able to assign a weight to the edge between them independently using equation~\ref{eqn:gmm}, and therefore decide whether or not to join the cover. During the \cEd\ state neighboring vertices are able to update some of their own edge weights, by assigning a weight of zero to any edges incident to a vertex which has joined the cover.
-
-\input{alg/alg-dgmm.tex}
-
-\subsubsection{Performance}
-
-Our experiments show that DGMM finds covers that are equivalent to those found by other 2-optimal algorithms, in far fewer communication rounds. A formal proof supporting our experimental results follows.
-
-\input{proofs/prf-dgmm-term.tex}
-
-
+\input{secs/sub-algorithms-dgmm.tex}
 \subsection{Redundancy Checking}
 \label{sec:redundant}
 When vertices make local decisions to join a cover, it is difficult to judge whether any neighbor will also decide to join the cover. In some cases, this leads to vertices joining the cover which can be subsequently removed while still retaining full coverage. Removing these nodes will certainly reduce the total weight of the cover. We therefore implement a {\em redundancy checking} algorithm. Figure~\ref{fig:red} shows the progression of Algorithm~\ref{alg:red}.
@@ -371,7 +352,7 @@ In this case, we will start in the middle and design the Node first.Looking at F
 
 In order to build a dependency graph, we need to be able to create the solutions. We've decided that each node should consider it's two-hop neighborhood. From prior testing, we know that in order to generate sets, the most efficient method is probably going to be to use the {\bfseries Combinator} module, which can take a set of nodes and edges are returns sets of Node ids that represent covers. For this problem, we want to use the module to take a set of nodes and edges and return ids that represent indpendent sets. Looking at the code in Example~\ref{exa:combinator-1}, we can see the flow of control in the Combinator Module. 
 
-The method {\ttfamily construct\_covers} serves as the interface for the other methods. The only method that is specific to returning covers is the method {\ttfamily test\_cover?}, which takes an array of edges and a combination of Node ids and tests whether the combination is a cover. The {\bfseries \&} operator is the set intersection operator, so the line {\ttfamily e.each\{|k| return false if (c&k).empty?\}} translates as ''return false if one of these edges contains an id that is not in 'c'". For independent set, we want a test that returns false if the id combination (c) contains {\em both} of the ids in any edge. To accomplish this, we could use the array difference operator, and return false if the subtraction of c from any edge results in an empty array. The modified module with the new definition of {\ttfamily test\_cover?} is shown in Example~\ref{exa:is-combinator}.  
+The method {\ttfamily construct\_covers} serves as the interface for the other methods. The only method that is specific to returning covers is the method {\ttfamily test\_cover?}, which takes an array of edges and a combination of Node ids and tests whether the combination is a cover. The {\bfseries \&} operator is the set intersection operator, so the line {\ttfamily e.each\{|k| return false if (c\&k).empty?\}} translates as ''return false if one of these edges contains an id that is not in 'c'". For independent set, we want a test that returns false if the id combination (c) contains {\em both} of the ids in any edge. To accomplish this, we could use the array difference operator, and return false if the subtraction of c from any edge results in an empty array. The modified module with the new definition of {\ttfamily test\_cover?} is shown in Example~\ref{exa:is-combinator}.  
 
 The new module must be included into the definition of {\bf ISDGRoot} in order to be used.  
 \subsection{Future Development}
