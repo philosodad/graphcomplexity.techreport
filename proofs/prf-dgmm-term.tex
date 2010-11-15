@@ -14,7 +14,7 @@ A ``communication round'' is actually three steps: an invitation sending step, a
 \end{note}
 \begin{note}[Local Information]
 \label{not:dgmm-local-info}
-At the beginning of each communication round, each node has a list of it's neighbors, their current state, the edges associated with those neighbors, and the results of any previous computation performed on those edges.
+At the beginning of each communication round, each node has a list of its neighbors, their current state, the edges associated with those neighbors, and the results of any previous computation performed on those edges.
 \end{note}
 \begin{note}[Mapping to Sequential Algorithm]
 \label{not:gmm-dgmm}
@@ -64,11 +64,11 @@ For DGMM, the Graph is represented as a network of compute nodes, with the nodes
     
 At the beginning of every communication round, each node makes an equally weighted random decision to either issue an invitation or wait for invitations. We consider these options by cases.
 
-    Case One: Assume that $v$ issues invitations. If $v$ issues invitations, $v$ will choose a single unweighted edge $(v,u)$ and broadcast an invitation with the id of $u$ to all of it's neighbors (Line~\algref{alg:dgmm}{alglin:dgmm-issue-invite}). $v$ then transitions to the \cWd\ state. In this state, the node gathers all responses issued by its neighbors, and updates an edge if a response is sent specifically to .
+    Case One: Assume that $v$ issues invitations. If $v$ issues invitations, $v$ will choose a single unweighted edge $(v,u)$ and broadcast an invitation with the id of $u$ to all of its neighbors (Line~\algref{alg:dgmm}{alglin:dgmm-issue-invite}). $v$ then transitions to the \cWd\ state. In this state, the node gathers all responses issued by its neighbors, and updates an edge if a response is sent specifically to .
 
     So if two edges are weighted, $v$ must receive two responses.
 
-    Responses are issued by nodes in the \cRd\ state. Each node in this state chooses a single invitation from it's received invitations and responds to it. Since $v$ gets two responses, therefore, $v$ must have invited two separate nodes in this round. But $v$ only issues one invitation, so this is a contradiction.
+    Responses are issued by nodes in the \cRd\ state. Each node in this state chooses a single invitation from its received invitations and responds to it. Since $v$ gets two responses, therefore, $v$ must have invited two separate nodes in this round. But $v$ only issues one invitation, so this is a contradiction.
 
     Case Two: Assume that $v$ receives invitations. A node which recieves invitations updates the edge corresponding to the invitation it recieved. Since $v$ is weighting two edges, $v$ must respond to multiple invitations in this round. However, $v$ only sends a single response message (Line~\algref{alg:dgmm}{alglin:dgmm-choose-invite}., which is a contradiction as well.
     Therefore, Proposition~\ref{prop:dgmm-edge-match} is true.
@@ -80,7 +80,7 @@ At the beginning of every communication round, each node makes an equally weight
     \item The node has joined the cover.
     \item A nodes neighbors have all joined the cover.
     \end{enumerate}
-    In the first case, the node will weight all of it's unweighted edges to 0. In the second case, the node weights it's own edges to 0 if the other endpoint is in the cover.
+    In the first case, the node will weight all of its unweighted edges to 0. In the second case, the node weights its own edges to 0 if the other endpoint is in the cover.
     Therefore, if the algorithm halts, all edges have been weighted once.
   \end{proof}
   Therefore, Lemma~\ref{lem:dgmm-edge}: our algorithm weights edges equivalently to the GMM algorithm. As we have indicated, prior work by Gonzalez has shown GMM to be 2-optimal, therefore DGMM is two optimal as well.
@@ -90,60 +90,42 @@ At the beginning of every communication round, each node makes an equally weight
   \label{lem:dgmm-delta}
   DGMM will weight all edges in approximately $log\Delta$ communication rounds.
 \end{lem}
-\begin{proof}[Proof of Lemma~\ref{lem:dgmm-delta}]
+
 \begin{ldef}
 A node is {\em committed} if it has joined the cover or if all of its neighbors have joined the cover.
 \end{ldef}
 \begin{ldef}
 A node is {\em active} if it is not committed.
 \end{ldef}
+\begin{ldef}
+$\Delta$ is the maximum degree of the Graph.
+\end{ldef}
+\begin{ldef}
+\label{def:gamma}
+For an active node $u$, $\Gamma_u$ is the number of uncovered edges of $u$. $\Gamma$ is the average value of $\Gamma_u$ for all active nodes in the Graph. $\Gamma_u$ is equivalent to the number of active neighbors of $u$, and is bounded by $\Delta$.
+\end{ldef}
 \begin{note}
 Only nodes that are still active at the end of a round participate in the next round. 
 \end{note}
-\begin{lprp}
-\label{prop:dgmm-delta-half}
-Approximately $\frac{1}{2}$ of active nodes will be endpoints in the matching for each round.
-\end{lprp}
-
-\begin{lprp}
-\label{prop:dgmm-delta-quarter}
-Approximately $\frac{1}{4}$ of active nodes will become committed in each round.
-\end{lprp}
-\begin{lprp}
-\label{prop:dgmm-delta-gamma}
-For any given active node with $\Gamma$ uncovered edges, approximately $\frac{\Gamma}{4}$ of its incident edges will be covered in each round.
-\end{lprp}
-\begin{lprp}
-\label{prop:dgmm-delta-const}
-If, for an active node $v$ with $\Gamma$ uncovered edges, if $\Gamma < 4$, all of the uncovered edges of $v$ will be covered within a constant number of rounds.
-\end{lprp}
-
-If Propositions~\ref{prop:dgmm-delta-half},~\ref{prop:dgmm-delta-quarter},~\ref{prop:dgmm-delta-gamma}, and~\ref{prop:dgmm-delta-const} are all true, Lemma~\ref{lem:dgmm-delta} follows.
-
-\begin{proof}[Proof of Proposition~\ref{prop:dgmm-delta-half}]
  
-As has been shown in Proposition~\ref{prof:dgmm-edge-match} DGMM forms a matching on the graph in each communication round. We now show that approximately $\frac{1}{2}$ of those nodes which have not yet joined the cover will be endpoints in the matching.
+\begin{proof}[Proof of Lemma~\ref{lem:dgmm-delta}]
+The neighborhood of $u$ ($N_u$) contains $u$ and all nodes $v$ such that there is an edge $(u,v)$. We can assume without loss of generality that there are $\Gamma$ uncovered edges and therefore $\Gamma$ active nodes in $N_u$. $u$ must cover all of these edges in order for the algorithm to halt. 
 
-Following the automata in Figure~\ref{fig:dgmm-auto}, each communication round starts with a choice phase (labeled \cCd), after which the nodes will be divided approximately in half, with half being senders in the next round and half being recievers. A given node $u$ will become a reciever (indicated by state \cLd) with a probability of $\frac{1}{2}$. The degree of $u$ can be assumed, without loss of generality, to be the average degree in the graph, indicated as $\Gamma$. 
+If $u$ joins the cover in a round, all of its edges will be covered. Otherwise, an edge $(u,v)$ will be covered only if $v$ joins the cover.
 
-Roughly half of the neighbors of $u$ will be senders (indicated by state \cId). For each of these, we can assume a degree of $\Gamma$ as well, meaning that for each neighbor $v$ of $u$, there is a probability of $\frac{1}{\Gamma}$ that $v$ will invite $u$ to weight edge $(u,v)$ in this round. Since $u$ has $\frac{\Gamma}{2}$ neighbors that are also senders, each indpendently deciding, $u$ will recieve an invitation with a probability of $\frac{\Gamma}{2} \times \frac{1}{\Gamma} = \frac{1}{2}$. Thus, the probability of a node being a reciever and being invited to weight an incident edge is $\frac{1}{2} \times \frac{1}{2} = \frac{1}{4}$. 
+At the beginning of a round, $u$ chooses to issue invitations or recieve invitations without bias.
 
-Therefore, in any given round, roughly $\frac{1}{4}$ of the total number of nodes will recieve an invitation from a neighbor to weight an edge. 
+Assume $u$ chooses to recieve invitations. Approximately $\sfrac{\Gamma}{2}$ of the active neighbors of $u$ will choose to send invitations. We can assume that for each node $v$ that is a neighbor of $u$, $\Gamma_v = \Gamma$. Each sender chooses one of its $\Gamma$ active nodes to send an invitation to without bias, so the odds that a given neighbor of $u$ will send an invitation to $u$ is $\sfrac{\Gamma}{2} \times \sfrac{1}{\Gamma} = \sfrac{1}{2}$. If $u$ recieves any invitations, it will respond to at least one. We know that if $u,v$ are endpoints in the matching for a round, one of them must join the cover, so if $u$ is a reciever, it will cover at least one edge with a probability of $\sfrac{1}{2}$. The probability that $u$ will join the cover is the same as the probability that $v$ will join the cover, so $u$ will cover all of its edges with a probability of $\sfrac{1}{2}$. Therefore, the probability that $u$ is a reciever and all edges incident to $u$ are covered is $\sfrac{1}{2} \times \sfrac{1}{2} \times \sfrac{1}{2} = \sfrac{1}{8}$.
 
-As detailed in the proof of Proposition~\ref{prop:dgmm-edge-match}, each node that recieves at least one invitation chooses exactly one invitation to respond to. Nodes which issue invitations only issue a single invitation and wait for a reply to that invitation in the next step. The inviting node and the invited node together form the endpoints of an edge, so approximately $\frac{1}{2}$ of the nodes will be endpoints in the matching in any given round.
-\end{proof}
+For each active neighbor of $u$, this same analysis applies. Each node will be a reciever with probability of $\sfrac{1}{2}$ and each node that is a reciever will weight all of its edges with a probability of $\sfrac{1}{4}$.
 
-\begin{proof}[Proof of Proposition~\ref{prop:dgmm-delta-quarter}]
+Assume that $u$ is dormant for all phases of the round except the exchange/update phase. In this phase, all nodes that have joined the cover broadcast their status. If $u$ is incident to a node $v$ that joins the cover and edge $(u,v)$ is unweighted, $u$ will set the weight of $(u,v)$ to 0. 
 
-This follows in a straightforward manner from the previous proposition. When two nodes form a pair as endpoints in the matching for a round, then one of them must join the cover, according to Lemma~\ref{lem:dgmm-edge}. Therefore, if $\frac{1}{2}$ of the nodes participate in the matching, roughly $\frac{1}{4}$ of the nodes will join the cover in any given round.
+$\sfrac{\Gamma_u}{2}$ neighbors of $u$ will choose to be recievers. Of these, $\sfrac{1}{2}$ will participate in the matching. Of these, $\sfrac{1}{2}$ will join the cover.
 
-Looked at from a local perspective, a given node $v$ has $\Gamma$ uncovered edges, which means that there are $\Gamma$ nodes $u_1, u_2 ... u_{\Gamma}$ that are eligible to participate in the next round. We know that approximately $\frac{\Gamma}{2}$ of these nodes will participate, and of these, $\frac{1}{2}$ will join the cover. This means that if $\Gamma$ is the number of uncovered edges that $v$ has in a given round, $\frac{Gamma}{2} \times \frac{1}{2}$ of these edges will be covered in a given round.
+Therefore, during the exchange phase, every node $u$ will weight $\sfrac{\Gamma_u}{2} \times \sfrac{1}{2} \times \sfrac{1}{2} = \sfrac{\Gamma}{8}$ of its edges in every round regardless of whether $u$ joins the matching or not. 
 
-The upper bound of $\Gamma$ is $\Delta$. Therefore the time complexity for DGMM is $log \Delta$.
-
-\end{proof}
-
-Therefore Lemma~\ref{lem:dgmm-delta} is correct.
+$\Gamma$ is bounded by $\Delta$, and the algorithm terminates when all nodes have weighted all edges. Therefore Lemma~\ref{lem:dgmm-delta} is correct.
 \end{proof}
 
 Therefore, because DGMM weights all edges and assigns nodes to the cover in a manner equivalent to GMM in $O(log \Delta)$ communication rounds, Theorem~\ref{thm:dgmm-term} is correct.

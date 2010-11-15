@@ -1,18 +1,26 @@
 \label{sub:algorithms-dgmm}
 \subsubsection{Description}
-Algorithm~\ref{alg:dgmm} is our distributed implementation of the 2-optimal minimum weighted vertex cover algorithm presented by Gonzalez.\cite{Gonzalez1995129} The Gonzalez algorithm proceeds by selecting each edge in turn and choosing one of the endpoints of that edge to add to the cover. The sequential algorithm goes through each edge in turn and assigns the edge a weight according to equation~\ref{eqn:gmm}. If the weight of a vertex is equal to the sum of it's incident edge weights, that vertex is added to the cover. 
+Algorithm~\ref{alg:dgmm} is our distributed implementation of the 2-optimal minimum weighted vertex cover algorithm presented by Gonzalez \cite{Gonzalez1995129}. The Gonzalez algorithm, Generalized Maximal Matching for MWVC (or GMM), proceeds by selecting each edge in turn and choosing one of the endpoints of that edge to add to the cover. The sequential algorithm goes through each edge in turn and assigns the edge a weight according to~\eqref{eqn:gmm}.
 
 \input{eqns/eqn-gmm.tex}
 
-The distributed version of the algorithm chooses some disjoint set of edges and assigns weights as described. The precise method of choosing edges and updating weights is given in Algorithm~\ref{alg:dgmm}. The automaton capturing the state transitions of Algorithm~\ref{alg:dgmm} is given succinctly in Figure~\ref{fig:dgmm-auto}. Each vertex begins in the \cCd\ state, and chooses to either send invitations (\cId), or listen for invitation (\cLd). Vertices in the \cId\ state choose one neighbor to send an invitation to and transition to a waiting state (\cWd), and vertices in the \cLd\ state choose one invitation to accept. The acceptence message is sent during the response state \cRd. All vertices then update their status (\cUd). Vertices that have either chosen to join the cover or which have no undecided neighbors will transition to the done state, (\cDd), and other vertices return to state \cCd.  
+So if there are no previously weighted edges incident to either endpoint, the weight of the edge is $min(w(u),w(v))$. A vertex $u$ joins the cover when, for all it's weighted edges, $\sum_i w(e(u,i)) \equiv w(u)$. When ~\eqref{eqn:gmm} is applied to subsequent incident edges of $u$, the result will be 0. The algorithm terminates when each edge has been weighted. 
+
+In GMM, every edge is examined exactly one time. If no endpoints of the edge are in the cover, one endpoint will join the cover. Finally, all the edges in a matching can be evaluated in arbitrary order without side effects. We explore this third point further in Section~\ref{ssb:algorithms-dgmm-performance}. 
+
+The distributed version of the algorithm chooses some disjoint set of edges and assigns weights to those edges according to~\eqref{eqn:gmm}. The precise method of choosing edges and updating weights is given in Algorithm~\ref{alg:dgmm}. Figure~\ref{fig:dgmm-auto} shows the state transitions of Algorithm~\ref{alg:dgmm}. 
 
 \input{figs/fig-dgmm.tex}
+
+Each vertex begins in the \cCd\ state, and chooses to either send invitations (\cId), or listen for invitation (\cLd). Vertices in the \cId\ state choose one neighbor to send an invitation to and transition to a waiting state (\cWd), and vertices in the \cLd\ state choose one invitation to accept. The acceptence message is sent during the response state \cRd. All vertices then update their status (\cUd). Vertices that have either chosen to join the cover or which have no undecided neighbors will transition to the done state, (\cDd), and other vertices return to state \cCd.  
+
 
 During the \cUd\ state, vertex pairs formed during the invitation/acceptance phases are able to assign a weight to the edge between them independently using equation~\ref{eqn:gmm}, and therefore decide whether or not to join the cover. During the \cEd\ state neighboring vertices are able to update some of their own edge weights, by assigning a weight of zero to any edges incident to a vertex which has joined the cover.
 
 \input{alg/alg-dgmm.tex}
 
 \subsubsection{Performance}
+\label{ssb:algorithms-dgmm-performance}
 
 Our experiments show that DGMM finds covers that are equivalent to those found by other 2-optimal algorithms, in far fewer communication rounds. A formal proof supporting our experimental results follows.
 
