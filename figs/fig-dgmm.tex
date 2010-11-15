@@ -13,16 +13,25 @@
     \node [state] (E)            at (3,-1)       {\cEd};
     \node [state, accepting] (D) at (4,0)   {\cDd};
 
-    \path [->] (C) edge              node {} (I)
-                   edge              node {} (L)
+    \path [->] (C) edge              node {h} (I)
+                   edge              node {t} (L)
                (L) edge              node {} (R)
                (I) edge              node {} (W)
                (W) edge              node {} (U)
                (R) edge              node {} (U)
-               (U) edge              node {} (E)
-               (E) edge              node {} (D)               
-               (W) edge              node {} (U)
-               (E) edge [bend left]  node {} (C);
+               (U) edge              node {} (E);
+    \path [->] (E) edge [bend right] node [above right] {f} (D);
+    \path [->] (W) edge              node {} (U);
+    \path [->] (E) edge [bend left]  node {c} (C);
+
+
+      \node [text width=7cm] (key) at (2, -3.25) {
+	$h$: Choose to Invite \hspace{4cm}
+        $t$: Choose to Respond\hspace{4cm}
+        $c$: Some edges unweighted\hspace{5cm}
+	$f$: All edges weighted
+	$\cC$: Choose 
+	}; 
   \end{tikzpicture}
   \end{center}
   \label{fig:dgmm-auto}
