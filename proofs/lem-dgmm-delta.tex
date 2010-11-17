@@ -2,15 +2,8 @@
   \label{lem:dgmm-delta}
   The worst case number of rounds for DGMM is $O(\Delta)$.
 \end{lem}
-\begin{ldef}
-A node is {\em committed} if it has joined the cover or if all of its neighbors have joined the cover.
-\end{ldef}
-\begin{ldef}
-A node is {\em active} if it is not committed.
-\end{ldef}
-\begin{ldef}
-$\Delta$ is the maximum degree of the Graph.
-\end{ldef}
+\input{proofs/terms-dgmm-1.tex}
+
 \begin{proof}[Proof of Lemma~\ref{lem:dgmm-delta}]
 Let us assume not, that is, there is a node in the graph which will not cover its edges in $C\Delta$ rounds, where $C$ is some constant.
 
